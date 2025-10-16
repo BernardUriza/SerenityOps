@@ -1,0 +1,95 @@
+# Financial Structure Template
+# Version: 1.0.0
+# Last Updated: 2025-10-16
+# Purpose: Track income, debt, projections, and financial goals
+
+meta:
+  version: "1.0.0"
+  last_updated: "2025-10-16"
+  owner: "Bernard Orozco"
+  currency: "MXN"
+  timezone: "America/Mexico_City"
+
+current_state:
+  # Snapshot of current financial reality
+  monthly_income:
+    current: 0  # Update with actual value
+    target: 20000  # Target increase as per spec
+    last_updated: "2025-10-16"
+
+  debt:
+    total: 0  # Total outstanding debt
+    breakdown:
+      - source: "Example Credit Card"
+        amount: 0
+        interest_rate: 0.0
+        minimum_payment: 0
+        priority: 1  # 1 = highest priority
+    last_updated: "2025-10-16"
+
+  savings:
+    emergency_fund: 0
+    investments: 0
+    liquid_cash: 0
+    last_updated: "2025-10-16"
+
+projections:
+  # Financial forecasting and scenario planning
+  income_trajectory:
+    scenario: "conservative"  # conservative | moderate | optimistic
+    assumptions:
+      - "Current job search yields offer within 3 months"
+      - "Salary range: 15,000 - 25,000 MXN/month"
+    projected_monthly:
+      month_1: 0
+      month_2: 0
+      month_3: 15000
+      month_6: 20000
+
+  debt_payoff:
+    strategy: "avalanche"  # avalanche (high interest first) | snowball (small balance first)
+    target_date: "2026-12-31"
+    monthly_allocation: 0
+    projected_completion: null  # Auto-calculated by scripts/metrics.py
+
+goals:
+  short_term:
+    - objective: "Increase monthly income by +20,000 MXN"
+      deadline: "2026-06-30"
+      status: "in_progress"
+      success_criteria:
+        - "Secure full-time role or sufficient freelance contracts"
+        - "Documented proof of income increase"
+
+  medium_term:
+    - objective: "Eliminate high-interest debt"
+      deadline: "2026-12-31"
+      status: "pending"
+      success_criteria:
+        - "Debt < 10% of annual income"
+        - "Credit utilization < 30%"
+
+  long_term:
+    - objective: "Build 6-month emergency fund"
+      deadline: "2027-12-31"
+      status: "pending"
+      success_criteria:
+        - "Savings >= 6 × monthly_income"
+
+transactions:
+  # Placeholder for periodic transaction logs (optional)
+  # Consider linking to external tool (YNAB, spreadsheet) if detailed tracking needed
+  log_method: "manual"  # manual | automated | external_tool
+  external_tool: null  # e.g., "YNAB", "Mint", "Google Sheets URL"
+
+metrics:
+  # Key performance indicators
+  debt_to_income_ratio: null  # Auto-calculated
+  savings_rate: null  # (savings / income) * 100
+  financial_stress_index: null  # Custom metric based on debt, income volatility
+
+notes:
+  - "All amounts in MXN unless otherwise specified"
+  - "Update current_state monthly or after significant financial events"
+  - "Use scripts/metrics.py to auto-calculate projections and metrics"
+  - "Privacy: This file should never be committed with real amounts if repo goes public"

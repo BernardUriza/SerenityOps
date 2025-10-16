@@ -1,0 +1,104 @@
+# Opportunities Structure Template
+# Version: 1.0.0
+# Last Updated: 2025-10-16
+# Purpose: Personal CRM for job search, interviews, and professional opportunities
+
+meta:
+  version: "1.0.0"
+  last_updated: "2025-10-16"
+  owner: "Bernard Orozco"
+  timezone: "America/Mexico_City"
+
+pipeline:
+  # Active opportunities organized by stage
+  # Stages: discovered | applied | interviewing | offer | closed
+
+  - id: "example-001"
+    company: "Example Corp"
+    role: "Backend Engineer (Go)"
+    stage: "discovered"
+    priority: "high"  # high | medium | low
+
+    details:
+      description: "Build scalable microservices with Go and Kubernetes"
+      location: "Remote"
+      salary_range: "18000-25000 MXN/month"
+      tech_stack:
+        - "Go"
+        - "PostgreSQL"
+        - "Docker"
+        - "Kubernetes"
+
+    timeline:
+      discovered: "2025-10-16"
+      applied: null
+      first_interview: null
+      final_interview: null
+      offer_received: null
+      decision_deadline: null
+
+    contacts:
+      - name: "Jane Doe"
+        role: "Hiring Manager"
+        email: "jane@example.com"
+        linkedin: "https://linkedin.com/in/janedoe"
+
+    notes:
+      - date: "2025-10-16"
+        content: "Found via LinkedIn. Company culture emphasizes work-life balance."
+
+    fit_analysis:
+      technical_match: 0.85  # 0.0-1.0 scale
+      cultural_match: null
+      growth_potential: null
+      red_flags: []
+      green_flags:
+        - "Remote-first policy"
+        - "Modern tech stack"
+
+active_count:
+  # Auto-calculated metrics
+  discovered: 1
+  applied: 0
+  interviewing: 0
+  offer: 0
+  total: 1
+
+goals:
+  weekly:
+    applications: 5  # Target number of applications per week
+    networking_events: 1
+    skill_development_hours: 10
+
+  monthly:
+    interviews_target: 3
+    offers_target: 1
+
+archived:
+  # Reference to closed opportunities
+  # Actual data stored in opportunities/archive/
+  location: "opportunities/archive/"
+  format: "YAML per opportunity"
+  retention: "indefinite"
+
+templates:
+  # Reusable templates for common communications
+  cover_letter_base: "curriculum/templates/cover_letter.md"
+  follow_up_email: "curriculum/templates/follow_up_email.md"
+
+integrations:
+  # Potential integrations for automation
+  linkedin: false
+  calendar: false  # Google Calendar, Outlook, etc.
+  email: false     # Gmail, Outlook API
+  job_boards:
+    - name: "LinkedIn"
+      enabled: false
+    - name: "Indeed"
+      enabled: false
+
+notes:
+  - "Update stage as opportunities progress through pipeline"
+  - "Archive closed opportunities to maintain clean active list"
+  - "Use fit_analysis scores to prioritize interview preparation"
+  - "Privacy: Anonymize company names if repo becomes public"

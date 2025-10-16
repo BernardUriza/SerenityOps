@@ -1,0 +1,22 @@
+# SerenityOps API Dependencies
+
+# FastAPI framework
+fastapi>=0.109.0
+
+# ASGI server
+uvicorn[standard]>=0.27.0
+
+# YAML parsing (shared with main project)
+pyyaml>=6.0.1
+
+# Data validation
+pydantic>=2.5.0
+
+# AI integration (shared with main project)
+anthropic>=0.18.0
+
+# Environment variable management
+python-dotenv>=1.0.0
+
+# Optional: WeasyPrint for PDF generation
+weasyprint>=60.0

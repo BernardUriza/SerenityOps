@@ -1,0 +1,303 @@
+# SerenityOps Curriculum Structure
+# Source: Extracted from CV PDF (2025-10-16)
+# Owner: Bernard Uriza
+
+personal:
+  full_name: "Bernard Uriza"
+  title: "Senior Fullstack Developer | AI Integration Specialist"
+  tagline: "BE - Computer Systems Software Developer"
+  location: "Guadalajara, Jalisco, MX"
+  phone: "+52 33 2477 6734"
+  email: "bernarduriza@gmail.com"
+  website: "https://bernarduriza.com"
+  linkedin: null  # Add if available
+  github: null    # Add if available
+
+summary: |
+  Senior Fullstack Developer with over 10 years of experience building robust, scalable software
+  systems across diverse industries. Specialized in backend and frontend development using .NET
+  Core, C#, SQL Server, and modern JavaScript frameworks like React, Angular, and Next.js. Early
+  hands-on experience in .NET since 2014, leading both greenfield projects and critical legacy
+  migrations. Autonomous, resilient, and visionary — with a proven track record of delivering
+  consistent value under real-world constraints — not under idealized, sanitized conditions.
+
+experience:
+  - company: "JLL"
+    role: "Software Developer | Full-Stack Engineer | AI Integration Specialist"
+    location: "Los Angeles, CA (Hybrid)"
+    start_date: "2025-07"
+    end_date: null
+    current: true
+    description: |
+      Developed AI-powered real estate solutions integrating ChatGPT APIs with enterprise systems.
+      Built scalable frontend modules with React.js and optimized backend services for high availability.
+      Collaborated with cross-functional teams to deliver hybrid AI + business workflows.
+    achievements:
+      - "Integrated ChatGPT APIs with enterprise real estate systems"
+      - "Built scalable React.js frontend modules for high availability"
+      - "Delivered hybrid AI + business workflow solutions"
+    tech_stack:
+      - "React.js"
+      - "ChatGPT API"
+      - ".NET"
+      - "Enterprise Systems Integration"
+
+  - company: "PlanetTogether"
+    role: "Full Stack Developer"
+    location: "California, USA"
+    start_date: "2023-01"
+    end_date: "2025-06"
+    current: false
+    description: |
+      Designed and implemented full-stack solutions combining React.js, .NET, and cloud-based APIs.
+      Improved system scalability and performance for advanced planning and scheduling platforms.
+      Drove adoption of modern CI/CD practices, streamlining deployment cycles.
+    achievements:
+      - "Improved system scalability for planning/scheduling platforms"
+      - "Implemented modern CI/CD practices, streamlining deployments"
+      - "Designed full-stack solutions with React.js, .NET, and cloud APIs"
+    tech_stack:
+      - "React.js"
+      - ".NET"
+      - "Cloud APIs"
+      - "CI/CD"
+      - "Supply Chain Systems"
+
+  - company: "PlanetTogether"
+    role: "React Developer"
+    location: "California, USA"
+    start_date: "2021-05"
+    end_date: "2023-01"
+    current: false
+    description: |
+      Delivered modular, responsive interfaces with React.js and TypeScript.
+      Enhanced data visualization and analytics dashboards for supply chain planning tools.
+      Collaborated with backend teams to integrate RESTful APIs and optimize UX.
+    achievements:
+      - "Enhanced data visualization dashboards for supply chain tools"
+      - "Delivered modular, responsive React.js interfaces"
+      - "Integrated RESTful APIs with optimized UX"
+    tech_stack:
+      - "React.js"
+      - "TypeScript"
+      - "RESTful APIs"
+      - "Data Visualization"
+
+  - company: "WorkTeam"
+    role: "Senior Developer"
+    location: "Zapopan, Jalisco, MX"
+    start_date: "2019-09"
+    end_date: "2021-05"
+    current: false
+    description: |
+      Contributed to enterprise applications in logistics and HR domains.
+      Participated in system integrations and modernization projects using .NET and SQL.
+      Mentored junior developers on coding standards and agile methodologies.
+    achievements:
+      - "Contributed to enterprise logistics and HR applications"
+      - "Led system integrations and modernization with .NET and SQL"
+      - "Mentored junior developers on coding standards"
+    tech_stack:
+      - ".NET"
+      - "SQL Server"
+      - "Logistics Systems"
+      - "HR Systems"
+
+  - company: "Corporativo FRAGUA"
+    role: "Senior Developer"
+    location: "Guadalajara, MX"
+    start_date: "2019-04"
+    end_date: "2019-09"
+    current: false
+    description: |
+      Supported internal system enhancements with focus on performance and reliability.
+      Assisted in data integration and migration processes across business applications.
+    achievements:
+      - "Enhanced system performance and reliability"
+      - "Supported data integration and migration processes"
+    tech_stack:
+      - ".NET"
+      - "SQL Server"
+      - "Data Migration"
+
+  - company: "Dalton Efectivo Seguro"
+    role: "System Software Developer"
+    location: "Zapopan, MX"
+    start_date: "2018-10"
+    end_date: "2019-03"
+    current: false
+    description: |
+      Developed and maintained backend services supporting financial operations.
+      Implemented process automation solutions, improving internal system efficiency.
+    achievements:
+      - "Developed backend services for financial operations"
+      - "Implemented process automation improving system efficiency"
+    tech_stack:
+      - ".NET"
+      - "SQL Server"
+      - "Financial Systems"
+      - "Process Automation"
+
+  - company: "EC Ideas"
+    role: "Software Developer"
+    location: "Guadalajara, MX"
+    start_date: "2014-07"
+    end_date: "2017-09"
+    current: false
+    description: |
+      Early career development across multiple client projects.
+      Gained foundational experience in .NET development and software engineering practices.
+    achievements:
+      - "Gained foundational .NET development experience"
+      - "Contributed to multiple client projects"
+    tech_stack:
+      - ".NET"
+      - "C#"
+      - "SQL Server"
+
+projects:
+  - name: "Legacy System Overhaul"
+    tagline: "It works. It lasts. And now, it grows."
+    description: |
+      Rebuilt a legacy desktop app into a scalable web platform using .NET Core and React.
+      Not a migration—a structural resurrection.
+      Delivered clarity, modularity, and future-proof design.
+    role: "Lead Developer"
+    tech_stack:
+      - ".NET Core"
+      - "React"
+      - "SQL Server"
+      - "Azure"
+    achievements:
+      - "Transformed legacy desktop app into scalable web platform"
+      - "Delivered modular, future-proof architecture"
+      - "Established modern development practices"
+
+  - name: "Reverse Engineering Leadership"
+    tagline: "They gave us scrap. We built signal."
+    description: |
+      Dissected undocumented Chinese hardware to sync coin insertions with GPS via custom circuit design.
+      Engineered signal adaptation with resistors, TLCs and trial-by-fire.
+      No manuals. No excuses. Only binary grit and instinct.
+    role: "Hardware Integration Engineer"
+    tech_stack:
+      - "Circuit Design"
+      - "Hardware Integration"
+      - "C++"
+      - "GPS Systems"
+    achievements:
+      - "Reverse-engineered undocumented hardware successfully"
+      - "Designed custom circuits for signal adaptation"
+      - "Integrated coin mechanisms with GPS tracking"
+
+  - name: "Zero-Resource Mobile Launch"
+    tagline: "Built with nothing. Runs like everything."
+    description: |
+      Spearheaded development of a logistics app in Ionic without allocated resources.
+      Wove it into production pipelines solo.
+      Now integral to field operations.
+    role: "Solo Developer"
+    tech_stack:
+      - "Ionic Framework"
+      - "Angular"
+      - "TypeScript"
+      - "RESTful APIs"
+    achievements:
+      - "Delivered production mobile app without allocated resources"
+      - "Integrated with existing logistics pipelines"
+      - "Now critical to field operations"
+
+skills:
+  languages:
+    - name: "C#"
+      proficiency: "expert"
+      years: 11
+    - name: "JavaScript"
+      proficiency: "advanced"
+      years: 10
+    - name: "TypeScript"
+      proficiency: "advanced"
+      years: 5
+    - name: "C++"
+      proficiency: "intermediate"
+      years: 3
+    - name: "PHP"
+      proficiency: "intermediate"
+      years: 4
+
+  frameworks:
+    backend:
+      - ".NET Core"
+      - ".NET Framework"
+      - "ASP.NET"
+      - "Entity Framework"
+    frontend:
+      - "React"
+      - "Angular"
+      - "Next.js"
+      - "Blazor"
+    mobile:
+      - "Ionic Framework"
+    ui:
+      - "Bootstrap"
+      - "DevExpress"
+      - "Responsive Design"
+
+  databases:
+    - name: "SQL Server"
+      proficiency: "expert"
+    - name: "MySQL"
+      proficiency: "advanced"
+    - name: "MongoDB"
+      proficiency: "intermediate"
+
+  cloud_devops:
+    - "Azure"
+    - "AWS"
+    - "GitLab CI/CD"
+    - "GitHub Actions"
+    - "Docker"
+
+  tools:
+    - "Git"
+    - "GitHub"
+    - "GitLab"
+    - "REST APIs"
+    - "Visual Studio"
+    - "VS Code"
+
+  domain_expertise:
+    - "Finance (payment integrations, ISO 8583)"
+    - "Logistics Systems"
+    - "Real Estate Technology"
+    - "Supply Chain Planning"
+    - "HR Systems"
+
+education:
+  - institution: "UTEL University"
+    degree: "Bachelor's Degree in Computer Systems Engineering"
+    field: "Computer Systems Engineering"
+    start_date: "2017-08"
+    end_date: "2024-06"
+    status: "completed"
+
+  - institution: "CETI Colomos Institute"
+    degree: "Technologist Degree in Computer Science and IT"
+    field: "Computer Science and IT"
+    start_date: "2011-08"
+    end_date: "2014-06"
+    status: "completed"
+
+certifications: []  # Add if you have any
+
+languages:
+  - name: "Spanish"
+    proficiency: "native"
+  - name: "English"
+    proficiency: "professional"  # Adjust based on actual level
+
+metadata:
+  last_updated: "2025-10-16"
+  version: "1.0.0"
+  source: "CV PDF extraction"
+  generated_by: "ClaudeInsult via SerenityOps"

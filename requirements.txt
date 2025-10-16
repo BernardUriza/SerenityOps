@@ -1,0 +1,30 @@
+# SerenityOps Dependencies
+# Python 3.11+
+
+# Core data handling
+pyyaml>=6.0.1
+
+# AI integration - Claude API for CV generation
+anthropic>=0.18.0
+
+# CV generation - PDF via HTML/CSS (WeasyPrint)
+weasyprint>=60.0
+# Note: WeasyPrint requires additional system dependencies:
+# - Windows: Download GTK3 runtime from https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer
+# - macOS: brew install python3 cairo pango gdk-pixbuf libffi
+# - Linux: apt-get install python3-dev python3-pip python3-cffi libcairo2 libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0 libffi-dev shared-mime-info
+
+# CV generation - Markdown rendering (fallback)
+jinja2>=3.1.2
+
+# Data analysis and metrics
+pandas>=2.0.0
+
+# Plotting for financial visualizations
+matplotlib>=3.7.0
+
+# Git operations from Python
+gitpython>=3.1.40
+
+# Utilities
+python-dateutil>=2.8.2

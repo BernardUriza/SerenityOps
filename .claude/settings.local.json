@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git log:*)",
+      "Bash(python:*)",
+      "Read(//c/Users/Bernard.Orozco/Downloads/**)",
+      "Bash(pip install:*)",
+      "Bash(npm create:*)",
+      "Bash(npm install)",
+      "Bash(npm install:*)",
+      "Bash(npm run dev:*)",
+      "Bash(curl:*)",
+      "Bash(npx tailwindcss:*)",
+      "WebSearch"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
