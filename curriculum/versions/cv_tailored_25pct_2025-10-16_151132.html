@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bernard Uriza - Senior Fullstack Developer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .cv-header {
+            background: linear-gradient(135deg, #2c5aa0 0%, #1e3a5f 100%);
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        
+        .header-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+        
+        .header-left h1 {
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        
+        .header-left .title {
+            font-size: 1.4em;
+            color: #a8d8ff;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .header-left .tagline {
+            color: #c1deff;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+        
+        .experience-highlight {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+            margin-top: 20px;
+        }
+        
+        .experience-highlight h3 {
+            color: #4CAF50;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+        
+        .contact-info {
+            text-align: right;
+        }
+        
+        .contact-info div {
+            margin-bottom: 10px;
+            color: #c1deff;
+        }
+        
+        .contact-info a {
+            color: #a8d8ff;
+            text-decoration: none;
+        }
+        
+        .section {
+            background: rgba(255,255,255,0.05);
+            margin-bottom: 25px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #3a4a5c 0%, #2c3e50 100%);
+            padding: 20px 30px;
+            border-bottom: 3px solid #4CAF50;
+        }
+        
+        .section-header h2 {
+            font-size: 1.8em;
+            color: #ffffff;
+            font-weight: 600;
+        }
+        
+        .section-content {
+            padding: 30px;
+        }
+        
+        .summary-text {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #d0d0d0;
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        
+        .skill-category h3 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 5px;
+        }
+        
+        .skill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+        
+        .skill-name {
+            font-weight: 500;
+            color: #e0e0e0;
+        }
+        
+        .skill-years {
+            background: #4CAF50;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .matching-skill {
+            border-left: 4px solid #FFD700;
+            background: rgba(255,215,0,0.1);
+        }
+        
+        .matching-skill .skill-name {
+            color: #FFD700;
+            font-weight: 600;
+        }
+        
+        .experience-item, .project-item {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .experience-header, .project-header {
+            margin-bottom: 15px;
+        }
+        
+        .role-title, .project-title {
+            font-size: 1.4em;
+            color: #4CAF50;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .company-info, .project-tagline {
+            color: #b0b0b0;
+            margin-bottom: 10px;
+        }
+        
+        .duration {
+            color: #888;
+            font-style: italic;
+        }
+        
+        .description {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            color: #d0d0d0;
+        }
+        
+        .achievements {
+            list-style: none;
+            margin-bottom: 15px;
+        }
+        
+        .achievements li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            color: #c0c0c0;
+        }
+        
+        .achievements li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .tech-tag {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        
+        .education-item {
+            padding: 20px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .degree {
+            font-size: 1.3em;
+            color: #2196F3;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .institution {
+            color: #b0b0b0;
+            margin-bottom: 8px;
+        }
+        
+        .languages-list {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .language-item {
+            background: rgba(255,255,255,0.05);
+            padding: 15px 20px;
+            border-radius: 10px;
+            text-align: center;
+            flex: 1;
+        }
+        
+        .language-name {
+            font-size: 1.2em;
+            color: #4CAF50;
+            margin-bottom: 5px;
+        }
+        
+        .language-level {
+            color: #b0b0b0;
+            text-transform: capitalize;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .contact-info {
+                text-align: center;
+                margin-top: 20px;
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .languages-list {
+                flex-direction: column;
+            }
+            
+            .section-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="cv-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1>Bernard Uriza</h1>
+                    <div class="title">Senior Fullstack Developer | AI Integration Specialist</div>
+                    <div class="tagline">BE - Computer Systems Software Developer</div>
+                    <div class="experience-highlight">
+                        <h3>10+ Years Professional Experience</h3>
+                        <p>Expert-level C# & TypeScript • Full-Stack Architecture • Enterprise Solutions</p>
+                    </div>
+                </div>
+                <div class="contact-info">
+                    <div><strong>📍</strong> Guadalajara, Jalisco, MX</div>
+                    <div><strong>📞</strong> +52 33 2477 6734</div>
+                    <div><strong>✉️</strong> <a href="mailto:bernarduriza@gmail.com">bernarduriza@gmail.com</a></div>
+                    <div><strong>🌐</strong> <a href="https://bernarduriza.com">bernarduriza.com</a></div>
+                </div>
+            </div>
+        </header>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>Professional Summary</h2>
+            </div>
+            <div class="section-content">
+                <div class="summary-text">
+                    Senior Fullstack Developer with over <strong>10 years of experience</strong> building robust, scalable software systems across diverse industries. Specialized in backend and frontend development using <strong>.NET Core, C#, SQL Server</strong>, and modern JavaScript frameworks like <strong>React, Angular, and Next.js</strong>. Early hands-on experience in .NET since 2014, leading both greenfield projects and critical legacy migrations. Autonomous, resilient, and visionary — with a proven track record of delivering consistent value under real-world constraints — not under idealized, sanitized conditions.
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>Core Technical Skills</h2>
+            </div>
+            <div class="section-content">
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <h3>Programming Languages</h3>
+                        <div class="skill-item matching-skill">
+                            <span class="skill-name">C#</span>
+                            <span class="skill-years">11 years</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">JavaScript</span>
+                            <span class="skill-years">10 years</span>
+                        </div>
+                        <div class="skill-item matching-skill">
+                            <span class="skill-name">TypeScript</span>
+                            <span class="skill-years">5 years</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">C++</span>
+                            <span class="skill-years">3 years</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">PHP</span>
+                            <span class="skill-years">4 years</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <h3>Backend Frameworks</h3>
+                        <div class="skill-item">
+                            <span class="skill-name">.NET Core</span>
+                            <span class="skill-years">Expert</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">.NET Framework</span>
+                            <span class="skill-years">Expert</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">ASP.NET</span>
+                            <span class="skill-years">Expert</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Entity Framework</span>
+                            <span class="skill-years">Advanced</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <h3>Frontend Frameworks</h3>
+                        <div class="skill-item">
+                            <span class="skill-name">React</span>
+                            <span class="skill-years">Expert</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Angular</span>
+                            <span class="skill-years">Advanced</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Next.js</span>
+                            <span class="skill-years">Advanced</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Blazor</span>
+                            <span class="skill-years">Intermediate</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <h3>Database & Cloud</h3>
+                        <div class="skill-item">
+                            <span class="skill-name">SQL Server</span>
+                            <span class="skill-years">Expert</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Azure</span>
+                            <span class="skill-years">Advanced</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">MySQL</span>
+                            <span class="skill-years">Advanced</span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">MongoDB</span>
+                            <span class="skill-years">Intermediate</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>Professional Experience</h2>
+            </div>
+            <div class="section-content">
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="role-title">Software Developer | Full-Stack Engineer | AI Integration Specialist</div>
+                        <div class="company-info">JLL • Los Angeles, CA (Hybrid)</div>
+                        <div class="duration">July 2025 - Present</div>
+                    </div>
+                    <div class="description">
+                        Developed AI-powered real estate solutions integrating ChatGPT APIs with enterprise systems. Built scalable frontend modules with React.js and optimized backend services for high availability. Collaborated with cross-functional teams to deliver hybrid AI + business workflows.
+                    </div>
+                    <ul class="achievements">
+                        <li>Integrated ChatGPT APIs with enterprise real estate systems</li>
+                        <li>Built scalable React.js frontend modules for high availability</li>
+                        <li>Delivered hybrid AI + business workflow solutions</li>
+                    </ul>
+                    <div class="tech-stack">
+                        <span class="tech-tag">React.js</span>
+                        <span class="tech-tag">ChatGPT API</span>
+                        <span class="tech-tag">.NET</span>
+                        <span class="tech-tag">Enterprise Systems</span>
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="role-title">Full Stack Developer</div>
+                        <div class="company-info">PlanetTogether • California, USA</div>
+                        <div class="duration">January 2023 - June 2025</div>
+                    </div>
+                    <div class="description">
+                        Designed and implemented full-stack solutions combining React.js, .NET, and cloud-based APIs. Improved system scalability and performance for advanced planning and scheduling platforms. Drove adoption of modern CI/CD practices, streamlining deployment cycles.
+                    </div>
+                    <ul class="achievements">
+                        <li>Improved system scalability for planning/scheduling platforms</li>
+                        <li>Implemented modern CI/CD practices, streamlining deployments</li>
+                        <li>Designed full-stack solutions with React.js, .NET, and cloud APIs</li>
+                    </ul>
+                    <div class="tech-stack">
+                        <span class="tech-tag">React.js</span>
+                        <span class="tech-tag">.NET</span>
+                        <span class="tech-tag">Cloud APIs</span>
+                        <span class="tech-tag">CI/CD</span>
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="role-title">React Developer</div>
+                        <div class="company-info">PlanetTogether • California, USA</div>
+                        <div class="duration">May 2021 - January 2023</div>
+                    </div>
+                    <div class="description">
+                        Delivered modular, responsive interfaces with React.js and TypeScript. Enhanced data visualization and analytics dashboards for supply chain planning tools. Collaborated with backend teams to integrate RESTful APIs and optimize UX.
+                    </div>
+                    <ul class="achievements">
+                        <li>Enhanced data visualization dashboards for supply chain tools</li>
+                        <li>Delivered modular, responsive React.js interfaces</li>
+                        <li>Integrated RESTful APIs with optimized UX</li>
+                    </ul>
+                    <div class="tech-stack">
+                        <span class="tech-tag">React.js</span>
+                        <span class="tech-tag">TypeScript</span>
+                        <span class="tech-tag">RESTful APIs</span>
+                        <span class="tech-tag">Data Visualization</span>
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="role-title">Senior Developer</div>
+                        <div class="company-info">WorkTeam • Zapopan, Jalisco, MX</div>
+                        <div class="duration">September 2019 - May 2021</div>
+                    </div>
+                    <div class="description">
+                        Contributed to enterprise applications in logistics and HR domains. Participated in system integrations and modernization projects using .NET and SQL. Mentored junior developers on coding standards and agile methodologies.
+                    </div>
+                    <ul class="achievements">
+                        <li>Contributed to enterprise logistics and HR applications</li>
+                        <li>Led system integrations and modernization with .NET and SQL</li>
+                        <li>Mentored junior developers on coding standards</li>
+                    </ul>
+                    <div class="tech-stack">
+                        <span class="tech-tag">.NET</span>
+                        <span class="tech-tag">SQL Server</span>
+                        <span class="tech-tag">Logistics Systems</span>
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="role-title">System Software Developer</div>
+                        <div class="company-info">Dalton Efectivo Seguro • Zapopan, MX</div>
+                        <div class="duration">October 2018 - March 2019</div>
+                    </div>
+                    <div class="description">
+                        Developed and maintained backend services supporting financial operations. Implemented process automation solutions, improving internal system efficiency.
+                    </div>
+                    <ul class="achievements">
+                        <li>Developed backend services for financial operations</li>
+                        <li>Implemented process automation improving system efficiency</li>
+                    </ul>
+                    <div class="tech-stack">
+                        <span class="tech-tag">.NET</span>
+                        <span class="tech-tag">SQL Server</span>
+                        <span class="tech-tag">Financial Systems</span>
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="role-title">Software Developer</div>
+                        <div class="company-info">EC Ideas • Guadalajara, MX</div>
+                        <div class="duration">July 2014 - September 2017</div>
+                    </div>
+                    <div class="description">
+                        Early career development across multiple client projects. Gained foundational experience in .NET development and software engineering practices.
+                    </div>
+                    <ul class="achievements">
+                        <li>Gained foundational .NET development experience</li>
+                        <li>Contributed to multiple client projects</li>
+                    </ul>
+                    <div class="tech-stack">
+                        <span class="tech-tag">.NET</span>
+                        <span class="tech-tag">C#</span>
+                        <span class="tech-tag">SQL Server</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>Key Projects</h2>
+            </div>
+            <div class="section-content">
+                <div class="project-item">
+                    <div class="project-header">
+                        <div class="project-title">Legacy System Overhaul</div>
+                        <div class="project-tagline">"It works. It lasts. And now, it grows."</div>
+                    </div>
+                    <div class="description">
+                        Rebuilt a legacy desktop app into a scalable web platform using .NET Core and React. Not a migration—a structural resurrection. Delivered clarity, modularity, and future-proof design.
+                    </div>
+                    <ul class="achievements">
+                        <li>Transformed legacy desktop app into scalable web platform</li>
+                        <li>Delivered modular, future-proof architecture</li>
+                        <li>Established modern development practices</li>
+                    </ul>
+                    <div class="tech-stack">
+                        <span class="tech-tag">.NET Core</span>
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">SQL Server</span>
+                        <span class="tech-tag">Azure</span>
+                    </div>
+                </div>
+
+                <div class="project-item">
+                    <div class="project-header">
+                        <div class="project-title">Reverse Engineering Leadership</div>
+                        <div class="project-tagline">"They gave us scrap. We built signal."</div>
+                    </div>
+                    <div class="description">
+                        Dissected undocumented Chinese hardware to sync coin insertions with GPS via custom circuit design. Engineered signal adaptation with resistors, TLCs and trial-by-fire. No manuals. No excuses. Only binary grit and instinct.
+                    </div>
+                    <ul class="achievements">
+                        <li>Reverse-engineered undocumented hardware successfully</li>
+                        <li>Designed custom circuits for signal adaptation</li>
+                        <li>Integrated coin mechanisms with GPS tracking</li>
+                    </ul>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Circuit Design</span>
+                        <span class="tech-tag">Hardware Integration</span>
+                        <span class="tech-tag">C++</span>
+                        <span class="tech-tag">GPS Systems</span>
+                    </div>
+                </div>
+
+                <div class="project-item">
+                    <div class="project-header">
+                        <div class="project-title">Zero-Resource Mobile Launch</div>
+                        <div class="project-tagline">"Built with nothing. Runs like everything."</div>
+                    </div>
+                    <div class="description">
+                        Spearheaded development of a logistics app in Ionic without allocated resources. Wove it into production pipelines solo. Now integral to field operations.
+                    </div>
+                    <ul class="achievements">
+                        <li>Delivered production mobile app without allocated resources</li>
+                        <li>Integrated with existing logistics pipelines</li>
+                        <li>Now critical to field operations</li>
+                    </ul>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Ionic Framework</span>
+                        <span class="tech-tag">Angular</span>
+                        <span class="tech-tag">TypeScript</span>
+                        <span class="tech-tag">RESTful APIs</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>Education</h2>
+            </div>
+            <div class="section-content">
+                <div class="education-item">
+                    <div class="degree">Bachelor's Degree in Computer Systems Engineering</div>
+                    <div class="institution">UTEL University</div>
+                    <div class="duration">August 2017 - June 2024</div>
+                </div>
+                
+                <div class="education-item">
+                    <div class="degree">Technologist Degree in Computer Science and IT</div>
+                    <div class="institution">CETI Colomos Institute</div>
+                    <div class="duration">August 2011 - June 2014</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>Languages</h2>
+            </div>
+            <div class="section-content">
+                <div class="languages-list">
+                    <div class="language-item">
+                        <div class="language-name">Spanish</div>
+                        <div class="language-level">Native</div>
+                    </div>
+                    <div class="language-item">
+                        <div class="language-name">English</div>
+                        <div class="language-level">Professional</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
