@@ -400,7 +400,7 @@ def list_generated_cvs():
             CV_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
             return {"count": 0, "files": []}
 
-        cv_files = sorted(CV_OUTPUT_DIR.glob("cv_*.html"), key=lambda p: p.stat().st_mtime, reverse=True)
+        cv_files = sorted(CV_OUTPUT_DIR.glob("cv_*.pdf"), key=lambda p: p.stat().st_mtime, reverse=True)
 
         from datetime import datetime
 
@@ -411,7 +411,7 @@ def list_generated_cvs():
                     "filename": f.name,
                     "size_kb": round(f.stat().st_size / 1024, 1),
                     "created_at": datetime.fromtimestamp(f.stat().st_mtime).isoformat(),
-                    "format": "html",
+                    "format": "pdf",
                     "download_url": f"/api/cv/download/{f.name}",
                     "preview_url": f"/api/cv/file/{f.name}"
                 }
@@ -1202,6 +1202,103 @@ Return ONLY the complete HTML (<!DOCTYPE html> to </html>), no explanations."""
         raise HTTPException(
             status_code=500,
             detail=f"CV tailoring failed: {str(e)}\n{traceback.format_exc()}"
+        )
+
+# ========================
+# Icon Service Endpoints
+# ========================
+
+try:
+    from services.icon_service import (
+        get_tech_icon,
+        search_icons,
+        get_all_tech_categories
+    )
+except ImportError:
+    get_tech_icon = None
+    search_icons = None
+    get_all_tech_categories = None
+
+@app.get("/api/icons")
+async def get_icons(query: str):
+    """
+    Get icon data for a technology
+
+    Query parameters:
+        query: Technology name (e.g., "react", "python", "aws")
+
+    Returns:
+        Icon data with emoji, svg_url, color, and category
+    """
+    if not search_icons:
+        raise HTTPException(
+            status_code=503,
+            detail="Icon service not available"
+        )
+
+    try:
+        results = search_icons(query)
+        return {
+            "query": query,
+            "results": results,
+            "count": len(results)
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Icon search failed: {str(e)}"
+        )
+
+@app.get("/api/icons/categories")
+async def get_icon_categories():
+    """
+    Get all available technology categories with tech lists
+
+    Returns:
+        Dictionary of categories with their technologies
+    """
+    if not get_all_tech_categories:
+        raise HTTPException(
+            status_code=503,
+            detail="Icon service not available"
+        )
+
+    try:
+        categories = get_all_tech_categories()
+        return {
+            "categories": categories,
+            "total_technologies": sum(len(techs) for techs in categories.values())
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to retrieve categories: {str(e)}"
+        )
+
+@app.get("/api/icons/{tech_name}")
+async def get_single_icon(tech_name: str):
+    """
+    Get icon data for a specific technology
+
+    Path parameters:
+        tech_name: Technology name (e.g., "react", "python", "aws")
+
+    Returns:
+        Single icon data with emoji, svg_url, color, and category
+    """
+    if not get_tech_icon:
+        raise HTTPException(
+            status_code=503,
+            detail="Icon service not available"
+        )
+
+    try:
+        icon_data = get_tech_icon(tech_name)
+        return icon_data
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to retrieve icon: {str(e)}"
         )
 
 # ========================
