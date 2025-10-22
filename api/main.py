@@ -30,10 +30,15 @@ load_dotenv()
 
 # Import cv_builder functions
 try:
-    from scripts.cv_builder import generate_cv as cv_builder_generate
+    from scripts.cv_builder import (
+        generate_cv as cv_builder_generate,
+        generate_html_with_claude,
+        load_curriculum as load_cv_data
+    )
 except ImportError:
-    # If running from api/ directory, adjust path
     cv_builder_generate = None
+    generate_html_with_claude = None
+    load_cv_data = None
 
 # Import PDF service
 try:
@@ -67,6 +72,37 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ========================
+# Helper Functions
+# ========================
+
+def generate_cv_html(curriculum_path: Path) -> str:
+    """Generate HTML CV from curriculum data"""
+    cv_data = load_cv_data(curriculum_path)
+    return generate_html_with_claude(cv_data)
+
+
+def log_action_execution(
+    start_time: float,
+    action_type: str,
+    payload: Dict[str, Any],
+    result: Optional[Dict[str, Any]] = None,
+    success: bool = True,
+    error: Optional[str] = None
+):
+    """Log action execution with timing"""
+    if audit_logger:
+        execution_time = time.time() - start_time
+        audit_logger.log_action(
+            action_type=action_type,
+            payload=payload,
+            result=result,
+            success=success,
+            error=error,
+            execution_time=execution_time
+        )
+
 
 # ========================
 # Pydantic Models
@@ -261,15 +297,8 @@ def generate_cv_endpoint(request: CVGenerateRequest):
         Generated file path and download URL
     """
     try:
-        # Load curriculum and generate HTML with Claude
-        from datetime import datetime
-        import sys
-        sys.path.insert(0, str(PROJECT_ROOT))
-
-        from scripts.cv_builder import generate_html_with_claude, load_curriculum as load_cv_data
-
-        cv_data = load_cv_data(CURRICULUM_PATH)
-        html_content = generate_html_with_claude(cv_data)
+        # Generate HTML CV
+        html_content = generate_cv_html(CURRICULUM_PATH)
 
         # Save HTML file
         timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
@@ -808,27 +837,22 @@ async def execute_action(action: ActionRequest):
         payload = action.payload
 
         if action_type == "cv_generate":
-            # Phase 2: Generate PDF CV directly from HTML
+            # Generate PDF CV directly from HTML
             opportunity_id = payload.get("opportunity_id", "general")
-
-            # Load curriculum and generate HTML with Claude
-            from scripts.cv_builder import generate_html_with_claude, load_curriculum as load_cv_data
-
-            cv_data = load_cv_data(CURRICULUM_PATH)
-            html_content = generate_html_with_claude(cv_data)
-
-            # Generate PDF directly from HTML content (no intermediate HTML file)
-            timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
-            pdf_filename = f"cv_{opportunity_id}_{timestamp}.pdf"
-            pdf_path = CV_OUTPUT_DIR / pdf_filename
-
-            pdf_path.parent.mkdir(parents=True, exist_ok=True)
 
             if not is_pdf_service_available():
                 raise HTTPException(
                     status_code=503,
                     detail="PDF service unavailable. Install dependencies: cd api/services/pdf_generator && npm install"
                 )
+
+            # Generate HTML CV and convert to PDF
+            html_content = generate_cv_html(CURRICULUM_PATH)
+
+            timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
+            pdf_filename = f"cv_{opportunity_id}_{timestamp}.pdf"
+            pdf_path = CV_OUTPUT_DIR / pdf_filename
+            pdf_path.parent.mkdir(parents=True, exist_ok=True)
 
             try:
                 pdf_result = generate_pdf_from_html_content(
@@ -861,9 +885,8 @@ async def execute_action(action: ActionRequest):
                 "result": result
             }
 
-            # Audit log CV generation
+            # Audit logging
             if audit_logger:
-                execution_time = time.time() - start_time
                 audit_logger.log_cv_generation(
                     opportunity_id=opportunity_id,
                     format="pdf",
@@ -872,13 +895,7 @@ async def execute_action(action: ActionRequest):
                     pdf_generated=True,
                     file_size=pdf_result["size"]
                 )
-                audit_logger.log_action(
-                    action_type=action_type,
-                    payload=payload,
-                    result=result,
-                    success=True,
-                    execution_time=execution_time
-                )
+            log_action_execution(start_time, action_type, payload, result)
 
             return response
 
@@ -911,16 +928,8 @@ async def execute_action(action: ActionRequest):
                 }
             }
 
-            # Audit log opportunity tracking
-            if audit_logger:
-                execution_time = time.time() - start_time
-                audit_logger.log_action(
-                    action_type=action_type,
-                    payload=payload,
-                    result=response["result"],
-                    success=True,
-                    execution_time=execution_time
-                )
+            # Audit logging
+            log_action_execution(start_time, action_type, payload, response["result"])
 
             return response
 
@@ -939,16 +948,8 @@ async def execute_action(action: ActionRequest):
             "traceback": traceback.format_exc()
         }
 
-        # Audit log error
-        if audit_logger:
-            execution_time = time.time() - start_time
-            audit_logger.log_action(
-                action_type=action.type,
-                payload=action.payload,
-                success=False,
-                error=str(e),
-                execution_time=execution_time
-            )
+        # Audit logging
+        log_action_execution(start_time, action.type, action.payload, success=False, error=str(e))
 
         return error_response
 
