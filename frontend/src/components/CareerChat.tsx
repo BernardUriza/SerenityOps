@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import ChatMessage from './ChatMessage';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -263,7 +264,7 @@ const CareerChat: React.FC<CareerChatProps> = ({ apiBaseUrl }) => {
                         <span className="text-2xl mr-3 flex-shrink-0">🤖</span>
                       )}
                       <div className="flex-1">
-                        <p className="whitespace-pre-wrap">{msg.content}</p>
+                        <ChatMessage content={msg.content} role={msg.role} />
                         <p className={`text-xs mt-2 ${
                           msg.role === 'user' ? 'text-blue-200' : 'text-slate-500'
                         }`}>
