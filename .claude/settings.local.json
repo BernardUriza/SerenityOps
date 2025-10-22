@@ -21,7 +21,8 @@
       "Bash(pnpm install)",
       "Bash(pnpm start:serenity)",
       "Bash(git rm:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []

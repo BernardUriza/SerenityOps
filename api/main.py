@@ -37,9 +37,9 @@ except ImportError:
 
 # Import PDF service
 try:
-    from services.pdf_service import generate_pdf_from_html, is_pdf_service_available
+    from services.pdf_service import generate_pdf_from_html_content, is_pdf_service_available
 except ImportError:
-    generate_pdf_from_html = None
+    generate_pdf_from_html_content = None
     is_pdf_service_available = lambda: False
 
 # Import audit logger
@@ -808,67 +808,51 @@ async def execute_action(action: ActionRequest):
         payload = action.payload
 
         if action_type == "cv_generate":
-            # Phase 2: Generate HTML + PDF CV
+            # Phase 2: Generate PDF CV directly from HTML
             opportunity_id = payload.get("opportunity_id", "general")
-            export_pdf = payload.get("export_pdf", True)  # Default to PDF export
 
-            # Load curriculum
-            with open(CURRICULUM_PATH, 'r', encoding='utf-8') as f:
-                curriculum = yaml.safe_load(f)
-
-            # Generate HTML using Claude
+            # Load curriculum and generate HTML with Claude
             from scripts.cv_builder import generate_html_with_claude, load_curriculum as load_cv_data
 
             cv_data = load_cv_data(CURRICULUM_PATH)
             html_content = generate_html_with_claude(cv_data)
 
-            # Save HTML
+            # Generate PDF directly from HTML content (no intermediate HTML file)
             timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
-            html_filename = f"cv_{opportunity_id}_{timestamp}.html"
-            html_path = CV_OUTPUT_DIR / html_filename
+            pdf_filename = f"cv_{opportunity_id}_{timestamp}.pdf"
+            pdf_path = CV_OUTPUT_DIR / pdf_filename
 
-            html_path.parent.mkdir(parents=True, exist_ok=True)
-            with open(html_path, 'w', encoding='utf-8') as f:
-                f.write(html_content)
+            pdf_path.parent.mkdir(parents=True, exist_ok=True)
 
-            result = {
-                "format": "html",
-                "html_path": str(html_path),
-                "html_filename": html_filename,
-                "html_download_url": f"/api/cv/download/{html_filename}",
-                "preview_url": f"/api/cv/file/{html_filename}"
-            }
+            if not is_pdf_service_available():
+                raise HTTPException(
+                    status_code=503,
+                    detail="PDF service unavailable. Install dependencies: cd api/services/pdf_generator && npm install"
+                )
 
-            # Phase 2: Generate PDF if requested and service available
-            if export_pdf and is_pdf_service_available():
-                try:
-                    pdf_filename = f"cv_{opportunity_id}_{timestamp}.pdf"
-                    pdf_path = CV_OUTPUT_DIR / pdf_filename
+            try:
+                pdf_result = generate_pdf_from_html_content(
+                    html_content=html_content,
+                    output_path=pdf_path,
+                    format="A4",
+                    margin="medium"
+                )
 
-                    pdf_result = generate_pdf_from_html(
-                        html_path=html_path,
-                        output_path=pdf_path,
-                        format="A4",
-                        margin="medium"
-                    )
+                result = {
+                    "format": "pdf",
+                    "pdf_path": str(pdf_path),
+                    "pdf_filename": pdf_filename,
+                    "pdf_download_url": f"/api/cv/download/{pdf_filename}",
+                    "pdf_size": pdf_result["size"]
+                }
 
-                    result.update({
-                        "format": "pdf",
-                        "pdf_path": str(pdf_path),
-                        "pdf_filename": pdf_filename,
-                        "pdf_download_url": f"/api/cv/download/{pdf_filename}",
-                        "pdf_size": pdf_result["size"]
-                    })
+                message = f"CV generated successfully (PDF) for {opportunity_id}"
 
-                    message = f"CV generated successfully (HTML + PDF) for {opportunity_id}"
-                except Exception as pdf_error:
-                    # PDF generation failed, but HTML succeeded
-                    result["pdf_error"] = str(pdf_error)
-                    message = f"CV generated (HTML only) for {opportunity_id}. PDF conversion failed: {str(pdf_error)}"
-            else:
-                if not is_pdf_service_available():
-                    result["pdf_note"] = "PDF service unavailable. Install dependencies: cd api/services/pdf_generator && npm install"
-                message = f"CV generated successfully (HTML) for {opportunity_id}"
+            except Exception as pdf_error:
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"PDF generation failed: {str(pdf_error)}"
+                )
 
             response = {
                 "status": "success",
@@ -882,11 +866,11 @@ async def execute_action(action: ActionRequest):
                 execution_time = time.time() - start_time
                 audit_logger.log_cv_generation(
                     opportunity_id=opportunity_id,
-                    format=result.get("format", "html"),
-                    output_path=result.get("pdf_path") or result.get("html_path", ""),
+                    format="pdf",
+                    output_path=str(pdf_path),
                     success=True,
-                    pdf_generated=bool(result.get("pdf_path")),
-                    file_size=result.get("pdf_size") or (Path(result["html_path"]).stat().st_size if result.get("html_path") else None)
+                    pdf_generated=True,
+                    file_size=pdf_result["size"]
                 )
                 audit_logger.log_action(
                     action_type=action_type,

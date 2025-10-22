@@ -87,78 +87,25 @@ const ActionExecutor: React.FC<ActionExecutorProps> = ({ action, apiBaseUrl }) =
               <div className="mt-3 p-3 bg-slate-950 rounded border border-slate-700">
                 <p className="text-xs text-slate-500 uppercase font-semibold mb-2">Result:</p>
 
-                {/* PDF Download (Primary) */}
+                {/* PDF Download */}
                 {result.result.pdf_download_url && (
                   <a
                     href={`${apiBaseUrl}${result.result.pdf_download_url}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center px-3 py-2 bg-red-600 hover:bg-red-500 text-white rounded text-sm font-medium transition-colors"
+                    className="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg text-sm font-medium transition-colors shadow-lg"
                   >
-                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                     </svg>
-                    Download PDF
+                    Download PDF ({(result.result.pdf_size / 1024).toFixed(1)} KB)
                   </a>
                 )}
 
-                {/* HTML Download (Secondary) */}
-                {result.result.html_download_url && (
-                  <a
-                    href={`${apiBaseUrl}${result.result.html_download_url}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded text-sm font-medium transition-colors ml-2"
-                  >
-                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                    Download HTML
-                  </a>
-                )}
-
-                {/* Legacy support for download_url */}
-                {!result.result.pdf_download_url && !result.result.html_download_url && result.result.download_url && (
-                  <a
-                    href={`${apiBaseUrl}${result.result.download_url}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded text-sm font-medium transition-colors"
-                  >
-                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                    Download {result.result.format?.toUpperCase() || 'File'}
-                  </a>
-                )}
-
-                {/* Preview Button */}
-                {result.result.preview_url && (
-                  <a
-                    href={`${apiBaseUrl}${result.result.preview_url}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center px-3 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded text-sm font-medium transition-colors ml-2"
-                  >
-                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                    Preview HTML
-                  </a>
-                )}
-
-                {/* PDF Error Note */}
-                {result.result.pdf_error && (
-                  <div className="mt-2 text-xs text-yellow-400">
-                    ⚠️ PDF generation failed: {result.result.pdf_error}
-                  </div>
-                )}
-
-                {/* PDF Service Note */}
-                {result.result.pdf_note && (
-                  <div className="mt-2 text-xs text-slate-400">
-                    ℹ️ {result.result.pdf_note}
+                {/* File Info */}
+                {result.result.pdf_filename && (
+                  <div className="mt-3 text-xs text-slate-400">
+                    <span className="font-mono">{result.result.pdf_filename}</span>
                   </div>
                 )}
               </div>

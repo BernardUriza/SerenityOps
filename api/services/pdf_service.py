@@ -102,6 +102,56 @@ def generate_pdf_from_html(
         raise PDFGenerationError(f"Unexpected error: {str(e)}")
 
 
+def generate_pdf_from_html_content(
+    html_content: str,
+    output_path: Path,
+    format: str = "A4",
+    margin: str = "medium",
+    landscape: bool = False
+) -> Dict[str, Any]:
+    """
+    Generate PDF from HTML content string using Puppeteer
+
+    Args:
+        html_content: HTML content as string
+        output_path: Path where PDF should be saved
+        format: Paper format (A4, Letter, Legal)
+        margin: Margin size (none, small, medium, large)
+        landscape: Whether to use landscape orientation
+
+    Returns:
+        Dict with generation result metadata
+
+    Raises:
+        PDFGenerationError: If PDF generation fails
+    """
+    import tempfile
+    import os
+
+    # Create temporary HTML file
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.html', delete=False, encoding='utf-8') as temp_html:
+        temp_html.write(html_content)
+        temp_html_path = Path(temp_html.name)
+
+    try:
+        # Generate PDF from temporary HTML file
+        result = generate_pdf_from_html(
+            html_path=temp_html_path,
+            output_path=output_path,
+            format=format,
+            margin=margin,
+            landscape=landscape
+        )
+        return result
+
+    finally:
+        # Clean up temporary HTML file
+        try:
+            os.unlink(temp_html_path)
+        except Exception as e:
+            logger.warning(f"Failed to delete temporary HTML file {temp_html_path}: {str(e)}")
+
+
 def is_pdf_service_available() -> bool:
     """
     Check if PDF generation service is available
