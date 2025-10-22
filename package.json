@@ -1,0 +1,26 @@
+{
+  "name": "serenityops",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Personal Intelligence System for Structured Career & Financial Management",
+  "workspaces": [
+    "frontend",
+    "api"
+  ],
+  "scripts": {
+    "dev": "pnpm start:serenity",
+    "start:serenity": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "clean": "turbo run clean",
+    "test": "turbo run test"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.3"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.15.0"
+}
