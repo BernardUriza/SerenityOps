@@ -23,7 +23,11 @@
       "Bash(git rm:*)",
       "Bash(python3:*)",
       "Bash(git push:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(git merge:*)",
+      "Read(//Users/bernardurizaorozco/.npm/_logs/**)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm run build:*)"
     ],
     "deny": [],
     "ask": []

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import ProfileForm from './components/ProfileForm';
-import ExperienceList from './components/ExperienceList';
+import { ExperienceEditor } from './components/experience';
 import ProjectsManager from './components/ProjectsManager';
 import SkillsEditor from './components/SkillsEditor';
 import EducationList from './components/EducationList';
@@ -221,12 +221,7 @@ function App() {
           )}
 
           {activeTab === 'experience' && (
-            <ExperienceList
-              experiences={curriculum.experience}
-              onChange={(experiences) =>
-                setCurriculum({ ...curriculum, experience: experiences })
-              }
-            />
+            <ExperienceEditor />
           )}
 
           {activeTab === 'projects' && (
