@@ -12,7 +12,32 @@ export default {
         surface: '#0f172a',
         card: '#1e293b',
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            maxWidth: 'none',
+            color: '#e2e8f0',
+            a: {
+              color: '#60a5fa',
+              '&:hover': {
+                color: '#93c5fd',
+              },
+            },
+            code: {
+              color: '#34d399',
+            },
+            'code::before': {
+              content: '""',
+            },
+            'code::after': {
+              content: '""',
+            },
+          },
+        },
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 }
