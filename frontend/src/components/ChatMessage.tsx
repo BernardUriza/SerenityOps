@@ -3,18 +3,41 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/github-dark.css';
+import ActionExecutor from './ActionExecutor';
 
 interface ChatMessageProps {
   content: string;
   role: 'user' | 'assistant';
+  apiBaseUrl: string;
 }
 
-const ChatMessage: React.FC<ChatMessageProps> = React.memo(({ content, role }) => {
+const ChatMessage: React.FC<ChatMessageProps> = React.memo(({ content, role, apiBaseUrl }) => {
   if (role === 'user') {
     // User messages: simple text rendering
     return (
       <p className="whitespace-pre-wrap">{content}</p>
     );
+  }
+
+  // Detect ACTION blocks in assistant messages
+  if (role === 'assistant' && content.trim().startsWith('ACTION:')) {
+    try {
+      const actionPayload = content.replace(/^ACTION:\s*/, '').trim();
+      const action = JSON.parse(actionPayload);
+
+      return <ActionExecutor action={action} apiBaseUrl={apiBaseUrl} />;
+    } catch (error) {
+      // If JSON parsing fails, show error message
+      return (
+        <div className="my-4 p-4 bg-red-900/30 border border-red-700 rounded-lg">
+          <p className="text-red-300 font-semibold">⚠️ Invalid ACTION format</p>
+          <p className="text-red-400 text-sm mt-1">Failed to parse ACTION block</p>
+          <pre className="mt-2 p-3 bg-slate-950 rounded border border-slate-700 text-xs text-red-400 overflow-x-auto">
+            {content}
+          </pre>
+        </div>
+      );
+    }
   }
 
   // Assistant messages: rich Markdown rendering with wrapper div for className

@@ -1,0 +1,12 @@
+{
+  "name": "serenityops-pdf-generator",
+  "version": "1.0.0",
+  "description": "PDF generation service using Puppeteer for SerenityOps",
+  "main": "generate_pdf.js",
+  "scripts": {
+    "test": "node generate_pdf.js test.html test.pdf"
+  },
+  "dependencies": {
+    "puppeteer": "^24.15.0"
+  }
+}

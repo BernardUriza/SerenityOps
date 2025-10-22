@@ -14,7 +14,14 @@
       "Bash(npm run dev:*)",
       "Bash(curl:*)",
       "Bash(npx tailwindcss:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(python3 -m pip:*)",
+      "Bash(test:*)",
+      "Bash(cat:*)",
+      "Bash(pnpm install)",
+      "Bash(pnpm start:serenity)",
+      "Bash(git rm:*)",
+      "Bash(python3:*)"
     ],
     "deny": [],
     "ask": []

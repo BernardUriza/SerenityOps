@@ -221,6 +221,14 @@ pnpm-lock.yaml
 # Turborepo
 .turbo/
 
+# SerenityOps - Audit Logs
+logs/audit/
+*.jsonl
+
+# SerenityOps - PDF Generator Service
+api/services/pdf_generator/node_modules/
+api/services/pdf_generator/package-lock.json
+
 # Build outputs
 dist/
 dist-ssr/

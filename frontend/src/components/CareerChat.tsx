@@ -39,7 +39,45 @@ const CareerChat: React.FC<CareerChatProps> = ({ apiBaseUrl }) => {
 
   useEffect(() => {
     loadConversations();
+    autoLoadLastConversation();
   }, []);
+
+  // Save conversation ID to localStorage whenever it changes
+  useEffect(() => {
+    if (conversationId) {
+      localStorage.setItem('serenity_last_conversation_id', conversationId);
+    }
+  }, [conversationId]);
+
+  const autoLoadLastConversation = async () => {
+    try {
+      // Try localStorage first
+      const lastId = localStorage.getItem('serenity_last_conversation_id');
+
+      if (lastId) {
+        // Verify it still exists on backend
+        const response = await fetch(`${apiBaseUrl}/api/chat/conversation/${lastId}`);
+        if (response.ok) {
+          const data = await response.json();
+          setMessages(data.messages || []);
+          setConversationId(lastId);
+          return;
+        }
+      }
+
+      // Fallback: load most recent from backend
+      const lastResponse = await fetch(`${apiBaseUrl}/api/chat/last`);
+      if (lastResponse.ok) {
+        const data = await lastResponse.json();
+        if (data.conversation) {
+          setMessages(data.conversation.messages || []);
+          setConversationId(data.conversation.session.id);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to auto-load conversation:', error);
+    }
+  };
 
   const loadConversations = async () => {
     try {
@@ -146,6 +184,8 @@ const CareerChat: React.FC<CareerChatProps> = ({ apiBaseUrl }) => {
     setMessages([]);
     setConversationId(null);
     setShowHistory(false);
+    // Clear localStorage to start fresh
+    localStorage.removeItem('serenity_last_conversation_id');
   };
 
   return (
@@ -264,7 +304,7 @@ const CareerChat: React.FC<CareerChatProps> = ({ apiBaseUrl }) => {
                         <span className="text-2xl mr-3 flex-shrink-0">🤖</span>
                       )}
                       <div className="flex-1">
-                        <ChatMessage content={msg.content} role={msg.role} />
+                        <ChatMessage content={msg.content} role={msg.role} apiBaseUrl={apiBaseUrl} />
                         <p className={`text-xs mt-2 ${
                           msg.role === 'user' ? 'text-blue-200' : 'text-slate-500'
                         }`}>

@@ -1,0 +1,26 @@
+session:
+  id: conv_20251022_145920
+  date: '2025-10-22T14:59:20.636813'
+  type: career_chat
+messages:
+- role: user
+  timestamp: '2025-10-22T14:59:30.659358'
+  content: mañana entrevista con Paylocity como ingeniero AI
+- role: assistant
+  timestamp: '2025-10-22T14:59:30.659387'
+  content: "¡Excelente! Una entrevista con Paylocity como ingeniero AI es una gran\
+    \ oportunidad. Paylocity se enfoca en soluciones de RRHH y nómina, así que probablemente\
+    \ buscan integrar AI para automatización de procesos, análisis predictivo, o mejoras\
+    \ en UX.\n\n**Preparación inmediata para mañana:**\n\n1. **Enfócate en tus proyectos\
+    \ de AI Integration** - destaca cómo has implementado AI en sistemas existentes\n\
+    2. **Prepara ejemplos específicos** de tu experiencia con:\n   - APIs de AI/ML\
+    \ (OpenAI, Azure Cognitive Services, etc.)\n   - Integración de modelos en aplicaciones\
+    \ full-stack\n   - Optimización de rendimiento en sistemas AI\n\n3. **Investiga\
+    \ sus productos** - Modern Workforce Platform, analytics, automation features\n\
+    \n4. **Preguntas técnicas probables:**\n   - Experiencia con LLMs y fine-tuning\n\
+    \   - Arquitectura de sistemas AI escalables\n   - Data processing y ETL para\
+    \ modelos AI\n\n**¿Qué tecnologías AI específicas has usado en tus proyectos recientes?**\
+    \ Necesito detalles para ayudarte a enfocar mejor tu pitch técnico.\n\nTambién,\
+    \ después de la entrevista, comparte cómo fue para actualizar tu perfil con cualquier\
+    \ feedback o nueva dirección técnica que descubras.\n\n¿Tienes alguna pregunta\
+    \ específica sobre la empresa o el rol?"

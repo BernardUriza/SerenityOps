@@ -35,6 +35,20 @@ except ImportError:
     # If running from api/ directory, adjust path
     cv_builder_generate = None
 
+# Import PDF service
+try:
+    from services.pdf_service import generate_pdf_from_html, is_pdf_service_available
+except ImportError:
+    generate_pdf_from_html = None
+    is_pdf_service_available = lambda: False
+
+# Import audit logger
+try:
+    from services.audit_logger import get_audit_logger
+    audit_logger = get_audit_logger()
+except ImportError:
+    audit_logger = None
+
 # ========================
 # FastAPI App Setup
 # ========================
@@ -739,6 +753,220 @@ async def get_conversation(conversation_id: str):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to load conversation: {str(e)}")
+
+@app.get("/api/chat/last")
+async def get_last_conversation():
+    """
+    Get the most recent conversation for auto-loading
+
+    Returns:
+        The latest conversation with full message history
+    """
+    try:
+        if not CONVERSATIONS_DIR.exists():
+            CONVERSATIONS_DIR.mkdir(parents=True, exist_ok=True)
+            return {"conversation": None}
+
+        conv_files = sorted(CONVERSATIONS_DIR.glob("*.yaml"), key=lambda p: p.stat().st_mtime, reverse=True)
+
+        if not conv_files:
+            return {"conversation": None}
+
+        # Load the most recent conversation
+        with open(conv_files[0], 'r', encoding='utf-8') as f:
+            data = yaml.safe_load(f)
+
+        return {"conversation": data}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to load last conversation: {str(e)}")
+
+# ========================
+# Action Execution System
+# ========================
+
+class ActionRequest(BaseModel):
+    type: str
+    payload: Dict[str, Any] = {}
+
+@app.post("/api/actions/execute")
+async def execute_action(action: ActionRequest):
+    """
+    Universal action dispatcher for SerenityOps
+
+    Handles execution of actions sent from CareerChat or other modules.
+    Currently supports:
+    - cv_generate: Generate CV with HTML + PDF export
+    - opportunity_track: Track new opportunity
+
+    Phase 2: Full audit logging and PDF generation via Puppeteer
+    """
+    import time
+    start_time = time.time()
+
+    try:
+        action_type = action.type
+        payload = action.payload
+
+        if action_type == "cv_generate":
+            # Phase 2: Generate HTML + PDF CV
+            opportunity_id = payload.get("opportunity_id", "general")
+            export_pdf = payload.get("export_pdf", True)  # Default to PDF export
+
+            # Load curriculum
+            with open(CURRICULUM_PATH, 'r', encoding='utf-8') as f:
+                curriculum = yaml.safe_load(f)
+
+            # Generate HTML using Claude
+            from scripts.cv_builder import generate_html_with_claude, load_curriculum as load_cv_data
+
+            cv_data = load_cv_data(CURRICULUM_PATH)
+            html_content = generate_html_with_claude(cv_data)
+
+            # Save HTML
+            timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
+            html_filename = f"cv_{opportunity_id}_{timestamp}.html"
+            html_path = CV_OUTPUT_DIR / html_filename
+
+            html_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(html_path, 'w', encoding='utf-8') as f:
+                f.write(html_content)
+
+            result = {
+                "format": "html",
+                "html_path": str(html_path),
+                "html_filename": html_filename,
+                "html_download_url": f"/api/cv/download/{html_filename}",
+                "preview_url": f"/api/cv/file/{html_filename}"
+            }
+
+            # Phase 2: Generate PDF if requested and service available
+            if export_pdf and is_pdf_service_available():
+                try:
+                    pdf_filename = f"cv_{opportunity_id}_{timestamp}.pdf"
+                    pdf_path = CV_OUTPUT_DIR / pdf_filename
+
+                    pdf_result = generate_pdf_from_html(
+                        html_path=html_path,
+                        output_path=pdf_path,
+                        format="A4",
+                        margin="medium"
+                    )
+
+                    result.update({
+                        "format": "pdf",
+                        "pdf_path": str(pdf_path),
+                        "pdf_filename": pdf_filename,
+                        "pdf_download_url": f"/api/cv/download/{pdf_filename}",
+                        "pdf_size": pdf_result["size"]
+                    })
+
+                    message = f"CV generated successfully (HTML + PDF) for {opportunity_id}"
+                except Exception as pdf_error:
+                    # PDF generation failed, but HTML succeeded
+                    result["pdf_error"] = str(pdf_error)
+                    message = f"CV generated (HTML only) for {opportunity_id}. PDF conversion failed: {str(pdf_error)}"
+            else:
+                if not is_pdf_service_available():
+                    result["pdf_note"] = "PDF service unavailable. Install dependencies: cd api/services/pdf_generator && npm install"
+                message = f"CV generated successfully (HTML) for {opportunity_id}"
+
+            response = {
+                "status": "success",
+                "action": action_type,
+                "message": message,
+                "result": result
+            }
+
+            # Audit log CV generation
+            if audit_logger:
+                execution_time = time.time() - start_time
+                audit_logger.log_cv_generation(
+                    opportunity_id=opportunity_id,
+                    format=result.get("format", "html"),
+                    output_path=result.get("pdf_path") or result.get("html_path", ""),
+                    success=True,
+                    pdf_generated=bool(result.get("pdf_path")),
+                    file_size=result.get("pdf_size") or (Path(result["html_path"]).stat().st_size if result.get("html_path") else None)
+                )
+                audit_logger.log_action(
+                    action_type=action_type,
+                    payload=payload,
+                    result=result,
+                    success=True,
+                    execution_time=execution_time
+                )
+
+            return response
+
+        elif action_type == "opportunity_track":
+            # Track new opportunity
+            opportunity_data = payload.get("opportunity", {})
+
+            # Load opportunities
+            if OPPORTUNITIES_PATH.exists():
+                with open(OPPORTUNITIES_PATH, 'r', encoding='utf-8') as f:
+                    opportunities = yaml.safe_load(f) or {"opportunities": []}
+            else:
+                opportunities = {"opportunities": []}
+
+            # Add new opportunity
+            opportunities["opportunities"].append(opportunity_data)
+
+            # Save
+            with open(OPPORTUNITIES_PATH, 'w', encoding='utf-8') as f:
+                yaml.dump(opportunities, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+
+            response = {
+                "status": "success",
+                "action": action_type,
+                "message": f"Opportunity '{opportunity_data.get('company', 'Unknown')}' tracked successfully",
+                "result": {
+                    "opportunity_id": opportunity_data.get("id"),
+                    "company": opportunity_data.get("company"),
+                    "role": opportunity_data.get("role")
+                }
+            }
+
+            # Audit log opportunity tracking
+            if audit_logger:
+                execution_time = time.time() - start_time
+                audit_logger.log_action(
+                    action_type=action_type,
+                    payload=payload,
+                    result=response["result"],
+                    success=True,
+                    execution_time=execution_time
+                )
+
+            return response
+
+        else:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Unknown action type: {action_type}. Supported: cv_generate, opportunity_track"
+            )
+
+    except Exception as e:
+        import traceback
+        error_response = {
+            "status": "error",
+            "action": action.type,
+            "message": f"Action execution failed: {str(e)}",
+            "traceback": traceback.format_exc()
+        }
+
+        # Audit log error
+        if audit_logger:
+            execution_time = time.time() - start_time
+            audit_logger.log_action(
+                action_type=action.type,
+                payload=action.payload,
+                success=False,
+                error=str(e),
+                execution_time=execution_time
+            )
+
+        return error_response
 
 # ========================
 # Phase 2: GitHub Sync & Job Matching
