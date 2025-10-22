@@ -225,6 +225,10 @@ pnpm-lock.yaml
 logs/audit/
 *.jsonl
 
+# SerenityOps - CV Generation Jobs
+logs/cv_jobs/
+logs/cv_jobs/*.json
+
 # SerenityOps - PDF Generator Service
 api/services/pdf_generator/node_modules/
 api/services/pdf_generator/package-lock.json

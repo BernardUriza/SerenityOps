@@ -8,6 +8,7 @@ import EducationList from './components/EducationList';
 import CVManager from './components/CVManager';
 import QuickImport from './components/QuickImport';
 import CareerChat from './components/CareerChat';
+import { useCVJobStore, loadJobFromLocalStorage } from './stores/cvJobStore';
 
 // API configuration
 const API_BASE_URL = 'http://localhost:8000';
@@ -21,10 +22,17 @@ function App() {
   const [generating, setGenerating] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>('chat');
   const [notification, setNotification] = useState<{message: string, type: 'success' | 'error'} | null>(null);
+  const { setJob } = useCVJobStore();
 
   useEffect(() => {
     loadCurriculum();
-  }, []);
+
+    // Restore job from localStorage if it exists
+    const savedJob = loadJobFromLocalStorage();
+    if (savedJob) {
+      setJob(savedJob);
+    }
+  }, [setJob]);
 
   const loadCurriculum = async () => {
     try {
