@@ -15,7 +15,7 @@ import os
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 import yaml
 
@@ -177,7 +177,7 @@ def save_file(content: str, output_path: Path) -> Path:
 
 def generate_cv(
     format: str = "html",
-    output_path: Path | None = None
+    output_path: Optional[Path] = None
 ) -> Path:
     """
     Main CV generation orchestrator.
