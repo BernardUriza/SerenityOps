@@ -9,7 +9,7 @@ import { create } from 'zustand';
 
 export type JobStatus = 'queued' | 'running' | 'error' | 'success';
 
-export interface CVJob {
+export type CVJob = {
   id: string;
   opportunity: string;
   user_id: string;

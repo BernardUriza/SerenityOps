@@ -6,7 +6,8 @@
  */
 
 import { useEffect, useRef } from 'react';
-import { useCVJobStore, CVJob } from '../stores/cvJobStore';
+import { useCVJobStore } from '../stores/cvJobStore';
+import type { CVJob } from '../stores/cvJobStore';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 const POLLING_INTERVAL = 1500; // 1.5 seconds
@@ -34,7 +35,7 @@ export function useCVJobPolling() {
           throw new Error(`HTTP ${response.status}`);
         }
 
-        const data: CVJob = await response.json();
+        const data = await response.json() as CVJob;
 
         // Update store with latest status
         updateStatus(data);
