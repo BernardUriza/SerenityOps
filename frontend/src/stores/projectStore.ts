@@ -5,6 +5,7 @@
 
 import { create } from 'zustand';
 import type { ProjectStore, Project } from '../types/project';
+import { curriculumSaveQueue } from './curriculumSaveQueue';
 
 const API_BASE_URL = 'http://localhost:8000/api';
 
@@ -55,26 +56,29 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     set({ isSaving: true, error: undefined });
 
     try {
-      // Fetch full curriculum
-      const response = await fetch(`${API_BASE_URL}/curriculum`);
-      if (!response.ok) throw new Error('Failed to fetch curriculum');
+      // Use queue to prevent race conditions with other stores
+      await curriculumSaveQueue.enqueue(async () => {
+        // Fetch full curriculum (always get latest state)
+        const response = await fetch(`${API_BASE_URL}/curriculum`);
+        if (!response.ok) throw new Error('Failed to fetch curriculum');
 
-      const curriculum = await response.json();
+        const curriculum = await response.json();
 
-      // Update projects in curriculum
-      const updatedCurriculum = {
-        ...curriculum,
-        projects: projects.map(({ id, ...proj }) => proj), // Remove id for backend
-      };
+        // Update projects in curriculum
+        const updatedCurriculum = {
+          ...curriculum,
+          projects: projects.map(({ id, ...proj }) => proj), // Remove id for backend
+        };
 
-      // Save updated curriculum
-      const saveResponse = await fetch(`${API_BASE_URL}/curriculum`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedCurriculum),
+        // Save updated curriculum
+        const saveResponse = await fetch(`${API_BASE_URL}/curriculum`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updatedCurriculum),
+        });
+
+        if (!saveResponse.ok) throw new Error('Failed to save projects');
       });
-
-      if (!saveResponse.ok) throw new Error('Failed to save projects');
 
       set({ isSaving: false, lastSaved: new Date(), error: undefined });
     } catch (error) {
