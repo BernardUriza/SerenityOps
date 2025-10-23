@@ -69,15 +69,15 @@ export const ProjectsManager: React.FC = () => {
   }
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-3">
+    <div className="w-full">
       {/* Header */}
-      <div className="flex justify-between items-center mb-3">
+      <div className="flex justify-between items-center mb-6">
         <div>
           <div className="flex items-center gap-2">
-            <Rocket size={14} className="text-macAccent" />
-            <h1 className="text-base font-bold text-macText">Projects</h1>
+            <Rocket size={16} className="text-macAccent" />
+            <h1 className="text-lg font-bold text-macText">Projects</h1>
           </div>
-          <div className="flex items-center gap-2 text-xs text-macSubtext mt-1">
+          <div className="flex items-center gap-3 text-xs text-macSubtext mt-2">
             <span>{projects.length} projects</span>
             {isSaving && (
               <span className="flex items-center gap-1 text-macAccent">
@@ -101,7 +101,7 @@ export const ProjectsManager: React.FC = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleAddProject}
-          className="flex items-center gap-4 px-3 py-1.5 bg-success text-white rounded-mac font-medium text-xs hover:bg-success-hover transition-all duration-300 ease-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)]"
+          className="flex items-center gap-2 px-4 py-2 bg-success text-white rounded-mac font-medium text-xs hover:bg-success-hover transition-all duration-300 ease-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)]"
         >
           <Plus size={14} />
           Add Project
@@ -109,42 +109,44 @@ export const ProjectsManager: React.FC = () => {
       </div>
 
       {/* Projects list */}
-      <AnimatePresence mode="popLayout">
-        {projects.length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="text-center py-8"
-          >
-            <Rocket size={24} className="text-macSubtext mx-auto mb-3" />
-            <p className="text-macSubtext text-sm mb-3">No projects yet</p>
-            <button
-              onClick={handleAddProject}
-              className="inline-flex items-center gap-4 px-3 py-1.5 bg-macAccent text-white rounded-mac font-medium text-xs hover:bg-macAccent/80 transition-all duration-300 ease-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)]"
+      <div className="space-y-4">
+        <AnimatePresence mode="popLayout">
+          {projects.length === 0 ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="text-center py-12"
             >
-              <Plus size={14} />
-              Add Your First Project
-            </button>
-          </motion.div>
-        ) : (
-          projects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              onUpdate={(updates) => updateProject(project.id!, updates)}
-              onDelete={() => deleteProject(project.id!)}
-            />
-          ))
-        )}
-      </AnimatePresence>
+              <Rocket size={32} className="text-macSubtext mx-auto mb-4" />
+              <p className="text-macSubtext text-sm mb-4">No projects yet</p>
+              <button
+                onClick={handleAddProject}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-macAccent text-white rounded-mac font-medium text-xs hover:bg-macAccent/80 transition-all duration-300 ease-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)]"
+              >
+                <Plus size={14} />
+                Add Your First Project
+              </button>
+            </motion.div>
+          ) : (
+            projects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                onUpdate={(updates) => updateProject(project.id!, updates)}
+                onDelete={() => deleteProject(project.id!)}
+              />
+            ))
+          )}
+        </AnimatePresence>
+      </div>
 
       {/* Helper text */}
       {projects.length > 0 && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-3 text-center text-xs text-macSubtext"
+          className="mt-6 text-center text-xs text-macSubtext"
         >
           Projects auto-save after 3 seconds of inactivity
         </motion.div>

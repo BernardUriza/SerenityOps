@@ -168,7 +168,7 @@ function App() {
           {/* Enhanced loading bar */}
           <div className="mt-4 px-4">
             <div className="w-48 h-1 liquid-glass rounded-full mx-auto overflow-hidden relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-macAccent via-cyan-400 to-macAccent animate-shimmer"></div>
+              <div className="absolute inset-0 bg-linear-to-r from-macAccent via-cyan-400 to-macAccent animate-shimmer"></div>
             </div>
           </div>
 
@@ -230,7 +230,7 @@ function App() {
       {/* macOS Sidebar - Liquid Glass */}
       <div className="w-sidebar liquid-glass flex flex-col relative overflow-hidden z-10 shadow-xl">
         {/* Enhanced ambient gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-macAccent/8 via-transparent to-purple-500/5 pointer-events-none animate-gradient-shift"></div>
+        <div className="absolute inset-0 bg-linear-to-b from-macAccent/8 via-transparent to-purple-500/5 pointer-events-none animate-gradient-shift"></div>
 
         {/* Particles effect */}
         <div className="particle absolute top-[20%] left-[30%]" style={{ animationDelay: '0s' }}></div>
@@ -255,7 +255,7 @@ function App() {
               style={{ animationDelay: `${index * 50}ms` }}
               className={`w-full h-sidebar-icon flex items-center justify-center transition-all duration-300 ease-mac relative group mb-1 animate-slide-in-left ${
                 activeTab === item.id
-                  ? 'bg-gradient-to-r from-macAccent/25 via-macAccent/20 to-transparent border-l-2 border-macAccent text-macAccent shadow-[inset_0_0_12px_rgba(10,132,255,0.15)]'
+                  ? 'bg-linear-to-r from-macAccent/25 via-macAccent/20 to-transparent border-l-2 border-macAccent text-macAccent shadow-[inset_0_0_12px_rgba(10,132,255,0.15)]'
                   : 'text-slate-300 hover:bg-macHover/60 hover:text-macText hover:scale-105'
               }`}
             >
@@ -294,7 +294,7 @@ function App() {
             title="Generate CV"
             className="w-full h-8 liquid-glass-accent hover:shadow-accent text-white text-xs font-semibold rounded-mac transition-all duration-300 ease-mac disabled:opacity-40 flex items-center justify-center hover-lift group relative overflow-hidden bounce-click ripple-effect"
           >
-            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 animate-shimmer"></span>
+            <span className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 animate-shimmer"></span>
             <svg className="w-4 h-4 relative z-10 transition-transform duration-300 group-hover:rotate-180 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
@@ -302,87 +302,126 @@ function App() {
         </div>
       </div>
 
-      {/* Main Content - Centered & Spacious */}
+      {/* Main Content - Perfectly Centered & Spacious */}
       <div className="flex-1 overflow-y-auto relative">
-        <div className={activeTab === 'chat' ? 'h-full' : 'max-w-6xl mx-auto px-8 py-12'}>
-          {activeTab === 'chat' && (
+        {/* Chat gets full height, others get centered container */}
+        {activeTab === 'chat' ? (
+          <div className="h-full">
             <ChatManager apiBaseUrl={API_BASE_URL} />
-          )}
+          </div>
+        ) : (
+          <div className="min-h-full flex items-start justify-center px-8 py-12">
+            <div className="w-full max-w-5xl animate-fade-in">
+              {activeTab === 'import' && (
+                <QuickImport
+                  apiBaseUrl={API_BASE_URL}
+                  onDataMerged={() => {
+                    loadCurriculum();
+                    setActiveTab('profile');
+                  }}
+                />
+              )}
 
-          {activeTab === 'import' && (
-            <QuickImport
-              apiBaseUrl={API_BASE_URL}
-              onDataMerged={() => {
-                loadCurriculum();
-                setActiveTab('profile');
-              }}
-            />
-          )}
+              {activeTab === 'profile' && (
+                <ProfileForm
+                  personal={curriculum.personal}
+                  summary={curriculum.summary}
+                  onChange={(field, value) => {
+                    if (field === 'summary') {
+                      setCurriculum({ ...curriculum, summary: value });
+                    } else {
+                      setCurriculum({
+                        ...curriculum,
+                        personal: { ...curriculum.personal, [field]: value }
+                      });
+                    }
+                  }}
+                />
+              )}
 
-          {activeTab === 'profile' && (
-            <ProfileForm
-              personal={curriculum.personal}
-              summary={curriculum.summary}
-              onChange={(field, value) => {
-                if (field === 'summary') {
-                  setCurriculum({ ...curriculum, summary: value });
-                } else {
-                  setCurriculum({
-                    ...curriculum,
-                    personal: { ...curriculum.personal, [field]: value }
-                  });
-                }
-              }}
-            />
-          )}
+              {activeTab === 'experience' && (
+                <ExperienceEditor />
+              )}
 
-          {activeTab === 'experience' && (
-            <ExperienceEditor />
-          )}
+              {activeTab === 'projects' && (
+                <ProjectsManager />
+              )}
 
-          {activeTab === 'projects' && (
-            <ProjectsManager />
-          )}
+              {activeTab === 'skills' && (
+                <SkillsEditor
+                  skills={curriculum.skills}
+                  onChange={(skills) =>
+                    setCurriculum({ ...curriculum, skills })
+                  }
+                />
+              )}
 
-          {activeTab === 'skills' && (
-            <SkillsEditor
-              skills={curriculum.skills}
-              onChange={(skills) =>
-                setCurriculum({ ...curriculum, skills })
-              }
-            />
-          )}
+              {activeTab === 'education' && (
+                <EducationList
+                  education={curriculum.education}
+                  languages={curriculum.languages}
+                  certifications={curriculum.certifications}
+                  onChange={(field, value) =>
+                    setCurriculum({ ...curriculum, [field]: value })
+                  }
+                />
+              )}
 
-          {activeTab === 'education' && (
-            <EducationList
-              education={curriculum.education}
-              languages={curriculum.languages}
-              certifications={curriculum.certifications}
-              onChange={(field, value) =>
-                setCurriculum({ ...curriculum, [field]: value })
-              }
-            />
-          )}
+              {activeTab === 'cvs' && (
+                <CVManager apiBaseUrl={API_BASE_URL} />
+              )}
 
-          {activeTab === 'cvs' && (
-            <CVManager apiBaseUrl={API_BASE_URL} />
-          )}
+              {activeTab === 'finances' && (
+                <div className="space-y-6">
+                  {/* Header */}
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-mac bg-macAccent/10 backdrop-blur-md flex items-center justify-center shadow-[0_2px_6px_rgba(10,132,255,0.15)]">
+                      <svg className="w-5 h-5 text-macAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h2 className="text-lg font-bold text-macText">Financial Management</h2>
+                      <p className="text-xs text-macSubtext">Track income, expenses, and goals</p>
+                    </div>
+                  </div>
 
-          {activeTab === 'finances' && (
-            <div className="bg-macPanel/50 backdrop-blur-md border border-macBorder/30 rounded-mac p-6 shadow-[0_2px_6px_rgba(0,0,0,0.2)]">
-              <h2 className="text-sm font-semibold text-macText mb-4">Finances</h2>
-              <div className="bg-macPanel/60 border border-macBorder/40 rounded-mac p-4">
-                <p className="text-xs text-macSubtext">
-                  Finances module coming soon. Will integrate with finances/structure.yaml
-                </p>
-              </div>
+                  {/* Coming Soon Card */}
+                  <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac p-8 shadow-[0_2px_6px_rgba(0,0,0,0.2)] text-center">
+                    <div className="w-16 h-16 mx-auto mb-4 rounded-mac bg-macAccent/5 flex items-center justify-center">
+                      <svg className="w-8 h-8 text-macAccent/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-sm font-semibold text-macText mb-2">Coming Soon</h3>
+                    <p className="text-xs text-macSubtext max-w-md mx-auto leading-relaxed">
+                      This module will integrate with <code className="px-1.5 py-0.5 bg-macPanel/60 rounded text-macAccent font-mono">finances/structure.yaml</code> to provide comprehensive financial tracking, projections, and insights for your career planning.
+                    </p>
+                  </div>
+
+                  {/* Preview Features */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {[
+                      { icon: '📊', title: 'Income Tracking', desc: 'Monitor salary and revenue streams' },
+                      { icon: '💳', title: 'Expense Management', desc: 'Track and categorize spending' },
+                      { icon: '🎯', title: 'Financial Goals', desc: 'Set and achieve money targets' }
+                    ].map((feature, i) => (
+                      <div key={i} className="bg-macPanel/50 backdrop-blur-md border border-macBorder/30 rounded-mac p-4 shadow-[0_2px_6px_rgba(0,0,0,0.1)]">
+                        <div className="text-2xl mb-2">{feature.icon}</div>
+                        <h4 className="text-xs font-semibold text-macText mb-1">{feature.title}</h4>
+                        <p className="text-xs text-macSubtext">{feature.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'opportunities' && (
+                <OpportunityManager apiBaseUrl={API_BASE_URL} />
+              )}
             </div>
-          )}
-
-          {activeTab === 'opportunities' && (
-            <OpportunityManager apiBaseUrl={API_BASE_URL} />
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* Enhanced Notification Toast with Animations */}
@@ -396,13 +435,13 @@ function App() {
             {/* Animated gradient background */}
             <div className={`absolute inset-0 opacity-10 ${
               notification.type === 'success'
-                ? 'bg-gradient-to-br from-success/30 to-transparent'
-                : 'bg-gradient-to-br from-error/30 to-transparent'
+                ? 'bg-linear-to-br from-success/30 to-transparent'
+                : 'bg-linear-to-br from-error/30 to-transparent'
             }`}></div>
 
             {/* Content */}
             <div className="flex items-start gap-3 relative z-10">
-              <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+              <div className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
                 notification.type === 'success'
                   ? 'bg-success/20 text-success'
                   : 'bg-error/20 text-error'
