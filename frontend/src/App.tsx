@@ -25,15 +25,18 @@ function App() {
   const [notification, setNotification] = useState<{message: string, type: 'success' | 'error'} | null>(null);
   const { setJob } = useCVJobStore();
 
+  // Load curriculum on mount
   useEffect(() => {
     loadCurriculum();
+  }, []); // Empty dependency array - run once on mount
 
-    // Restore job from localStorage if it exists
+  // Restore job from localStorage on mount
+  useEffect(() => {
     const savedJob = loadJobFromLocalStorage();
     if (savedJob) {
       setJob(savedJob);
     }
-  }, [setJob]);
+  }, [setJob]); // setJob is stable from Zustand, won't cause loops
 
   const loadCurriculum = async () => {
     try {
