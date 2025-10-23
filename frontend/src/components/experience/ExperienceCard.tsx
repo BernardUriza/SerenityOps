@@ -46,64 +46,64 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 mb-6 shadow-lg shadow-slate-800/50 hover:border-slate-700 transition-colors"
+      className="bg-surface-elevated border border-border rounded p-3 mb-3 hover:border-border-strong transition-colors"
     >
       {/* Header */}
-      <div className="flex justify-between items-start mb-4">
+      <div className="flex justify-between items-start mb-2">
         <div className="flex-1">
-          <div className="flex items-center gap-3 mb-2">
+          <div className="flex items-center gap-2 mb-1">
             {experience.company_logo && (
               <img
                 src={experience.company_logo}
                 alt={experience.company}
-                className="w-12 h-12 rounded-lg object-cover"
+                className="w-8 h-8 rounded object-cover"
               />
             )}
             <div className="flex-1">
               <EditableField
                 value={experience.company}
                 onChange={(value) => onUpdate({ company: value })}
-                className="text-xl font-bold text-slate-100 block mb-1"
+                className="text-sm font-bold text-text-primary block mb-0.5"
                 as="div"
               />
               <EditableField
                 value={experience.role}
                 onChange={(value) => onUpdate({ role: value })}
-                className="text-sm font-medium text-sky-400"
+                className="text-xs font-medium text-primary"
                 as="div"
               />
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 text-sm text-slate-400">
+          <div className="flex flex-wrap items-center gap-2 text-xs text-text-tertiary">
             <div className="flex items-center gap-1">
-              <MapPin size={14} />
+              <MapPin size={11} />
               <EditableField
                 value={experience.location}
                 onChange={(value) => onUpdate({ location: value })}
-                className="text-slate-400"
+                className="text-text-tertiary"
               />
             </div>
             <div className="flex items-center gap-1">
-              <Calendar size={14} />
+              <Calendar size={11} />
               <span>{dateRange}</span>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-lg transition-colors"
+            className="p-1 text-text-tertiary hover:text-text-secondary hover:bg-surface-hover rounded transition-colors"
           >
-            {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+            {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
           </button>
           {editMode === 'edit' && (
             <button
               onClick={onDelete}
-              className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+              className="p-1 text-text-tertiary hover:text-error hover:bg-error/10 rounded transition-colors"
             >
-              <Trash2 size={18} />
+              <Trash2 size={14} />
             </button>
           )}
         </div>
@@ -116,23 +116,23 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({
           animate={{ height: 'auto', opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="space-y-4"
+          className="space-y-2"
         >
           {/* Description */}
           <div>
-            <label className="block text-xs font-medium text-slate-500 mb-2">Description</label>
+            <label className="block text-xs font-medium text-text-tertiary mb-1">Description</label>
             <EditableField
               value={experience.description}
               onChange={(value) => onUpdate({ description: value })}
               multiline
-              className="text-sm text-slate-300 leading-relaxed block"
+              className="text-xs text-text-secondary leading-relaxed block"
               as="p"
             />
           </div>
 
           {/* Tech Stack */}
           <div>
-            <label className="block text-xs font-medium text-slate-500 mb-2">Tech Stack</label>
+            <label className="block text-xs font-medium text-text-tertiary mb-1">Tech Stack</label>
             <TagSelector
               tags={experience.tech_stack}
               onChange={(tech_stack) => onUpdate({ tech_stack })}
@@ -141,7 +141,7 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({
 
           {/* Achievements */}
           <div>
-            <label className="block text-xs font-medium text-slate-500 mb-2">Key Achievements</label>
+            <label className="block text-xs font-medium text-text-tertiary mb-1">Key Achievements</label>
             <AchievementBadge
               achievements={experience.achievements}
               onChange={(achievements) => onUpdate({ achievements })}

@@ -70,8 +70,8 @@ export const EditableField: React.FC<EditableFieldProps> = ({
       onKeyDown={handleKeyDown}
       className={`
         outline-none cursor-text transition-all duration-200
-        ${isEditing ? 'ring-2 ring-sky-500/50 bg-slate-800/50 rounded px-2 py-1' : ''}
-        ${!localValue && !isEditing ? 'text-slate-500' : 'text-slate-200'}
+        ${isEditing ? 'ring-1 ring-primary/50 bg-surface-elevated rounded px-1 py-0.5' : ''}
+        ${!localValue && !isEditing ? 'text-text-tertiary' : 'text-text-primary'}
         ${className}
       `}
       whileTap={{ scale: 0.99 }}

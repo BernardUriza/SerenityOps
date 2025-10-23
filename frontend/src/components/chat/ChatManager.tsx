@@ -1,6 +1,7 @@
 /**
  * ChatManager - Main orchestrator for Chat v2
  * Combines ChatSidebar + ChatView with keyboard shortcuts
+ * Compact Precision UI
  */
 
 import React, { useEffect } from 'react';
@@ -51,35 +52,37 @@ export const ChatManager: React.FC<ChatManagerProps> = ({ apiBaseUrl }) => {
   }, [createChat, setFilter]);
 
   return (
-    <div className="flex h-full bg-slate-950">
-      {/* Sidebar */}
+    <div className="flex h-full bg-background">
+      {/* Sidebar - Compact */}
       <ChatSidebar />
 
       {/* Main Chat View */}
       {activeChat ? (
         <ChatView conversationId={activeChat} apiBaseUrl={apiBaseUrl} />
       ) : (
-        <div className="flex-1 flex items-center justify-center bg-slate-800">
-          <div className="text-center">
-            <div className="text-6xl mb-4">💬</div>
-            <h2 className="text-2xl font-bold text-slate-300 mb-2">No chat selected</h2>
-            <p className="text-slate-400 mb-6">
+        <div className="flex-1 flex items-center justify-center bg-surface">
+          <div className="text-center max-w-xs">
+            <div className="text-3xl mb-2">💬</div>
+            <h2 className="text-sm font-semibold text-text-primary mb-1">No chat selected</h2>
+            <p className="text-xs text-text-secondary mb-3">
               Select a chat from the sidebar or create a new one
             </p>
             <button
               onClick={() => createChat()}
-              className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-colors"
+              className="h-7 px-3 bg-success hover:bg-success-hover text-white text-xs font-semibold rounded transition-colors"
             >
               Start New Chat
             </button>
-            <div className="mt-6 text-xs text-slate-500">
-              <p>Keyboard shortcuts:</p>
-              <p className="mt-1">
-                <kbd className="px-2 py-1 bg-slate-700 rounded">Cmd+N</kbd> New Chat
-              </p>
-              <p className="mt-1">
-                <kbd className="px-2 py-1 bg-slate-700 rounded">Cmd+K</kbd> Search
-              </p>
+            <div className="mt-3 text-xs text-text-tertiary space-y-0.5">
+              <p className="font-medium text-[10px]">Keyboard shortcuts:</p>
+              <div className="flex items-center justify-center gap-1.5 text-[10px]">
+                <kbd className="px-1 py-0.5 bg-surface-elevated border border-border rounded">Cmd+N</kbd>
+                <span>New Chat</span>
+              </div>
+              <div className="flex items-center justify-center gap-1.5 text-[10px]">
+                <kbd className="px-1 py-0.5 bg-surface-elevated border border-border rounded">Cmd+K</kbd>
+                <span>Search</span>
+              </div>
             </div>
           </div>
         </div>

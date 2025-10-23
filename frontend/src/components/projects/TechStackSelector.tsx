@@ -93,7 +93,7 @@ export const TechStackSelector: React.FC<TechStackSelectorProps> = ({
 
   return (
     <div className={`${className}`}>
-      <div className="flex flex-wrap gap-2 items-center">
+      <div className="flex flex-wrap gap-1 items-center">
         {/* Existing tech stack badges */}
         <AnimatePresence mode="popLayout">
           {techStack.map((tech) => (
@@ -113,15 +113,15 @@ export const TechStackSelector: React.FC<TechStackSelectorProps> = ({
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsAdding(true)}
-            className="flex items-center gap-1 px-3 py-1.5 bg-slate-800/50 border border-slate-700 border-dashed rounded-lg text-sm text-slate-400 hover:text-sky-400 hover:border-sky-500 transition-colors"
+            className="flex items-center gap-1 px-3 py-1.5 bg-surface-elevated/50 border border-border border-dashed rounded text-xs text-text-tertiary hover:text-primary hover:border-sky-500 transition-colors"
           >
-            <Plus size={14} />
+            <Plus size={11} />
             <span>Add tech</span>
           </motion.button>
         ) : (
           <div className="relative">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-800 border border-sky-500 rounded-lg">
-              <Search size={14} className="text-sky-400" />
+            <div className="flex items-center gap-1 px-3 py-1.5 bg-surface-elevated border border-sky-500 rounded">
+              <Search size={11} className="text-primary" />
               <input
                 type="text"
                 value={searchQuery}
@@ -134,7 +134,7 @@ export const TechStackSelector: React.FC<TechStackSelectorProps> = ({
                   }, 200);
                 }}
                 placeholder="Search tech..."
-                className="bg-transparent outline-none text-sm text-slate-200 w-32"
+                className="bg-transparent outline-none text-xs text-text-primary w-32"
                 autoFocus
               />
             </div>
@@ -144,26 +144,26 @@ export const TechStackSelector: React.FC<TechStackSelectorProps> = ({
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="absolute top-full left-0 mt-2 w-64 bg-slate-900 border border-slate-700 rounded-lg shadow-lg z-10 max-h-64 overflow-y-auto"
+                className="absolute top-full left-0 mt-1 w-64 bg-surface-elevated border border-border rounded shadow-lg z-10 max-h-64 overflow-y-auto"
               >
                 {searchResults.map((result) => (
                   <button
                     key={result.name}
                     onClick={() => handleAddTech(result.name)}
-                    className="w-full flex items-center gap-2 px-3 py-2 hover:bg-slate-800 text-left transition-colors"
+                    className="w-full flex items-center gap-1 px-3 py-1 hover:bg-surface-elevated text-left transition-colors"
                   >
                     {result.svg_url ? (
                       <img
                         src={result.svg_url}
                         alt={result.name}
-                        className="w-5 h-5"
+                        className="w-3 h-3"
                         style={{ filter: 'brightness(0.9)' }}
                       />
                     ) : result.emoji ? (
-                      <span className="text-lg">{result.emoji}</span>
+                      <span className="text-xs">{result.emoji}</span>
                     ) : null}
-                    <span className="text-sm text-slate-200">{result.name}</span>
-                    <span className="ml-auto text-xs text-slate-500">{result.category}</span>
+                    <span className="text-xs text-text-primary">{result.name}</span>
+                    <span className="ml-auto text-xs text-text-tertiary">{result.category}</span>
                   </button>
                 ))}
               </motion.div>

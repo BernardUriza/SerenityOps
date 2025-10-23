@@ -80,34 +80,34 @@ export const ExperienceEditor: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 size={32} className="animate-spin text-sky-400" />
+        <Loader2 size={16} className="animate-spin text-primary" />
       </div>
     );
   }
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-6">
+    <div className="w-full max-w-6xl mx-auto p-3">
       {/* Header */}
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-center mb-3">
         <div>
-          <h1 className="text-3xl font-bold text-slate-100 mb-2">Experience</h1>
-          <div className="flex items-center gap-3 text-sm text-slate-400">
+          <h1 className="text-base font-bold text-text-primary mb-1">Experience</h1>
+          <div className="flex items-center gap-2 text-xs text-text-tertiary">
             <span>{experiences.length} positions</span>
             {isSaving && (
-              <span className="flex items-center gap-1 text-sky-400">
-                <Loader2 size={14} className="animate-spin" />
+              <span className="flex items-center gap-1 text-primary">
+                <Loader2 size={12} className="animate-spin" />
                 Saving...
               </span>
             )}
             {!isSaving && lastSaved && (
-              <span className="flex items-center gap-1 text-emerald-400">
-                <Save size={14} />
+              <span className="flex items-center gap-1 text-success">
+                <Save size={12} />
                 Saved {formatLastSaved()}
               </span>
             )}
           </div>
           {error && (
-            <p className="text-sm text-red-400 mt-2">Error: {error}</p>
+            <p className="text-xs text-error mt-1">Error: {error}</p>
           )}
         </div>
 
@@ -116,21 +116,21 @@ export const ExperienceEditor: React.FC = () => {
           <button
             onClick={() => setEditMode(editMode === 'edit' ? 'presentation' : 'edit')}
             className={`
-              flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all
+              flex items-center gap-1.5 px-3 py-1.5 rounded font-medium text-xs transition-all
               ${editMode === 'edit'
-                ? 'bg-sky-500 text-white hover:bg-sky-600'
-                : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                ? 'bg-primary text-white hover:bg-primary-hover'
+                : 'bg-surface-elevated text-text-secondary hover:bg-surface-hover'
               }
             `}
           >
             {editMode === 'edit' ? (
               <>
-                <Eye size={16} />
+                <Eye size={14} />
                 Preview
               </>
             ) : (
               <>
-                <Edit3 size={16} />
+                <Edit3 size={14} />
                 Edit
               </>
             )}
@@ -142,9 +142,9 @@ export const ExperienceEditor: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleAddExperience}
-              className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-lg font-medium hover:bg-emerald-600 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-success text-white rounded font-medium text-xs hover:bg-success-hover transition-colors"
             >
-              <Plus size={16} />
+              <Plus size={14} />
               Add Experience
             </motion.button>
           )}
@@ -158,14 +158,14 @@ export const ExperienceEditor: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="text-center py-16"
+            className="text-center py-8"
           >
-            <p className="text-slate-400 text-lg mb-4">No experiences yet</p>
+            <p className="text-text-secondary text-sm mb-3">No experiences yet</p>
             <button
               onClick={handleAddExperience}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-sky-500 text-white rounded-lg font-medium hover:bg-sky-600 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary text-white rounded font-medium text-xs hover:bg-primary-hover transition-colors"
             >
-              <Plus size={18} />
+              <Plus size={14} />
               Add Your First Experience
             </button>
           </motion.div>
@@ -187,11 +187,11 @@ export const ExperienceEditor: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-8 text-center text-sm text-slate-500"
+          className="mt-3 text-center text-xs text-text-tertiary"
         >
-          <kbd className="px-2 py-1 bg-slate-800 border border-slate-700 rounded">Ctrl</kbd>
+          <kbd className="px-1.5 py-0.5 bg-surface-elevated border border-border rounded">Ctrl</kbd>
           {' + '}
-          <kbd className="px-2 py-1 bg-slate-800 border border-slate-700 rounded">E</kbd>
+          <kbd className="px-1.5 py-0.5 bg-surface-elevated border border-border rounded">E</kbd>
           {' to toggle preview mode'}
         </motion.div>
       )}

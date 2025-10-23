@@ -39,10 +39,10 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 mb-6 shadow-lg shadow-slate-800/50 hover:border-slate-700 transition-colors"
+      className="bg-surface-elevated/80 border border-border rounded p-1.5 mb-1.5 shadow-lg shadow-slate-800/50 hover:border-border transition-colors"
     >
       {/* Header */}
-      <div className="flex justify-between items-start mb-4">
+      <div className="flex justify-between items-start mb-1">
         <div className="flex-1">
           <input
             type="text"
@@ -50,10 +50,10 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             onChange={(e) => onUpdate({ name: e.target.value })}
             onFocus={() => setEditingField('name')}
             onBlur={(e) => handleFieldBlur('name', e.target.value)}
-            className={`text-xl font-bold bg-transparent outline-none w-full transition-colors ${
+            className={`text-xs font-bold bg-transparent outline-none w-full transition-colors ${
               editingField === 'name'
-                ? 'text-sky-400 ring-2 ring-sky-500/50 rounded px-2 py-1'
-                : 'text-slate-100'
+                ? 'text-primary ring-2 ring-sky-500/50 rounded px-2 py-1'
+                : 'text-text-primary'
             }`}
             placeholder="Project Name"
           />
@@ -64,22 +64,22 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             onChange={(e) => onUpdate({ tagline: e.target.value })}
             onFocus={() => setEditingField('tagline')}
             onBlur={(e) => handleFieldBlur('tagline', e.target.value)}
-            className={`text-sm font-medium block mt-1 bg-transparent outline-none w-full transition-colors ${
+            className={`text-xs font-medium block mt-1 bg-transparent outline-none w-full transition-colors ${
               editingField === 'tagline'
-                ? 'text-sky-400 ring-2 ring-sky-500/50 rounded px-2 py-1'
-                : 'text-slate-400'
+                ? 'text-primary ring-2 ring-sky-500/50 rounded px-2 py-1'
+                : 'text-text-tertiary'
             }`}
             placeholder="Short tagline or description"
           />
 
           {/* Links */}
-          <div className="flex items-center gap-3 mt-2 text-xs">
+          <div className="flex items-center gap-1.5 mt-1 text-xs">
             {project.github_url && (
               <a
                 href={project.github_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1 text-slate-400 hover:text-sky-400 transition-colors"
+                className="flex items-center gap-1 text-text-tertiary hover:text-primary transition-colors"
               >
                 <Github size={12} />
                 <span>GitHub</span>
@@ -90,7 +90,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                 href={project.live_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1 text-slate-400 hover:text-emerald-400 transition-colors"
+                className="flex items-center gap-1 text-text-tertiary hover:text-success transition-colors"
               >
                 <ExternalLink size={12} />
                 <span>Live Demo</span>
@@ -99,18 +99,18 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-lg transition-colors"
+            className="p-2 text-text-tertiary hover:text-text-primary hover:bg-surface-elevated rounded transition-colors"
           >
-            {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+            {isExpanded ? <ChevronUp size={11} /> : <ChevronDown size={11} />}
           </button>
           <button
             onClick={onDelete}
-            className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+            className="p-2 text-text-tertiary hover:text-error hover:bg-error/10 rounded transition-colors"
           >
-            <Trash2 size={18} />
+            <Trash2 size={11} />
           </button>
         </div>
       </div>
@@ -122,21 +122,21 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           animate={{ height: 'auto', opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="space-y-4"
+          className="space-y-1"
         >
           {/* Role */}
           <div>
-            <label className="block text-xs font-medium text-slate-500 mb-2">Your Role</label>
+            <label className="block text-xs font-medium text-text-tertiary mb-1">Your Role</label>
             <input
               type="text"
               value={project.role}
               onChange={(e) => onUpdate({ role: e.target.value })}
               onFocus={() => setEditingField('role')}
               onBlur={(e) => handleFieldBlur('role', e.target.value)}
-              className={`w-full bg-transparent outline-none text-sm transition-colors ${
+              className={`w-full bg-transparent outline-none text-xs transition-colors ${
                 editingField === 'role'
-                  ? 'text-sky-400 ring-2 ring-sky-500/50 rounded px-2 py-1'
-                  : 'text-slate-300'
+                  ? 'text-primary ring-2 ring-sky-500/50 rounded px-2 py-1'
+                  : 'text-text-secondary'
               }`}
               placeholder="e.g., Full Stack Developer, Lead Engineer"
             />
@@ -144,16 +144,16 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 
           {/* Description */}
           <div>
-            <label className="block text-xs font-medium text-slate-500 mb-2">Description</label>
+            <label className="block text-xs font-medium text-text-tertiary mb-1">Description</label>
             <textarea
               value={project.description}
               onChange={(e) => onUpdate({ description: e.target.value })}
               onFocus={() => setEditingField('description')}
               onBlur={(e) => handleFieldBlur('description', e.target.value)}
-              className={`w-full bg-transparent outline-none text-sm leading-relaxed resize-none transition-colors ${
+              className={`w-full bg-transparent outline-none text-xs leading-relaxed resize-none transition-colors ${
                 editingField === 'description'
-                  ? 'text-sky-400 ring-2 ring-sky-500/50 rounded px-2 py-1'
-                  : 'text-slate-300'
+                  ? 'text-primary ring-2 ring-sky-500/50 rounded px-2 py-1'
+                  : 'text-text-secondary'
               }`}
               rows={3}
               placeholder="Describe the project, its purpose, and impact..."
@@ -162,7 +162,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 
           {/* Tech Stack */}
           <div>
-            <label className="block text-xs font-medium text-slate-500 mb-2">Tech Stack</label>
+            <label className="block text-xs font-medium text-text-tertiary mb-1">Tech Stack</label>
             <TechStackSelector
               techStack={project.tech_stack}
               onChange={(tech_stack) => onUpdate({ tech_stack })}
@@ -171,7 +171,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 
           {/* Achievements */}
           <div>
-            <label className="block text-xs font-medium text-slate-500 mb-2">Key Achievements</label>
+            <label className="block text-xs font-medium text-text-tertiary mb-1">Key Achievements</label>
             <AchievementsEditor
               achievements={project.achievements}
               onChange={(achievements) => onUpdate({ achievements })}
@@ -179,24 +179,24 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           </div>
 
           {/* Links (editable) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
             <div>
-              <label className="block text-xs font-medium text-slate-500 mb-2">GitHub URL</label>
+              <label className="block text-xs font-medium text-text-tertiary mb-1">GitHub URL</label>
               <input
                 type="url"
                 value={project.github_url || ''}
                 onChange={(e) => onUpdate({ github_url: e.target.value })}
-                className="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-300 outline-none focus:border-sky-500 transition-colors"
+                className="w-full bg-surface-elevated/50 border border-border rounded px-3 py-1 text-xs text-text-secondary outline-none focus:border-sky-500 transition-colors"
                 placeholder="https://github.com/..."
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-500 mb-2">Live URL</label>
+              <label className="block text-xs font-medium text-text-tertiary mb-1">Live URL</label>
               <input
                 type="url"
                 value={project.live_url || ''}
                 onChange={(e) => onUpdate({ live_url: e.target.value })}
-                className="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-300 outline-none focus:border-sky-500 transition-colors"
+                className="w-full bg-surface-elevated/50 border border-border rounded px-3 py-1 text-xs text-text-secondary outline-none focus:border-sky-500 transition-colors"
                 placeholder="https://..."
               />
             </div>

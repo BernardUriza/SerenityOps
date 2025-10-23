@@ -63,37 +63,37 @@ export const ProjectsManager: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 size={32} className="animate-spin text-sky-400" />
+        <Loader2 size={16} className="animate-spin text-primary" />
       </div>
     );
   }
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-6">
+    <div className="w-full max-w-6xl mx-auto p-3">
       {/* Header */}
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-center mb-3">
         <div>
-          <div className="flex items-center gap-3">
-            <Rocket size={28} className="text-sky-400" />
-            <h1 className="text-3xl font-bold text-slate-100">Projects</h1>
+          <div className="flex items-center gap-2">
+            <Rocket size={14} className="text-primary" />
+            <h1 className="text-base font-bold text-text-primary">Projects</h1>
           </div>
-          <div className="flex items-center gap-3 text-sm text-slate-400 mt-2">
+          <div className="flex items-center gap-2 text-xs text-text-tertiary mt-1">
             <span>{projects.length} projects</span>
             {isSaving && (
-              <span className="flex items-center gap-1 text-sky-400">
-                <Loader2 size={14} className="animate-spin" />
+              <span className="flex items-center gap-1 text-primary">
+                <Loader2 size={12} className="animate-spin" />
                 Saving...
               </span>
             )}
             {!isSaving && lastSaved && (
-              <span className="flex items-center gap-1 text-emerald-400">
-                <Save size={14} />
+              <span className="flex items-center gap-1 text-success">
+                <Save size={12} />
                 Saved {formatLastSaved()}
               </span>
             )}
           </div>
           {error && (
-            <p className="text-sm text-red-400 mt-2">Error: {error}</p>
+            <p className="text-xs text-error mt-1">Error: {error}</p>
           )}
         </div>
 
@@ -101,9 +101,9 @@ export const ProjectsManager: React.FC = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleAddProject}
-          className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-lg font-medium hover:bg-emerald-600 transition-colors shadow-lg"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-success text-white rounded font-medium text-xs hover:bg-success-hover transition-colors"
         >
-          <Plus size={16} />
+          <Plus size={14} />
           Add Project
         </motion.button>
       </div>
@@ -115,15 +115,15 @@ export const ProjectsManager: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="text-center py-16"
+            className="text-center py-8"
           >
-            <Rocket size={48} className="text-slate-600 mx-auto mb-4" />
-            <p className="text-slate-400 text-lg mb-4">No projects yet</p>
+            <Rocket size={24} className="text-text-tertiary mx-auto mb-3" />
+            <p className="text-text-secondary text-sm mb-3">No projects yet</p>
             <button
               onClick={handleAddProject}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-sky-500 text-white rounded-lg font-medium hover:bg-sky-600 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary text-white rounded font-medium text-xs hover:bg-primary-hover transition-colors"
             >
-              <Plus size={18} />
+              <Plus size={14} />
               Add Your First Project
             </button>
           </motion.div>
@@ -144,7 +144,7 @@ export const ProjectsManager: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-8 text-center text-sm text-slate-500"
+          className="mt-3 text-center text-xs text-text-tertiary"
         >
           Projects auto-save after 3 seconds of inactivity
         </motion.div>

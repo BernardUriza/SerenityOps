@@ -80,10 +80,10 @@ export const ChatItem: React.FC<ChatItemProps> = ({
       onClick={onSelect}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
-      className={`group relative flex items-center h-[26px] px-2 cursor-pointer transition-colors ${
+      className={`group relative flex items-center h-row px-2 cursor-pointer transition-all ${
         isActive
-          ? 'bg-slate-800 border-l-2 border-sky-500'
-          : 'hover:bg-slate-800/50 border-l-2 border-transparent'
+          ? 'bg-surface-elevated border-l-2 border-primary'
+          : 'hover:bg-surface-hover border-l-2 border-transparent'
       } ${chat.archived ? 'opacity-60' : ''}`}
       title={`${chat.name} - ${chat.message_count} messages - ${new Date(
         chat.last_updated
@@ -98,13 +98,13 @@ export const ChatItem: React.FC<ChatItemProps> = ({
           onChange={(e) => setRenameDraft(e.target.value)}
           onBlur={handleRenameSubmit}
           onKeyDown={handleKeyDown}
-          className="flex-1 bg-slate-700 border border-sky-500/50 rounded px-1 py-0 text-xs text-slate-200 outline-none"
+          className="flex-1 bg-surface-elevated border border-primary/50 rounded px-1 py-0 text-xs text-text-primary outline-none"
           onClick={(e) => e.stopPropagation()}
         />
       ) : (
         <div className="flex-1 flex items-center min-w-0">
-          <span className="text-xs text-slate-200 truncate">{chat.name}</span>
-          <span className="ml-auto text-[10px] text-slate-500 ml-2 flex-shrink-0">
+          <span className="text-xs text-text-primary truncate">{chat.name}</span>
+          <span className="ml-auto text-[10px] text-text-tertiary ml-2 flex-shrink-0">
             {chat.message_count}
           </span>
         </div>
@@ -117,40 +117,40 @@ export const ChatItem: React.FC<ChatItemProps> = ({
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.1 }}
-          className="absolute right-1 flex items-center gap-0.5 bg-slate-900/90 rounded px-1"
+          className="absolute right-1 flex items-center gap-0.5 bg-surface-elevated/95 rounded px-1"
           onClick={(e) => e.stopPropagation()}
         >
           <button
             onClick={handleRenameStart}
-            className="p-0.5 hover:bg-slate-700 rounded transition-colors"
+            className="p-0.5 hover:bg-surface-hover rounded transition-colors"
             title="Rename"
           >
-            <Edit3 size={11} className="text-slate-400" />
+            <Edit3 size={11} className="text-text-secondary" />
           </button>
           <button
             onClick={(e) => handleActionClick(e, onDuplicate)}
-            className="p-0.5 hover:bg-slate-700 rounded transition-colors"
+            className="p-0.5 hover:bg-surface-hover rounded transition-colors"
             title="Duplicate"
           >
-            <Copy size={11} className="text-slate-400" />
+            <Copy size={11} className="text-text-secondary" />
           </button>
           <button
             onClick={(e) => handleActionClick(e, () => onArchive(!chat.archived))}
-            className="p-0.5 hover:bg-slate-700 rounded transition-colors"
+            className="p-0.5 hover:bg-surface-hover rounded transition-colors"
             title={chat.archived ? 'Unarchive' : 'Archive'}
           >
             {chat.archived ? (
-              <ArchiveX size={11} className="text-slate-400" />
+              <ArchiveX size={11} className="text-text-secondary" />
             ) : (
-              <Archive size={11} className="text-slate-400" />
+              <Archive size={11} className="text-text-secondary" />
             )}
           </button>
           <button
             onClick={(e) => handleActionClick(e, onDelete)}
-            className="p-0.5 hover:bg-red-900/50 rounded transition-colors"
+            className="p-0.5 hover:bg-error/10 rounded transition-colors"
             title="Delete"
           >
-            <Trash2 size={11} className="text-red-400" />
+            <Trash2 size={11} className="text-error" />
           </button>
         </motion.div>
       )}

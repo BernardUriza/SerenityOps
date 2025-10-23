@@ -1,6 +1,6 @@
 /**
  * ChatList - Renders filtered and sorted list of chats
- * Supports animations with framer-motion
+ * Compact Precision UI with animations
  */
 
 import React, { useMemo } from 'react';
@@ -56,7 +56,7 @@ export const ChatList: React.FC = () => {
   if (filteredAndSortedChats.length === 0) {
     return (
       <div className="flex items-center justify-center h-32">
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-text-tertiary">
           {filter ? 'No chats match your search' : 'No chats yet'}
         </p>
       </div>

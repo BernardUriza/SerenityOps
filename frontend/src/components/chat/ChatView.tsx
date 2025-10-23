@@ -103,23 +103,23 @@ export const ChatView: React.FC<ChatViewProps> = ({ conversationId, apiBaseUrl }
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-800 h-full">
+    <div className="flex-1 flex flex-col bg-surface h-full">
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-4">
+      <div className="flex-1 overflow-y-auto p-3 space-y-2">
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full">
-            <div className="text-center max-w-md">
-              <div className="text-6xl mb-4">🤖</div>
-              <h3 className="text-xl font-semibold text-slate-300 mb-2">
+            <div className="text-center max-w-sm">
+              <div className="text-4xl mb-3">🤖</div>
+              <h3 className="text-sm font-semibold text-text-primary mb-1">
                 Hi! I'm SerenityOps
               </h3>
-              <p className="text-slate-400 mb-4">
+              <p className="text-xs text-text-secondary mb-3">
                 Your career intelligence assistant. I have full context of your CV, projects, and
                 opportunities.
               </p>
-              <div className="bg-slate-900 border border-slate-700 rounded-lg p-4 text-left">
-                <p className="text-sm text-slate-300 font-medium mb-2">You can ask me to:</p>
-                <ul className="space-y-1 text-sm text-slate-400">
+              <div className="bg-surface-elevated border border-border rounded p-3 text-left">
+                <p className="text-xs text-text-primary font-medium mb-2">You can ask me to:</p>
+                <ul className="space-y-1 text-xs text-text-secondary">
                   <li>• Track new projects and experiences</li>
                   <li>• Suggest CV improvements</li>
                   <li>• Analyze job opportunities</li>
@@ -137,42 +137,42 @@ export const ChatView: React.FC<ChatViewProps> = ({ conversationId, apiBaseUrl }
                 className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-3xl rounded-lg p-4 ${
+                  className={`max-w-3xl rounded p-2 ${
                     msg.role === 'user'
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-slate-900 border border-slate-700 text-slate-100'
+                      ? 'bg-primary text-white'
+                      : 'bg-surface-elevated border border-border text-text-primary'
                   }`}
                 >
                   <div className="flex items-start">
                     {msg.role === 'assistant' && (
-                      <span className="text-2xl mr-3 flex-shrink-0">🤖</span>
+                      <span className="text-lg mr-2 flex-shrink-0">🤖</span>
                     )}
                     <div className="flex-1">
                       <ChatMessage content={msg.content} role={msg.role} apiBaseUrl={apiBaseUrl} />
                       <p
-                        className={`text-xs mt-2 ${
-                          msg.role === 'user' ? 'text-blue-200' : 'text-slate-500'
+                        className={`text-xs mt-1 ${
+                          msg.role === 'user' ? 'text-white/70' : 'text-text-tertiary'
                         }`}
                       >
                         {new Date(msg.timestamp).toLocaleTimeString()}
                       </p>
                     </div>
-                    {msg.role === 'user' && <span className="text-2xl ml-3 flex-shrink-0">👤</span>}
+                    {msg.role === 'user' && <span className="text-lg ml-2 flex-shrink-0">👤</span>}
                   </div>
                 </div>
               </div>
             ))}
             {sending && (
               <div className="flex justify-start">
-                <div className="bg-slate-900 border border-slate-700 rounded-lg p-4 max-w-3xl">
+                <div className="bg-surface-elevated border border-border rounded p-2 max-w-3xl">
                   <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce"></div>
                     <div
-                      className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+                      className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce"
                       style={{ animationDelay: '0.1s' }}
                     ></div>
                     <div
-                      className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+                      className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce"
                       style={{ animationDelay: '0.2s' }}
                     ></div>
                   </div>
@@ -185,24 +185,24 @@ export const ChatView: React.FC<ChatViewProps> = ({ conversationId, apiBaseUrl }
       </div>
 
       {/* Input Area */}
-      <div className="p-4 border-t border-slate-700 bg-slate-900">
-        <div className="flex gap-3">
+      <div className="p-2 border-t border-border bg-surface-elevated">
+        <div className="flex gap-2">
           <textarea
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Type your message... (Shift+Enter for new line)"
-            className="flex-1 px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-slate-50 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            className="flex-1 px-2 py-1.5 bg-surface border border-border rounded text-text-primary text-xs placeholder-text-tertiary focus:outline-none focus:ring-1 focus:ring-primary/50 focus:border-primary resize-none transition-all"
             rows={2}
             disabled={sending}
           />
           <button
             onClick={handleSendMessage}
             disabled={sending || !inputMessage.trim()}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+            className="px-3 py-1.5 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
           >
             {sending ? (
-              <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+              <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                 <circle
                   className="opacity-25"
                   cx="12"
@@ -218,7 +218,7 @@ export const ChatView: React.FC<ChatViewProps> = ({ conversationId, apiBaseUrl }
                 ></path>
               </svg>
             ) : (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"

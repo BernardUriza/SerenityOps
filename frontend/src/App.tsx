@@ -28,7 +28,7 @@ function App() {
   // Load curriculum on mount
   useEffect(() => {
     loadCurriculum();
-  }, []); // Empty dependency array - run once on mount
+  }, []);
 
   // Restore job from localStorage on mount
   useEffect(() => {
@@ -36,25 +36,37 @@ function App() {
     if (savedJob) {
       setJob(savedJob);
     }
-  }, [setJob]); // setJob is stable from Zustand, won't cause loops
+  }, [setJob]);
 
   const loadCurriculum = async () => {
     try {
-      console.log('[App] Starting loadCurriculum...');
       setLoading(true);
-      console.log('[App] Fetching from:', `${API_BASE_URL}/api/curriculum`);
-      const response = await fetch(`${API_BASE_URL}/api/curriculum`);
-      console.log('[App] Response status:', response.status);
-      if (!response.ok) throw new Error('Failed to load curriculum');
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+      const response = await fetch(`${API_BASE_URL}/api/curriculum`, {
+        signal: controller.signal,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: Failed to load curriculum`);
+      }
+
       const data = await response.json();
-      console.log('[App] Data loaded:', data);
       setCurriculum(data);
-      console.log('[App] Curriculum set successfully');
     } catch (error) {
       console.error('[App] Error loading curriculum:', error);
-      showNotification('Failed to load curriculum. Make sure the API is running.', 'error');
+      if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+          showNotification('Request timed out. Is the API server running?', 'error');
+        } else {
+          showNotification(error.message, 'error');
+        }
+      }
     } finally {
-      console.log('[App] Setting loading to false');
       setLoading(false);
     }
   };
@@ -99,7 +111,6 @@ function App() {
       const result = await response.json();
       showNotification('CV generated successfully!', 'success');
 
-      // Switch to CVs tab and open the CV
       setActiveTab('cvs');
       setTimeout(() => {
         window.open(`${API_BASE_URL}${result.preview_url}`, '_blank');
@@ -112,24 +123,24 @@ function App() {
     }
   };
 
+  // Loading state - Compact Precision
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-950">
+      <div className="flex items-center justify-center min-h-screen bg-background">
         <div className="text-center">
-          {/* Animated Logo */}
-          <div className="mb-6 animate-pulse">
+          <div className="mb-4 animate-pulse">
             <img
               src="/logo.svg"
               alt="SerenityOps"
-              className="w-24 h-24 mx-auto"
-              style={{ filter: 'drop-shadow(0 0 20px rgba(56, 189, 248, 0.5))' }}
+              className="w-16 h-16 mx-auto"
+              style={{ filter: 'drop-shadow(0 0 12px rgba(46, 151, 255, 0.4))' }}
             />
           </div>
-          <h2 className="text-2xl font-bold text-slate-100 mb-2">SerenityOps</h2>
-          <p className="text-slate-400">Loading your intelligence system...</p>
-          <div className="mt-4">
-            <div className="w-48 h-1 bg-slate-800 rounded-full mx-auto overflow-hidden">
-              <div className="h-full bg-gradient-to-r from-sky-500 via-indigo-500 to-purple-500 animate-pulse"></div>
+          <h2 className="text-lg font-semibold text-text-primary mb-1">SerenityOps</h2>
+          <p className="text-xs text-text-secondary">Loading intelligence system...</p>
+          <div className="mt-3">
+            <div className="w-32 h-0.5 bg-surface-elevated rounded-full mx-auto overflow-hidden">
+              <div className="h-full bg-primary animate-pulse"></div>
             </div>
           </div>
         </div>
@@ -137,20 +148,21 @@ function App() {
     );
   }
 
+  // Error state - Compact Precision
   if (!curriculum) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-950">
-        <div className="bg-slate-800 border border-slate-700 p-8 rounded-lg shadow-lg max-w-md">
-          <div className="text-red-500 mb-4">
-            <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="flex items-center justify-center min-h-screen bg-background">
+        <div className="bg-surface-elevated border border-border-strong p-4 rounded max-w-sm">
+          <div className="text-error mb-3">
+            <svg className="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
           </div>
-          <h2 className="text-xl font-bold text-slate-50 mb-2 text-center">Failed to load curriculum</h2>
-          <p className="text-slate-400 text-center mb-4">
+          <h2 className="text-sm font-semibold text-text-primary mb-1 text-center">Failed to load curriculum</h2>
+          <p className="text-xs text-text-secondary text-center mb-3">
             Make sure the FastAPI backend is running on port 8000.
           </p>
-          <code className="block bg-slate-900 p-3 rounded text-sm text-center text-slate-300">
+          <code className="block bg-surface p-2 rounded text-xs text-center text-text-tertiary">
             cd api && uvicorn main:app --reload
           </code>
         </div>
@@ -159,68 +171,77 @@ function App() {
   }
 
   const navItems = [
-    { id: 'chat' as TabType, name: 'Career Chat', icon: '💬' },
-    { id: 'import' as TabType, name: 'Quick Import', icon: '📥' },
-    { id: 'profile' as TabType, name: 'Profile', icon: '👤' },
-    { id: 'experience' as TabType, name: 'Experience', icon: '💼' },
-    { id: 'projects' as TabType, name: 'Projects', icon: '🚀' },
-    { id: 'skills' as TabType, name: 'Skills', icon: '⚡' },
-    { id: 'education' as TabType, name: 'Education', icon: '🎓' },
-    { id: 'cvs' as TabType, name: 'Generated CVs', icon: '📄' },
-    { id: 'finances' as TabType, name: 'Finances', icon: '💰' },
-    { id: 'opportunities' as TabType, name: 'Opportunities', icon: '🎯' },
+    { id: 'chat' as TabType, label: 'Chat', icon: '💬' },
+    { id: 'import' as TabType, label: 'Import', icon: '📥' },
+    { id: 'profile' as TabType, label: 'Profile', icon: '👤' },
+    { id: 'experience' as TabType, label: 'Experience', icon: '💼' },
+    { id: 'projects' as TabType, label: 'Projects', icon: '🚀' },
+    { id: 'skills' as TabType, label: 'Skills', icon: '⚡' },
+    { id: 'education' as TabType, label: 'Education', icon: '🎓' },
+    { id: 'cvs' as TabType, label: 'CVs', icon: '📄' },
+    { id: 'finances' as TabType, label: 'Finances', icon: '💰' },
+    { id: 'opportunities' as TabType, label: 'Opportunities', icon: '🎯' },
   ];
 
   return (
-    <div className="flex h-screen bg-slate-950">
-      {/* Sidebar */}
-      <div className="w-64 bg-slate-900 border-r border-slate-800 flex flex-col">
-        {/* Header */}
-        <div className="p-6 border-b border-slate-800">
-          <h1 className="text-2xl font-bold text-slate-50">SerenityOps</h1>
-          <p className="text-sm text-slate-400 mt-1">Career Intelligence</p>
+    <div className="flex h-screen bg-background text-text-primary">
+      {/* Compact Precision Sidebar - 52px */}
+      <div className="w-sidebar bg-surface border-r border-border flex flex-col">
+        {/* Header - Compact */}
+        <div className="h-header border-b border-border flex items-center justify-center">
+          <h1 className="text-sm font-bold text-primary">SO</h1>
         </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto p-4">
+        {/* Navigation - Icon Only */}
+        <nav className="flex-1 overflow-y-auto py-2">
           {navItems.map((item) => (
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center px-4 py-3 mb-2 rounded-lg text-left transition-colors ${
+              title={item.label}
+              className={`w-full h-sidebar-icon flex items-center justify-center transition-colors relative group ${
                 activeTab === item.id
-                  ? 'bg-blue-600 text-white shadow-md font-semibold'
-                  : 'text-slate-300 hover:bg-slate-800 hover:text-slate-50'
+                  ? 'bg-primary/10 border-l-2 border-primary text-primary'
+                  : 'text-text-tertiary hover:bg-surface-hover hover:text-text-secondary'
               }`}
             >
-              <span className="text-xl mr-3">{item.icon}</span>
-              <span className="font-medium">{item.name}</span>
+              <span className="text-lg">{item.icon}</span>
+              {/* Tooltip */}
+              <span className="absolute left-full ml-2 px-2 py-1 bg-surface-elevated border border-border-strong rounded text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-tooltip">
+                {item.label}
+              </span>
             </button>
           ))}
         </nav>
 
-        {/* Actions */}
-        <div className="p-4 border-t border-slate-800 space-y-2">
+        {/* Actions - Compact */}
+        <div className="p-2 border-t border-border space-y-1">
           <button
             onClick={handleSave}
             disabled={saving}
-            className="w-full bg-slate-800 hover:bg-slate-700 text-slate-50 font-medium py-3 px-4 rounded-lg transition-colors disabled:opacity-50 border border-slate-700 hover:border-slate-600"
+            title="Save Changes (Ctrl+S)"
+            className="w-full h-7 bg-surface-elevated hover:bg-surface-hover text-text-primary text-xs font-medium rounded transition-colors disabled:opacity-40 border border-border-strong flex items-center justify-center"
           >
-            {saving ? 'Saving...' : 'Save Changes'}
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+            </svg>
           </button>
           <button
             onClick={handleGenerateCV}
             disabled={generating}
-            className="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 shadow-md"
+            title="Generate CV"
+            className="w-full h-7 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded transition-colors disabled:opacity-40 flex items-center justify-center"
           >
-            {generating ? 'Generating...' : 'Generate CV'}
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
           </button>
         </div>
       </div>
 
-      {/* Main Content */}
+      {/* Main Content - Compact */}
       <div className="flex-1 overflow-y-auto">
-        <div className={activeTab === 'chat' ? 'h-full' : 'max-w-6xl mx-auto p-8'}>
+        <div className={activeTab === 'chat' ? 'h-full' : 'max-w-7xl mx-auto p-3'}>
           {activeTab === 'chat' && (
             <ChatManager apiBaseUrl={API_BASE_URL} />
           )}
@@ -285,10 +306,10 @@ function App() {
           )}
 
           {activeTab === 'finances' && (
-            <div className="bg-slate-800 border border-slate-700 rounded-lg shadow-sm p-8">
-              <h2 className="text-2xl font-bold text-slate-50 mb-4">Finances</h2>
-              <div className="bg-slate-900 border border-slate-700 rounded-lg p-6">
-                <p className="text-slate-400">
+            <div className="bg-surface-elevated border border-border rounded p-3">
+              <h2 className="text-sm font-semibold text-text-primary mb-2">Finances</h2>
+              <div className="bg-surface border border-border rounded p-3">
+                <p className="text-xs text-text-secondary">
                   Finances module coming soon. Will integrate with finances/structure.yaml
                 </p>
               </div>
@@ -301,29 +322,25 @@ function App() {
         </div>
       </div>
 
-      {/* Notification Toast */}
+      {/* Notification Toast - Compact Precision */}
       {notification && (
-        <div className="fixed bottom-4 right-4 z-50 animate-slide-up">
-          <div className={`rounded-lg shadow-lg p-4 max-w-md border ${
+        <div className="fixed bottom-3 right-3 z-50 animate-slide-up">
+          <div className={`rounded p-2 max-w-sm border text-xs ${
             notification.type === 'success'
-              ? 'bg-emerald-900 border-emerald-700'
-              : 'bg-red-900 border-red-700'
+              ? 'bg-success/10 border-success text-success'
+              : 'bg-error/10 border-error text-error'
           }`}>
-            <div className="flex items-start">
+            <div className="flex items-start gap-2">
               {notification.type === 'success' ? (
-                <svg className="w-6 h-6 text-emerald-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               ) : (
-                <svg className="w-6 h-6 text-red-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               )}
-              <p className={`font-medium ${
-                notification.type === 'success' ? 'text-emerald-100' : 'text-red-100'
-              }`}>
-                {notification.message}
-              </p>
+              <p className="font-medium leading-tight">{notification.message}</p>
             </div>
           </div>
         </div>

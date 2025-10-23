@@ -29,10 +29,10 @@ const ChatMessage: React.FC<ChatMessageProps> = React.memo(({ content, role, api
     } catch (error) {
       // If JSON parsing fails, show error message
       return (
-        <div className="my-4 p-4 bg-red-900/30 border border-red-700 rounded-lg">
-          <p className="text-red-300 font-semibold">⚠️ Invalid ACTION format</p>
-          <p className="text-red-400 text-sm mt-1">Failed to parse ACTION block</p>
-          <pre className="mt-2 p-3 bg-slate-950 rounded border border-slate-700 text-xs text-red-400 overflow-x-auto">
+        <div className="my-2 p-2 bg-error/10 border border-error rounded">
+          <p className="text-error font-semibold text-xs">⚠️ Invalid ACTION format</p>
+          <p className="text-error text-xs mt-1">Failed to parse ACTION block</p>
+          <pre className="mt-1 p-2 bg-surface rounded border border-border text-xs text-error overflow-x-auto">
             {content}
           </pre>
         </div>
@@ -42,7 +42,7 @@ const ChatMessage: React.FC<ChatMessageProps> = React.memo(({ content, role, api
 
   // Assistant messages: rich Markdown rendering with wrapper div for className
   return (
-    <div className="prose prose-invert prose-slate max-w-none prose-headings:text-slate-200 prose-p:text-slate-300 prose-a:text-blue-400 prose-strong:text-slate-100 prose-code:text-emerald-400 prose-pre:bg-slate-950 prose-pre:border prose-pre:border-slate-700">
+    <div className="prose prose-invert max-w-none prose-headings:text-text-primary prose-p:text-text-primary prose-a:text-primary prose-strong:text-text-primary prose-code:text-success prose-pre:bg-surface prose-pre:border prose-pre:border-border">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeHighlight]}
@@ -56,7 +56,7 @@ const ChatMessage: React.FC<ChatMessageProps> = React.memo(({ content, role, api
               // Block code with language
               return (
                 <div className="relative">
-                  <div className="absolute top-2 right-2 text-xs text-slate-500 font-mono uppercase">
+                  <div className="absolute top-1 right-1 text-xs text-text-tertiary font-mono uppercase">
                     {match[1]}
                   </div>
                   <code className={className} {...props}>
@@ -69,7 +69,7 @@ const ChatMessage: React.FC<ChatMessageProps> = React.memo(({ content, role, api
             // Inline code
             return (
               <code
-                className="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-emerald-400 text-sm font-mono"
+                className="px-1 py-0.5 bg-surface-elevated border border-border rounded text-success text-xs font-mono"
                 {...props}
               >
                 {children}
@@ -80,7 +80,7 @@ const ChatMessage: React.FC<ChatMessageProps> = React.memo(({ content, role, api
           pre({ children, ...props }: any) {
             return (
               <pre
-                className="p-4 rounded-lg overflow-x-auto bg-slate-950 border border-slate-700 my-4"
+                className="p-2 rounded overflow-x-auto bg-surface border border-border my-2"
                 {...props}
               >
                 {children}
@@ -90,21 +90,21 @@ const ChatMessage: React.FC<ChatMessageProps> = React.memo(({ content, role, api
           // Custom list styling
           ul({ children, ...props }: any) {
             return (
-              <ul className="space-y-2 my-3" {...props}>
+              <ul className="space-y-1 my-2" {...props}>
                 {children}
               </ul>
             );
           },
           ol({ children, ...props }: any) {
             return (
-              <ol className="space-y-2 my-3" {...props}>
+              <ol className="space-y-1 my-2" {...props}>
                 {children}
               </ol>
             );
           },
           li({ children, ...props }: any) {
             return (
-              <li className="text-slate-300" {...props}>
+              <li className="text-text-primary text-xs" {...props}>
                 {children}
               </li>
             );
@@ -112,21 +112,21 @@ const ChatMessage: React.FC<ChatMessageProps> = React.memo(({ content, role, api
           // Custom heading styling
           h1({ children, ...props }: any) {
             return (
-              <h1 className="text-2xl font-bold text-slate-100 mt-6 mb-3" {...props}>
+              <h1 className="text-base font-bold text-text-primary mt-3 mb-2" {...props}>
                 {children}
               </h1>
             );
           },
           h2({ children, ...props }: any) {
             return (
-              <h2 className="text-xl font-bold text-slate-100 mt-5 mb-2" {...props}>
+              <h2 className="text-sm font-bold text-text-primary mt-3 mb-1" {...props}>
                 {children}
               </h2>
             );
           },
           h3({ children, ...props }: any) {
             return (
-              <h3 className="text-lg font-semibold text-slate-200 mt-4 mb-2" {...props}>
+              <h3 className="text-sm font-semibold text-text-primary mt-2 mb-1" {...props}>
                 {children}
               </h3>
             );
@@ -134,7 +134,7 @@ const ChatMessage: React.FC<ChatMessageProps> = React.memo(({ content, role, api
           // Custom paragraph styling
           p({ children, ...props }: any) {
             return (
-              <p className="text-slate-300 leading-relaxed my-2" {...props}>
+              <p className="text-text-primary text-xs leading-relaxed my-1" {...props}>
                 {children}
               </p>
             );
@@ -143,7 +143,7 @@ const ChatMessage: React.FC<ChatMessageProps> = React.memo(({ content, role, api
           blockquote({ children, ...props }: any) {
             return (
               <blockquote
-                className="border-l-4 border-blue-600 pl-4 py-2 my-4 bg-slate-900/50 italic text-slate-400"
+                className="border-l-2 border-primary pl-2 py-1 my-2 bg-surface-elevated/50 italic text-text-secondary text-xs"
                 {...props}
               >
                 {children}
@@ -153,8 +153,8 @@ const ChatMessage: React.FC<ChatMessageProps> = React.memo(({ content, role, api
           // Custom table styling
           table({ children, ...props }: any) {
             return (
-              <div className="overflow-x-auto my-4">
-                <table className="min-w-full border border-slate-700" {...props}>
+              <div className="overflow-x-auto my-2">
+                <table className="min-w-full border border-border" {...props}>
                   {children}
                 </table>
               </div>
@@ -162,14 +162,14 @@ const ChatMessage: React.FC<ChatMessageProps> = React.memo(({ content, role, api
           },
           th({ children, ...props }: any) {
             return (
-              <th className="border border-slate-700 bg-slate-900 px-4 py-2 text-left text-slate-300 font-semibold" {...props}>
+              <th className="border border-border bg-surface-elevated px-2 py-1 text-left text-text-primary text-xs font-semibold" {...props}>
                 {children}
               </th>
             );
           },
           td({ children, ...props }: any) {
             return (
-              <td className="border border-slate-700 px-4 py-2 text-slate-300" {...props}>
+              <td className="border border-border px-2 py-1 text-text-primary text-xs" {...props}>
                 {children}
               </td>
             );
@@ -179,7 +179,7 @@ const ChatMessage: React.FC<ChatMessageProps> = React.memo(({ content, role, api
             return (
               <a
                 href={href}
-                className="text-blue-400 hover:text-blue-300 underline transition-colors"
+                className="text-primary hover:text-primary-hover underline transition-colors text-xs"
                 target="_blank"
                 rel="noopener noreferrer"
                 {...props}

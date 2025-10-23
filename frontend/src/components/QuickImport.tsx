@@ -91,33 +91,33 @@ const QuickImport: React.FC<QuickImportProps> = ({ apiBaseUrl, onDataMerged }) =
   };
 
   return (
-    <div className="bg-slate-800 border border-slate-700 rounded-lg shadow-sm p-8">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-slate-50 mb-2">Quick Import</h2>
-        <p className="text-slate-400">
+    <div className="bg-surface-elevated border border-border rounded shadow-sm p-8">
+      <div className="mb-1.5">
+        <h2 className="text-sm font-bold text-slate-50 mb-2">Quick Import</h2>
+        <p className="text-text-tertiary">
           Paste unstructured text and let Claude extract CV information automatically.
         </p>
       </div>
 
       {!parsedData ? (
-        <div className="space-y-4">
+        <div className="space-y-2">
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">
+            <label className="block text-sm font-medium text-text-secondary mb-2">
               Paste text here
             </label>
             <textarea
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               placeholder="Paste memory packs, project descriptions, GitHub links, or any career-related text..."
-              className="w-full h-64 px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-slate-50 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none font-mono text-sm"
+              className="w-full h-64 px-2 py-1.5 bg-surface-elevated border border-border rounded text-slate-50 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none font-mono text-sm"
             />
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex gap-1.5">
             <button
               onClick={handleParse}
               disabled={parsing || !inputText.trim()}
-              className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 bg-primary hover:bg-primary-hover text-white font-semibold py-1.5 px-3 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {parsing ? (
                 <span className="flex items-center justify-center">
@@ -135,17 +135,17 @@ const QuickImport: React.FC<QuickImportProps> = ({ apiBaseUrl, onDataMerged }) =
             <button
               onClick={() => setInputText('')}
               disabled={parsing}
-              className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-slate-300 font-medium rounded-lg transition-colors disabled:opacity-50"
+              className="px-3 py-1.5 bg-surface-hover hover:bg-slate-600 text-text-secondary font-medium rounded transition-colors disabled:opacity-50"
             >
               Clear
             </button>
           </div>
 
-          <div className="bg-slate-900 border border-slate-700 rounded-lg p-4">
-            <p className="text-sm text-slate-400">
-              <strong className="text-slate-300">Examples of what you can paste:</strong>
+          <div className="bg-surface-elevated border border-border rounded p-2">
+            <p className="text-sm text-text-tertiary">
+              <strong className="text-text-secondary">Examples of what you can paste:</strong>
             </p>
-            <ul className="mt-2 space-y-1 text-sm text-slate-400 ml-4 list-disc">
+            <ul className="mt-2 space-y-1 text-sm text-text-tertiary ml-4 list-disc">
               <li>Memory packs from other AI conversations</li>
               <li>Project descriptions from GitHub or documentation</li>
               <li>Job descriptions to extract requirements</li>
@@ -155,32 +155,32 @@ const QuickImport: React.FC<QuickImportProps> = ({ apiBaseUrl, onDataMerged }) =
           </div>
         </div>
       ) : (
-        <div className="space-y-6">
-          <div className="bg-green-900/20 border border-green-700 rounded-lg p-4">
+        <div className="space-y-1.5">
+          <div className="bg-green-900/20 border border-green-700 rounded p-2">
             <div className="flex items-start">
               <svg className="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <div className="flex-1">
-                <h3 className="font-semibold text-green-400 mb-1">Data Parsed Successfully</h3>
+                <h3 className="font-semibold text-success mb-1">Data Parsed Successfully</h3>
                 <p className="text-sm text-green-300">Review the extracted information below and accept to merge into your CV.</p>
               </div>
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-2">
             {parsedData.projects && parsedData.projects.length > 0 && (
-              <div className="bg-slate-900 border border-slate-700 rounded-lg p-4">
-                <h3 className="font-semibold text-slate-50 mb-3 flex items-center">
-                  <span className="text-xl mr-2">🚀</span>
+              <div className="bg-surface-elevated border border-border rounded p-2">
+                <h3 className="font-semibold text-slate-50 mb-1.5 flex items-center">
+                  <span className="text-sm mr-2">🚀</span>
                   Projects ({parsedData.projects.length})
                 </h3>
-                <div className="space-y-3">
+                <div className="space-y-1.5">
                   {parsedData.projects.map((project, idx) => (
-                    <div key={idx} className="bg-slate-800 border border-slate-700 rounded p-3">
-                      <h4 className="font-medium text-slate-200">{project.name}</h4>
+                    <div key={idx} className="bg-surface-elevated border border-border rounded p-3">
+                      <h4 className="font-medium text-text-primary">{project.name}</h4>
                       {project.tagline && (
-                        <p className="text-sm text-slate-400 mt-1">{project.tagline}</p>
+                        <p className="text-sm text-text-tertiary mt-1">{project.tagline}</p>
                       )}
                       {project.tech_stack && project.tech_stack.length > 0 && (
                         <div className="flex flex-wrap gap-2 mt-2">
@@ -198,16 +198,16 @@ const QuickImport: React.FC<QuickImportProps> = ({ apiBaseUrl, onDataMerged }) =
             )}
 
             {parsedData.experience && parsedData.experience.length > 0 && (
-              <div className="bg-slate-900 border border-slate-700 rounded-lg p-4">
-                <h3 className="font-semibold text-slate-50 mb-3 flex items-center">
-                  <span className="text-xl mr-2">💼</span>
+              <div className="bg-surface-elevated border border-border rounded p-2">
+                <h3 className="font-semibold text-slate-50 mb-1.5 flex items-center">
+                  <span className="text-sm mr-2">💼</span>
                   Experience ({parsedData.experience.length})
                 </h3>
-                <div className="space-y-3">
+                <div className="space-y-1.5">
                   {parsedData.experience.map((exp, idx) => (
-                    <div key={idx} className="bg-slate-800 border border-slate-700 rounded p-3">
-                      <h4 className="font-medium text-slate-200">{exp.role}</h4>
-                      <p className="text-sm text-slate-400">{exp.company}</p>
+                    <div key={idx} className="bg-surface-elevated border border-border rounded p-3">
+                      <h4 className="font-medium text-text-primary">{exp.role}</h4>
+                      <p className="text-sm text-text-tertiary">{exp.company}</p>
                     </div>
                   ))}
                 </div>
@@ -215,15 +215,15 @@ const QuickImport: React.FC<QuickImportProps> = ({ apiBaseUrl, onDataMerged }) =
             )}
 
             {parsedData.skills && (
-              <div className="bg-slate-900 border border-slate-700 rounded-lg p-4">
-                <h3 className="font-semibold text-slate-50 mb-3 flex items-center">
-                  <span className="text-xl mr-2">⚡</span>
+              <div className="bg-surface-elevated border border-border rounded p-2">
+                <h3 className="font-semibold text-slate-50 mb-1.5 flex items-center">
+                  <span className="text-sm mr-2">⚡</span>
                   Skills Extracted
                 </h3>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-2">
                   {parsedData.skills.languages && parsedData.skills.languages.length > 0 && (
                     <div>
-                      <h4 className="text-sm font-medium text-slate-300 mb-2">Languages</h4>
+                      <h4 className="text-sm font-medium text-text-secondary mb-2">Languages</h4>
                       <div className="flex flex-wrap gap-2">
                         {parsedData.skills.languages.map((lang: any, i: number) => (
                           <span key={i} className="px-2 py-1 bg-purple-900/30 text-purple-300 text-xs rounded">
@@ -235,7 +235,7 @@ const QuickImport: React.FC<QuickImportProps> = ({ apiBaseUrl, onDataMerged }) =
                   )}
                   {parsedData.skills.tools && parsedData.skills.tools.length > 0 && (
                     <div>
-                      <h4 className="text-sm font-medium text-slate-300 mb-2">Tools</h4>
+                      <h4 className="text-sm font-medium text-text-secondary mb-2">Tools</h4>
                       <div className="flex flex-wrap gap-2">
                         {parsedData.skills.tools.map((tool: string, i: number) => (
                           <span key={i} className="px-2 py-1 bg-green-900/30 text-green-300 text-xs rounded">
@@ -250,18 +250,18 @@ const QuickImport: React.FC<QuickImportProps> = ({ apiBaseUrl, onDataMerged }) =
             )}
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex gap-1.5">
             <button
               onClick={handleMerge}
               disabled={merging}
-              className="flex-1 bg-green-600 hover:bg-green-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-50"
+              className="flex-1 bg-green-600 hover:bg-green-500 text-white font-semibold py-1.5 px-3 rounded transition-colors disabled:opacity-50"
             >
               {merging ? 'Merging...' : 'Accept & Merge into CV'}
             </button>
             <button
               onClick={handleReject}
               disabled={merging}
-              className="px-6 py-3 bg-red-900/30 hover:bg-red-900/50 text-red-400 font-medium rounded-lg transition-colors disabled:opacity-50 border border-red-700"
+              className="px-3 py-1.5 bg-red-900/30 hover:bg-red-900/50 text-error font-medium rounded transition-colors disabled:opacity-50 border border-red-700"
             >
               Reject
             </button>
@@ -270,13 +270,13 @@ const QuickImport: React.FC<QuickImportProps> = ({ apiBaseUrl, onDataMerged }) =
       )}
 
       {notification && (
-        <div className={`mt-4 rounded-lg p-4 ${
+        <div className={`mt-2 rounded p-2 ${
           notification.type === 'success'
             ? 'bg-green-900/20 border border-green-700'
             : 'bg-red-900/20 border border-red-700'
         }`}>
           <p className={`text-sm ${
-            notification.type === 'success' ? 'text-green-400' : 'text-red-400'
+            notification.type === 'success' ? 'text-success' : 'text-error'
           }`}>
             {notification.message}
           </p>

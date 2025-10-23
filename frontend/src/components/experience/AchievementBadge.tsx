@@ -73,7 +73,7 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({
   };
 
   return (
-    <div className={`space-y-2 ${className}`}>
+    <div className={`space-y-1 ${className}`}>
       <AnimatePresence mode="popLayout">
         {achievements.map((achievement, index) => (
           <motion.div
@@ -84,42 +84,42 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({
             className="group"
           >
             {editingIndex === index ? (
-              <div className="flex items-start gap-2 p-2 bg-slate-800 border border-sky-500 rounded-lg">
+              <div className="flex items-start gap-1 p-1.5 bg-surface-elevated border border-primary rounded">
                 <textarea
                   value={editValue}
                   onChange={(e) => setEditValue(e.target.value)}
                   onKeyDown={(e) => handleKeyDown(e, 'edit')}
-                  className="flex-1 bg-transparent outline-none text-sm text-slate-200 resize-none"
+                  className="flex-1 bg-transparent outline-none text-xs text-text-primary resize-none"
                   rows={2}
                   autoFocus
                 />
                 <button
                   onClick={handleSaveEdit}
-                  className="p-1 text-green-400 hover:bg-green-400/10 rounded transition-colors"
+                  className="p-0.5 text-success hover:bg-success/10 rounded transition-colors"
                 >
-                  <Check size={16} />
+                  <Check size={12} />
                 </button>
                 <button
                   onClick={() => setEditingIndex(null)}
-                  className="p-1 text-red-400 hover:bg-red-400/10 rounded transition-colors"
+                  className="p-0.5 text-error hover:bg-error/10 rounded transition-colors"
                 >
-                  <X size={16} />
+                  <X size={12} />
                 </button>
               </div>
             ) : (
-              <div className="flex items-start gap-2 p-2 pl-4 bg-slate-800/50 border border-slate-700 rounded-lg hover:border-slate-600 transition-colors">
-                <span className="text-emerald-400 mt-1">•</span>
+              <div className="flex items-start gap-1.5 p-1.5 pl-2 bg-surface-elevated/50 border border-border rounded hover:border-border-strong transition-colors">
+                <span className="text-success text-xs mt-0.5">•</span>
                 <p
-                  className="flex-1 text-sm text-slate-300 cursor-pointer"
+                  className="flex-1 text-xs text-text-secondary cursor-pointer"
                   onClick={() => handleEdit(index)}
                 >
                   {achievement}
                 </p>
                 <button
                   onClick={() => handleDelete(index)}
-                  className="opacity-0 group-hover:opacity-100 p-1 text-slate-500 hover:text-red-400 transition-all"
+                  className="opacity-0 group-hover:opacity-100 p-0.5 text-text-tertiary hover:text-error transition-all"
                 >
-                  <X size={14} />
+                  <X size={11} />
                 </button>
               </div>
             )}
@@ -132,7 +132,7 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-start gap-2 p-2 bg-slate-800 border border-sky-500 rounded-lg"
+          className="flex items-start gap-1 p-1.5 bg-surface-elevated border border-primary rounded"
         >
           <textarea
             value={newAchievement}
@@ -146,15 +146,15 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({
               }, 200);
             }}
             placeholder="Describe a quantifiable achievement..."
-            className="flex-1 bg-transparent outline-none text-sm text-slate-200 resize-none"
+            className="flex-1 bg-transparent outline-none text-xs text-text-primary resize-none"
             rows={2}
             autoFocus
           />
           <button
             onClick={handleAdd}
-            className="p-1 text-green-400 hover:bg-green-400/10 rounded transition-colors"
+            className="p-0.5 text-success hover:bg-success/10 rounded transition-colors"
           >
-            <Check size={16} />
+            <Check size={12} />
           </button>
         </motion.div>
       ) : (
@@ -162,9 +162,9 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => setIsAdding(true)}
-          className="w-full flex items-center justify-center gap-2 p-2 bg-slate-800/30 border border-slate-700 border-dashed rounded-lg text-sm text-slate-400 hover:text-sky-400 hover:border-sky-500 transition-colors"
+          className="w-full flex items-center justify-center gap-1 p-1.5 bg-surface-elevated/30 border border-border border-dashed rounded text-xs text-text-tertiary hover:text-primary hover:border-primary transition-colors"
         >
-          <Plus size={14} />
+          <Plus size={11} />
           <span>Add achievement</span>
         </motion.button>
       )}

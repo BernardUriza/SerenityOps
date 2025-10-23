@@ -1,10 +1,355 @@
 @import "tailwindcss";
 
+/* ============================================
+   Compact Precision UI - Global CSS Variables
+   ============================================ */
+
+:root {
+  /* Typography */
+  --font-size-base: 12.5px;
+  --line-height-base: 1.25;
+  --letter-spacing-tight: -0.01em;
+
+  /* Spacing */
+  --spacing-unit: 0.4rem;
+  --container-width: 98%;
+
+  /* Borders & Radius */
+  --radius-base: 4px;
+  --border-width: 1px;
+
+  /* Transitions */
+  --transition-duration: 150ms;
+  --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Scrollbar */
+  --scrollbar-width: thin;
+  --scrollbar-track: #0F1419;
+  --scrollbar-thumb: #1E242E;
+  --scrollbar-thumb-hover: #252B36;
+}
+
+/* ============================================
+   Typography - Inter Variable
+   ============================================ */
+
+@import url('https://rsms.me/inter/inter.css');
+
+html {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+               'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+               'Helvetica Neue', sans-serif;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+}
+
+@supports (font-variation-settings: normal) {
+  html {
+    font-family: 'Inter var', sans-serif;
+  }
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  background-color: #090C10;
+  color: #E2E8F0;
+  overflow-x: hidden;
+}
+
+/* ============================================
+   Global Resets for Compact Precision
+   ============================================ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+*:focus-visible {
+  outline: 1px solid rgba(46, 151, 255, 0.5);
+  outline-offset: 2px;
+}
+
+/* Remove default button styles */
+button {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: opacity var(--transition-duration) var(--transition-timing);
+}
+
+button:hover:not(:disabled) {
+  opacity: 0.8;
+}
+
+button:active:not(:disabled) {
+  opacity: 0.6;
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Input styles */
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+  background-color: transparent;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: var(--radius-base);
+  transition: border-color var(--transition-duration) var(--transition-timing);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #2E97FF;
+  outline: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #64748B;
+}
+
+/* ============================================
+   Custom Scrollbar (Compact Precision)
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* ============================================
+   Selection
+   ============================================ */
+
+::selection {
+  background-color: rgba(46, 151, 255, 0.3);
+  color: #E2E8F0;
+}
+
+::-moz-selection {
+  background-color: rgba(46, 151, 255, 0.3);
+  color: #E2E8F0;
+}
+
+/* ============================================
+   Utility Classes for Compact Precision
+   ============================================ */
+
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Compact transitions */
+.transition-compact {
+  transition: all var(--transition-duration) var(--transition-timing);
+}
+
+/* Surface elevation shadows (minimal) */
+.surface-elevated {
+  background-color: #1A1F29;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Hover states */
+.hover-surface:hover {
+  background-color: #1E242E;
+}
+
+.hover-primary:hover {
+  background-color: #1E87EF;
+}
+
+/* ============================================
+   Animation Utilities (Fast & Precise)
+   ============================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--transition-duration) var(--transition-timing);
+}
+
+.animate-slide-down {
+  animation: slideDown var(--transition-duration) var(--transition-timing);
+}
+
+.animate-slide-up {
+  animation: slideUp var(--transition-duration) var(--transition-timing);
+}
+
+/* ============================================
+   Table Styles (Compact Precision)
+   ============================================ */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+thead {
+  position: sticky;
+  top: 0;
+  background-color: #0F1419;
+  z-index: 10;
+}
+
+thead th {
+  text-align: left;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  height: 1.75rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  color: #94A3B8;
+  font-size: 12.5px;
+}
+
+tbody tr {
+  height: 1.625rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+  transition: background-color var(--transition-duration);
+}
+
+tbody tr:hover {
+  background-color: rgba(30, 36, 46, 0.6);
+}
+
+tbody td {
+  padding: 0.4rem 0.8rem;
+  color: #E2E8F0;
+  font-size: 12.5px;
+}
+
+/* ============================================
+   Code Blocks (Engineer-Grade)
+   ============================================ */
+
+code {
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 10px;
+  background-color: rgba(46, 151, 255, 0.1);
+  padding: 0.2rem 0.4rem;
+  border-radius: 2px;
+  color: #2E97FF;
+}
+
+pre {
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 10px;
+  background-color: #0F1419;
+  padding: 0.8rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  line-height: 1.4;
+}
+
+pre code {
+  background-color: transparent;
+  padding: 0;
+  color: #E2E8F0;
+}
+
+/* ============================================
+   Print Styles (Maintain precision)
+   ============================================ */
+
+@media print {
+  body {
+    background-color: white;
+    color: black;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 }

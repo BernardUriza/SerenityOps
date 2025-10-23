@@ -66,21 +66,21 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
 
   const sizeClasses = {
     sm: 'px-2 py-1 text-xs',
-    md: 'px-3 py-1.5 text-sm',
-    lg: 'px-4 py-2 text-base',
+    md: 'px-3 py-1.5 text-xs',
+    lg: 'px-2 py-1 text-xs',
   };
 
   const iconSizes = {
     sm: 'w-3 h-3',
-    md: 'w-4 h-4',
-    lg: 'w-5 h-5',
+    md: 'w-3 h-3',
+    lg: 'w-3 h-3',
   };
 
   if (isLoading) {
     return (
-      <div className={`flex items-center gap-1.5 bg-slate-800/50 border border-slate-700 rounded-lg ${sizeClasses[size]} animate-pulse`}>
-        <div className={`${iconSizes[size]} bg-slate-700 rounded`}></div>
-        <span className="text-slate-400">{tech}</span>
+      <div className={`flex items-center gap-1.5 bg-surface-elevated/50 border border-border rounded ${sizeClasses[size]} animate-pulse`}>
+        <div className={`${iconSizes[size]} bg-surface-hover rounded`}></div>
+        <span className="text-text-tertiary">{tech}</span>
       </div>
     );
   }
@@ -91,7 +91,7 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
       animate={{ scale: 1, opacity: 1 }}
       exit={{ scale: 0, opacity: 0 }}
       whileHover={editable ? { scale: 1.05 } : {}}
-      className={`flex items-center gap-1.5 bg-slate-800 border border-slate-700 rounded-lg ${sizeClasses[size]} group`}
+      className={`flex items-center gap-1.5 bg-surface-elevated border border-border rounded ${sizeClasses[size]} group`}
       style={{
         borderColor: iconData?.color ? `${iconData.color}40` : undefined,
       }}
@@ -112,7 +112,7 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
           }}
         />
       ) : iconData?.emoji ? (
-        <span className={`${size === 'sm' ? 'text-sm' : size === 'md' ? 'text-base' : 'text-lg'}`}>
+        <span className={`${size === 'sm' ? 'text-xs' : size === 'md' ? 'text-xs' : 'text-xs'}`}>
           {iconData.emoji}
         </span>
       ) : null}
@@ -120,19 +120,19 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
       {/* Hidden emoji fallback */}
       {iconData?.svg_url && iconData?.emoji && (
         <span
-          className={`${size === 'sm' ? 'text-sm' : size === 'md' ? 'text-base' : 'text-lg'}`}
+          className={`${size === 'sm' ? 'text-xs' : size === 'md' ? 'text-xs' : 'text-xs'}`}
           style={{ display: 'none' }}
         >
           {iconData.emoji}
         </span>
       )}
 
-      <span className="text-slate-200">{tech}</span>
+      <span className="text-text-primary">{tech}</span>
 
       {editable && onRemove && (
         <button
           onClick={onRemove}
-          className="ml-1 text-slate-500 hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100"
+          className="ml-1 text-text-tertiary hover:text-error transition-colors opacity-0 group-hover:opacity-100"
         >
           <X size={size === 'sm' ? 12 : size === 'md' ? 14 : 16} />
         </button>
