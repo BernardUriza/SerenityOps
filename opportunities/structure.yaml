@@ -5,7 +5,7 @@
 
 meta:
   version: "1.0.0"
-  last_updated: "2025-10-16"
+  last_updated: "2025-10-22"
   owner: "Bernard Orozco"
   timezone: "America/Mexico_City"
 
@@ -13,56 +13,101 @@ pipeline:
   # Active opportunities organized by stage
   # Stages: discovered | applied | interviewing | offer | closed
 
-  - id: "example-001"
-    company: "Example Corp"
-    role: "Backend Engineer (Go)"
-    stage: "discovered"
-    priority: "high"  # high | medium | low
+  - id: "toka-001"
+    company: "Grupo Toka Internacional"
+    role: "Desarrollador Full Stack"
+    stage: "closed"
+    priority: "low"  # high | medium | low
+    outcome: "declined"  # declined | rejected | accepted | withdrawn
 
     details:
-      description: "Build scalable microservices with Go and Kubernetes"
-      location: "Remote"
-      salary_range: "18000-25000 MXN/month"
+      description: "Desarrollo de APIs y plataformas backend para fintech. Optimización de bases de datos y arquitecturas. Implementación de estándares OWASP."
+      location: "Presencial 100% - Av. Patria 1891, Puerta de Hierro, Zapopan, Jalisco"
+      salary_range: "30000-35000 MXN/month"
+      work_schedule: "Lunes a Viernes 09:00-18:00"
+      sector: "Fintech"
       tech_stack:
-        - "Go"
+        - "Python"
+        - "Django"
+        - "Redis"
+        - "C#"
+        - ".NET"
+        - "Go Lang"
+        - "Node.js"
+        - "JavaScript"
+        - "Java"
+        - "Angular"
+        - "Spring Boot"
+        - "SQL Server"
+        - "MongoDB"
         - "PostgreSQL"
+        - "AWS"
+        - "Azure"
         - "Docker"
         - "Kubernetes"
+        - "Git"
+        - "RESTful APIs"
+        - "GraphQL"
+      benefits:
+        - "Prestaciones de Ley"
+        - "Aguinaldo"
+        - "Utilidades"
+        - "Caja de ahorro"
+        - "Servicio médico"
+        - "Seguro de vida"
+        - "Gastos médicos menores"
+        - "Vales de despensa $1,200/mes"
+      requirements:
+        - "Licenciatura terminada"
+        - "Edad: 30-45 años (discriminatorio)"
+        - "Mínimo 5 años de experiencia backend"
+        - "Experiencia en liderazgo técnico y CI/CD"
+        - "Inglés básico"
 
     timeline:
-      discovered: "2025-10-16"
+      discovered: "2025-10-22"
       applied: null
-      first_interview: null
+      first_interview: "2025-10-22"
       final_interview: null
       offer_received: null
       decision_deadline: null
+      closed: "2025-10-22"
 
     contacts:
-      - name: "Jane Doe"
-        role: "Hiring Manager"
-        email: "jane@example.com"
-        linkedin: "https://linkedin.com/in/janedoe"
+      - name: "Unknown"
+        role: "Recruiter"
+        source: "LinkedIn/Indeed"
 
     notes:
-      - date: "2025-10-16"
-        content: "Found via LinkedIn. Company culture emphasizes work-life balance."
+      - date: "2025-10-22"
+        content: "Me contactaron para entrevista. Rechacé por modalidad 100% presencial. El salario está por debajo del mercado para el perfil requerido (5+ años, liderazgo técnico). Rango de edad discriminatorio. Stack demasiado amplio sugiere falta de enfoque."
+      - date: "2025-10-22"
+        content: "VALOR: Confirma que mi perfil Python/Django/Redis está en demanda en sector fintech de GDL. Benchmark salarial para presencial: $30-35K podría traducirse a $40-50K+ para remoto."
 
     fit_analysis:
-      technical_match: 0.85  # 0.0-1.0 scale
-      cultural_match: null
-      growth_potential: null
-      red_flags: []
+      technical_match: 0.90  # 0.0-1.0 scale - stack match excelente
+      cultural_match: 0.20   # presencial 100% incompatible con preferencias
+      growth_potential: 0.50 # fintech tiene potencial pero empresa desconocida
+      decline_reason: "100% presencial incompatible con preferencias laborales. Salario bajo para perfil requerido."
+      red_flags:
+        - "100% presencial en 2025 para desarrollo de software"
+        - "Salario bajo para 5+ años de experiencia y liderazgo técnico"
+        - "Rango de edad discriminatorio (30-45 años)"
+        - "Stack demasiado amplio (C#, Python, Go, Node, Java) - falta de enfoque"
+        - "Rating 2.9/5 estrellas en plataforma"
       green_flags:
-        - "Remote-first policy"
-        - "Modern tech stack"
+        - "Sector fintech en crecimiento"
+        - "Stack técnico moderno (Python, Django, Redis, AWS, Kubernetes)"
+        - "Validación de que perfil está siendo visto en mercado GDL"
 
 active_count:
   # Auto-calculated metrics
-  discovered: 1
+  discovered: 0
   applied: 0
   interviewing: 0
   offer: 0
-  total: 1
+  closed: 1
+  total: 0
 
 goals:
   weekly:
