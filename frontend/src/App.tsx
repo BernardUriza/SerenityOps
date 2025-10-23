@@ -37,15 +37,21 @@ function App() {
 
   const loadCurriculum = async () => {
     try {
+      console.log('[App] Starting loadCurriculum...');
       setLoading(true);
+      console.log('[App] Fetching from:', `${API_BASE_URL}/api/curriculum`);
       const response = await fetch(`${API_BASE_URL}/api/curriculum`);
+      console.log('[App] Response status:', response.status);
       if (!response.ok) throw new Error('Failed to load curriculum');
       const data = await response.json();
+      console.log('[App] Data loaded:', data);
       setCurriculum(data);
+      console.log('[App] Curriculum set successfully');
     } catch (error) {
-      console.error('Error loading curriculum:', error);
+      console.error('[App] Error loading curriculum:', error);
       showNotification('Failed to load curriculum. Make sure the API is running.', 'error');
     } finally {
+      console.log('[App] Setting loading to false');
       setLoading(false);
     }
   };
@@ -107,8 +113,22 @@ function App() {
     return (
       <div className="flex items-center justify-center min-h-screen bg-slate-950">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-slate-400">Loading SerenityOps...</p>
+          {/* Animated Logo */}
+          <div className="mb-6 animate-pulse">
+            <img
+              src="/logo.svg"
+              alt="SerenityOps"
+              className="w-24 h-24 mx-auto"
+              style={{ filter: 'drop-shadow(0 0 20px rgba(56, 189, 248, 0.5))' }}
+            />
+          </div>
+          <h2 className="text-2xl font-bold text-slate-100 mb-2">SerenityOps</h2>
+          <p className="text-slate-400">Loading your intelligence system...</p>
+          <div className="mt-4">
+            <div className="w-48 h-1 bg-slate-800 rounded-full mx-auto overflow-hidden">
+              <div className="h-full bg-gradient-to-r from-sky-500 via-indigo-500 to-purple-500 animate-pulse"></div>
+            </div>
+          </div>
         </div>
       </div>
     );
