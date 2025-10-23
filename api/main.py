@@ -14,12 +14,14 @@ from datetime import datetime
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import yaml
+import asyncio
+import time
 
 # Claude API
 from anthropic import Anthropic
@@ -53,6 +55,14 @@ try:
     audit_logger = get_audit_logger()
 except ImportError:
     audit_logger = None
+
+# Import job service
+try:
+    from services.cv_job_service import get_job_service, JobStatus
+    job_service = get_job_service()
+except ImportError:
+    job_service = None
+    JobStatus = None
 
 # ========================
 # FastAPI App Setup
@@ -101,6 +111,89 @@ def log_action_execution(
             success=success,
             error=error,
             execution_time=execution_time
+        )
+
+
+def run_cv_generation_with_tracking(job_id: str, opportunity: str):
+    """
+    Background task: Generate CV with progress tracking
+
+    Args:
+        job_id: Job identifier
+        opportunity: Opportunity identifier
+    """
+    if not job_service:
+        return
+
+    try:
+        # Update: Starting
+        job_service.update_job(
+            job_id,
+            status=JobStatus.RUNNING.value,
+            progress=10,
+            stage="Compiling HTML from curriculum data"
+        )
+
+        # Generate HTML CV
+        html_content = generate_cv_html(CURRICULUM_PATH)
+
+        # Update: HTML generated
+        job_service.update_job(
+            job_id,
+            progress=40,
+            stage="Converting HTML to PDF"
+        )
+
+        # Generate PDF
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
+        pdf_filename = f"cv_{opportunity}_{timestamp}.pdf"
+        pdf_path = CV_OUTPUT_DIR / pdf_filename
+        pdf_path.parent.mkdir(parents=True, exist_ok=True)
+
+        pdf_result = generate_pdf_from_html_content(
+            html_content=html_content,
+            output_path=pdf_path,
+            format="A4",
+            margin="medium"
+        )
+
+        # Update: Saving
+        job_service.update_job(
+            job_id,
+            progress=80,
+            stage="Saving output and finalizing"
+        )
+
+        # Audit logging
+        if audit_logger:
+            audit_logger.log_cv_generation(
+                opportunity_id=opportunity,
+                format="pdf",
+                output_path=str(pdf_path),
+                success=True,
+                pdf_generated=True,
+                file_size=pdf_result["size"]
+            )
+
+        # Update: Completed
+        job_service.update_job(
+            job_id,
+            status=JobStatus.SUCCESS.value,
+            progress=100,
+            stage="Completed",
+            output_path=str(pdf_path)
+        )
+
+    except Exception as e:
+        import traceback
+        error_message = f"{str(e)}\n{traceback.format_exc()}"
+
+        job_service.update_job(
+            job_id,
+            status=JobStatus.ERROR.value,
+            progress=0,
+            stage="Failed",
+            error_message=error_message
         )
 
 
@@ -185,7 +278,8 @@ class Curriculum(BaseModel):
     metadata: Metadata
 
 class CVGenerateRequest(BaseModel):
-    format: str = "html"
+    format: str = "pdf"
+    opportunity: Optional[str] = "general"
 
 class ParseTextRequest(BaseModel):
     text: str
@@ -193,6 +287,15 @@ class ParseTextRequest(BaseModel):
 class ChatMessageRequest(BaseModel):
     message: str
     conversation_id: Optional[str] = None
+
+class ChatCreateRequest(BaseModel):
+    name: Optional[str] = None
+
+class ChatRenameRequest(BaseModel):
+    name: str
+
+class ChatArchiveRequest(BaseModel):
+    archived: bool
 
 class MergeFieldsRequest(BaseModel):
     parsed_data: Dict[str, Any]
@@ -286,40 +389,88 @@ def update_curriculum(curriculum: Curriculum):
         raise HTTPException(status_code=500, detail=f"Failed to save curriculum: {str(e)}")
 
 @app.post("/api/cv/generate")
-def generate_cv_endpoint(request: CVGenerateRequest):
+def generate_cv_endpoint(request: CVGenerateRequest, background_tasks: BackgroundTasks):
     """
-    Generate CV using Claude API.
+    Start CV generation job with progress tracking
 
     Args:
-        request: Format specification (html or pdf)
+        request: CV generation request (opportunity, format)
+        background_tasks: FastAPI background tasks
 
     Returns:
-        Generated file path and download URL
+        Job ID and initial status
     """
     try:
-        # Generate HTML CV
-        html_content = generate_cv_html(CURRICULUM_PATH)
+        # Check if PDF service is available
+        if not is_pdf_service_available():
+            raise HTTPException(
+                status_code=503,
+                detail="PDF service unavailable. Install dependencies: cd api/services/pdf_generator && npm install"
+            )
 
-        # Save HTML file
-        timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
-        filename = f"cv_{timestamp}.html"
-        output_path = CV_OUTPUT_DIR / filename
+        if not job_service:
+            raise HTTPException(
+                status_code=503,
+                detail="Job service unavailable"
+            )
 
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(output_path, 'w', encoding='utf-8') as f:
-            f.write(html_content)
+        # Extract opportunity from request or use "general"
+        opportunity = getattr(request, 'opportunity', None) or "general"
+
+        # Create job
+        job = job_service.create_job(
+            opportunity=opportunity,
+            user_id="default"
+        )
+
+        # Start background task
+        background_tasks.add_task(
+            run_cv_generation_with_tracking,
+            job_id=job["id"],
+            opportunity=opportunity
+        )
 
         return {
-            "status": "success",
-            "format": "html",
-            "path": str(output_path),
-            "filename": output_path.name,
-            "download_url": f"/api/cv/download/{output_path.name}"
+            "job_id": job["id"],
+            "status": job["status"],
+            "message": "CV generation started"
         }
+
     except Exception as e:
         import traceback
-        error_detail = f"CV generation failed: {str(e)}\n{traceback.format_exc()}"
+        error_detail = f"Failed to start CV generation: {str(e)}\n{traceback.format_exc()}"
         raise HTTPException(status_code=500, detail=error_detail)
+
+@app.get("/api/cv/status/{job_id}")
+def get_cv_job_status(job_id: str):
+    """
+    Get CV generation job status
+
+    Args:
+        job_id: Job identifier
+
+    Returns:
+        Job status with progress, stage, and result
+    """
+    if not job_service:
+        raise HTTPException(status_code=503, detail="Job service unavailable")
+
+    job = job_service.get_job(job_id)
+
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+
+    # If job is successful and has output_path, add download URL
+    if job.get("status") == JobStatus.SUCCESS.value and job.get("output_path"):
+        output_path = Path(job["output_path"])
+        job["download_url"] = f"/api/cv/download/{output_path.name}"
+        job["filename"] = output_path.name
+
+        # Get file size if it exists
+        if output_path.exists():
+            job["size"] = output_path.stat().st_size
+
+    return job
 
 @app.get("/api/cv/file/{filename}")
 def serve_cv_file(filename: str):
@@ -400,7 +551,7 @@ def list_generated_cvs():
             CV_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
             return {"count": 0, "files": []}
 
-        cv_files = sorted(CV_OUTPUT_DIR.glob("cv_*.pdf"), key=lambda p: p.stat().st_mtime, reverse=True)
+        cv_files = sorted(CV_OUTPUT_DIR.glob("cv_*.html"), key=lambda p: p.stat().st_mtime, reverse=True)
 
         from datetime import datetime
 
@@ -411,7 +562,7 @@ def list_generated_cvs():
                     "filename": f.name,
                     "size_kb": round(f.stat().st_size / 1024, 1),
                     "created_at": datetime.fromtimestamp(f.stat().st_mtime).isoformat(),
-                    "format": "pdf",
+                    "format": "html",
                     "download_url": f"/api/cv/download/{f.name}",
                     "preview_url": f"/api/cv/file/{f.name}"
                 }
@@ -808,6 +959,205 @@ async def get_last_conversation():
         return {"conversation": data}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to load last conversation: {str(e)}")
+
+@app.get("/api/chat/list")
+async def list_chats_with_metadata():
+    """
+    Enhanced conversation list with full metadata for Chat Manager
+    Returns conversations with name, message_count, timestamps, archived status
+    """
+    try:
+        chats = []
+        for conv_file in CONVERSATIONS_DIR.glob("*.yaml"):
+            with open(conv_file, 'r', encoding='utf-8') as f:
+                data = yaml.safe_load(f)
+
+                session = data.get("session", {})
+                chats.append({
+                    "id": session.get("id", conv_file.stem),
+                    "name": session.get("name", f"Conversation {conv_file.stem}"),
+                    "message_count": len(data.get("messages", [])),
+                    "created_at": session.get("date", datetime.fromtimestamp(conv_file.stat().st_ctime).isoformat()),
+                    "last_updated": datetime.fromtimestamp(conv_file.stat().st_mtime).isoformat(),
+                    "archived": session.get("archived", False)
+                })
+
+        # Sort by last_updated descending
+        chats.sort(key=lambda x: x["last_updated"], reverse=True)
+
+        return {"chats": chats}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to list chats: {str(e)}")
+
+@app.post("/api/chat/create")
+async def create_chat(request: ChatCreateRequest):
+    """
+    Create a new conversation with optional custom name
+    """
+    try:
+        # Generate conversation ID
+        conversation_id = f"conv_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}"
+
+        # Count existing conversations for auto-naming
+        existing_count = len(list(CONVERSATIONS_DIR.glob("*.yaml")))
+        default_name = request.name or f"Chat {existing_count + 1}"
+
+        # Create conversation structure
+        conversation = {
+            "session": {
+                "id": conversation_id,
+                "name": default_name,
+                "date": datetime.now().isoformat(),
+                "type": "career_chat",
+                "archived": False
+            },
+            "messages": []
+        }
+
+        # Save to file
+        conv_file = CONVERSATIONS_DIR / f"{conversation_id}.yaml"
+        with open(conv_file, 'w', encoding='utf-8') as f:
+            yaml.dump(conversation, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+
+        return {
+            "id": conversation_id,
+            "name": default_name,
+            "message_count": 0,
+            "created_at": conversation["session"]["date"],
+            "last_updated": conversation["session"]["date"],
+            "archived": False
+        }
+    except Exception as e:
+        import traceback
+        raise HTTPException(status_code=500, detail=f"Failed to create chat: {str(e)}\n{traceback.format_exc()}")
+
+@app.patch("/api/chat/{conversation_id}/rename")
+async def rename_chat(conversation_id: str, request: ChatRenameRequest):
+    """
+    Rename an existing conversation
+    """
+    try:
+        conv_file = CONVERSATIONS_DIR / f"{conversation_id}.yaml"
+        if not conv_file.exists():
+            raise HTTPException(status_code=404, detail="Conversation not found")
+
+        # Load conversation
+        with open(conv_file, 'r', encoding='utf-8') as f:
+            data = yaml.safe_load(f)
+
+        # Update name
+        data["session"]["name"] = request.name
+
+        # Save back
+        with open(conv_file, 'w', encoding='utf-8') as f:
+            yaml.dump(data, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+
+        return {
+            "id": conversation_id,
+            "name": request.name,
+            "last_updated": datetime.now().isoformat()
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to rename chat: {str(e)}")
+
+@app.delete("/api/chat/{conversation_id}")
+async def delete_chat(conversation_id: str):
+    """
+    Delete a conversation permanently
+    """
+    try:
+        conv_file = CONVERSATIONS_DIR / f"{conversation_id}.yaml"
+        if not conv_file.exists():
+            raise HTTPException(status_code=404, detail="Conversation not found")
+
+        conv_file.unlink()
+
+        return {"success": True, "deleted_id": conversation_id}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to delete chat: {str(e)}")
+
+@app.post("/api/chat/{conversation_id}/duplicate")
+async def duplicate_chat(conversation_id: str):
+    """
+    Duplicate an existing conversation
+    """
+    try:
+        conv_file = CONVERSATIONS_DIR / f"{conversation_id}.yaml"
+        if not conv_file.exists():
+            raise HTTPException(status_code=404, detail="Conversation not found")
+
+        # Load original conversation
+        with open(conv_file, 'r', encoding='utf-8') as f:
+            original = yaml.safe_load(f)
+
+        # Create new conversation with copied messages
+        new_id = f"conv_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}"
+        original_name = original["session"].get("name", "Conversation")
+
+        duplicated = {
+            "session": {
+                "id": new_id,
+                "name": f"{original_name} (Copy)",
+                "date": datetime.now().isoformat(),
+                "type": "career_chat",
+                "archived": False
+            },
+            "messages": original.get("messages", []).copy()
+        }
+
+        # Save duplicated conversation
+        new_conv_file = CONVERSATIONS_DIR / f"{new_id}.yaml"
+        with open(new_conv_file, 'w', encoding='utf-8') as f:
+            yaml.dump(duplicated, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+
+        return {
+            "id": new_id,
+            "name": duplicated["session"]["name"],
+            "message_count": len(duplicated["messages"]),
+            "created_at": duplicated["session"]["date"],
+            "last_updated": duplicated["session"]["date"],
+            "archived": False
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        import traceback
+        raise HTTPException(status_code=500, detail=f"Failed to duplicate chat: {str(e)}\n{traceback.format_exc()}")
+
+@app.patch("/api/chat/{conversation_id}/archive")
+async def archive_chat(conversation_id: str, request: ChatArchiveRequest):
+    """
+    Archive or unarchive a conversation
+    """
+    try:
+        conv_file = CONVERSATIONS_DIR / f"{conversation_id}.yaml"
+        if not conv_file.exists():
+            raise HTTPException(status_code=404, detail="Conversation not found")
+
+        # Load conversation
+        with open(conv_file, 'r', encoding='utf-8') as f:
+            data = yaml.safe_load(f)
+
+        # Update archived status
+        data["session"]["archived"] = request.archived
+
+        # Save back
+        with open(conv_file, 'w', encoding='utf-8') as f:
+            yaml.dump(data, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+
+        return {
+            "id": conversation_id,
+            "archived": request.archived,
+            "last_updated": datetime.now().isoformat()
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to archive chat: {str(e)}")
 
 # ========================
 # Action Execution System
@@ -1214,7 +1564,9 @@ try:
         search_icons,
         get_all_tech_categories
     )
+    icon_service_available = True
 except ImportError:
+    icon_service_available = False
     get_tech_icon = None
     search_icons = None
     get_all_tech_categories = None
@@ -1222,15 +1574,15 @@ except ImportError:
 @app.get("/api/icons")
 async def get_icons(query: str):
     """
-    Get icon data for a technology
+    Search for technology icons
 
     Query parameters:
         query: Technology name (e.g., "react", "python", "aws")
 
     Returns:
-        Icon data with emoji, svg_url, color, and category
+        List of matching icons with emoji, svg_url, color, and category
     """
-    if not search_icons:
+    if not icon_service_available or not search_icons:
         raise HTTPException(
             status_code=503,
             detail="Icon service not available"
@@ -1252,12 +1604,12 @@ async def get_icons(query: str):
 @app.get("/api/icons/categories")
 async def get_icon_categories():
     """
-    Get all available technology categories with tech lists
+    Get all available technology categories
 
     Returns:
         Dictionary of categories with their technologies
     """
-    if not get_all_tech_categories:
+    if not icon_service_available or not get_all_tech_categories:
         raise HTTPException(
             status_code=503,
             detail="Icon service not available"
@@ -1284,9 +1636,9 @@ async def get_single_icon(tech_name: str):
         tech_name: Technology name (e.g., "react", "python", "aws")
 
     Returns:
-        Single icon data with emoji, svg_url, color, and category
+        Icon data with emoji, svg_url, color, and category
     """
-    if not get_tech_icon:
+    if not icon_service_available or not get_tech_icon:
         raise HTTPException(
             status_code=503,
             detail="Icon service not available"

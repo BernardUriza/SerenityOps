@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import ProfileForm from './components/ProfileForm';
-import ExperienceList from './components/ExperienceList';
-import ProjectsManager from './components/ProjectsManager';
+import { ExperienceEditor } from './components/experience';
+import { ProjectsManager } from './components/projects';
 import SkillsEditor from './components/SkillsEditor';
 import EducationList from './components/EducationList';
 import CVManager from './components/CVManager';
 import QuickImport from './components/QuickImport';
-import CareerChat from './components/CareerChat';
+import { ChatManager } from './components/chat';
+import { useCVJobStore, loadJobFromLocalStorage } from './stores/cvJobStore';
 
 // API configuration
 const API_BASE_URL = 'http://localhost:8000';
@@ -21,10 +22,17 @@ function App() {
   const [generating, setGenerating] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>('chat');
   const [notification, setNotification] = useState<{message: string, type: 'success' | 'error'} | null>(null);
+  const { setJob } = useCVJobStore();
 
   useEffect(() => {
     loadCurriculum();
-  }, []);
+
+    // Restore job from localStorage if it exists
+    const savedJob = loadJobFromLocalStorage();
+    if (savedJob) {
+      setJob(savedJob);
+    }
+  }, [setJob]);
 
   const loadCurriculum = async () => {
     try {
@@ -190,7 +198,7 @@ function App() {
       <div className="flex-1 overflow-y-auto">
         <div className={activeTab === 'chat' ? 'h-full' : 'max-w-6xl mx-auto p-8'}>
           {activeTab === 'chat' && (
-            <CareerChat apiBaseUrl={API_BASE_URL} />
+            <ChatManager apiBaseUrl={API_BASE_URL} />
           )}
 
           {activeTab === 'import' && (
@@ -221,21 +229,11 @@ function App() {
           )}
 
           {activeTab === 'experience' && (
-            <ExperienceList
-              experiences={curriculum.experience}
-              onChange={(experiences) =>
-                setCurriculum({ ...curriculum, experience: experiences })
-              }
-            />
+            <ExperienceEditor />
           )}
 
           {activeTab === 'projects' && (
-            <ProjectsManager
-              projects={curriculum.projects}
-              onChange={(projects) =>
-                setCurriculum({ ...curriculum, projects })
-              }
-            />
+            <ProjectsManager />
           )}
 
           {activeTab === 'skills' && (

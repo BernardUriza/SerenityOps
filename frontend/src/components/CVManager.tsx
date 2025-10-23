@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import CVJobProgress from './CVJobProgress';
+import { useCVJobStore } from '../stores/cvJobStore';
+import { useCVJobPolling } from '../hooks/useCVJobPolling';
 
 interface CVFile {
   filename: string;
@@ -17,6 +20,11 @@ const CVManager: React.FC<CVManagerProps> = ({ apiBaseUrl }) => {
   const [cvs, setCvs] = useState<CVFile[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [generating, setGenerating] = useState(false);
+  const { setJob } = useCVJobStore();
+
+  // Enable job polling
+  useCVJobPolling();
 
   useEffect(() => {
     loadCVs();
@@ -42,6 +50,43 @@ const CVManager: React.FC<CVManagerProps> = ({ apiBaseUrl }) => {
 
   const handleDownload = (filename: string) => {
     window.open(`${apiBaseUrl}/api/cv/download/${filename}`, '_blank');
+  };
+
+  const handleGenerate = async () => {
+    try {
+      setGenerating(true);
+      const response = await fetch(`${apiBaseUrl}/api/cv/generate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          format: 'pdf',
+          opportunity: 'general'
+        })
+      });
+
+      if (!response.ok) throw new Error('Failed to start CV generation');
+
+      const data = await response.json();
+
+      // Set job in store to start polling
+      setJob({
+        id: data.job_id,
+        opportunity: 'general',
+        user_id: 'default',
+        status: data.status,
+        progress: 0,
+        stage: 'Queued',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Error generating CV:', error);
+      alert('Failed to start CV generation');
+    } finally {
+      setGenerating(false);
+    }
   };
 
   const handleDelete = async (filename: string) => {
@@ -93,12 +138,34 @@ const CVManager: React.FC<CVManagerProps> = ({ apiBaseUrl }) => {
           <h2 className="text-2xl font-bold text-slate-50">Generated CVs</h2>
           <p className="text-slate-400 mt-1">{cvs.length} CV{cvs.length !== 1 ? 's' : ''} generated</p>
         </div>
-        <button
-          onClick={loadCVs}
-          className="px-4 py-2 text-blue-400 hover:text-blue-300 hover:bg-slate-700 font-medium rounded-lg transition-colors border border-slate-600 hover:border-blue-500"
-        >
-          Refresh
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleGenerate}
+            disabled={generating}
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+          >
+            {generating ? 'Starting...' : 'Generate CV'}
+          </button>
+          <button
+            onClick={loadCVs}
+            className="px-4 py-2 text-blue-400 hover:text-blue-300 hover:bg-slate-700 font-medium rounded-lg transition-colors border border-slate-600 hover:border-blue-500"
+          >
+            Refresh
+          </button>
+        </div>
+      </div>
+
+      {/* CV Job Progress Tracker */}
+      <div className="mb-6">
+        <CVJobProgress
+          onComplete={() => {
+            // Reload CVs when generation is complete
+            loadCVs();
+          }}
+          onError={(error) => {
+            console.error('CV generation failed:', error);
+          }}
+        />
       </div>
 
       {cvs.length === 0 ? (

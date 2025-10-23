@@ -23,7 +23,13 @@
       "Bash(git rm:*)",
       "Bash(python3:*)",
       "Bash(git push:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(git merge:*)",
+      "Read(//Users/bernardurizaorozco/.npm/_logs/**)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm run build:*)",
+      "Bash(node scripts/generate_favicon.js:*)",
+      "Bash(lsof:*)"
     ],
     "deny": [],
     "ask": []

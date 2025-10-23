@@ -1,0 +1,71 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="256" cy="256" r="256" fill="#0F172A"/>
+
+  <!-- Zen Circle (Enso) - Represents Serenity -->
+  <circle cx="256" cy="256" r="180" fill="none" stroke="url(#gradient1)" stroke-width="16" stroke-linecap="round" stroke-dasharray="0 20" opacity="0.9"/>
+
+  <!-- Inner Tech Circle - Represents Operations -->
+  <circle cx="256" cy="256" r="140" fill="none" stroke="url(#gradient2)" stroke-width="12" stroke-dasharray="8 12" opacity="0.7"/>
+
+  <!-- Central Symbol - Wave/Data Flow -->
+  <path d="M 200 256 Q 228 236, 256 256 T 312 256" fill="none" stroke="#38BDF8" stroke-width="8" stroke-linecap="round" opacity="0.8"/>
+  <path d="M 200 276 Q 228 256, 256 276 T 312 276" fill="none" stroke="#818CF8" stroke-width="6" stroke-linecap="round" opacity="0.6"/>
+  <path d="M 200 236 Q 228 216, 256 236 T 312 236" fill="none" stroke="#34D399" stroke-width="6" stroke-linecap="round" opacity="0.6"/>
+
+  <!-- Orbital Dots - Representing Intelligence/Data Points -->
+  <circle cx="256" cy="76" r="8" fill="#38BDF8" opacity="0.8">
+    <animateTransform
+      attributeName="transform"
+      type="rotate"
+      from="0 256 256"
+      to="360 256 256"
+      dur="20s"
+      repeatCount="indefinite"/>
+  </circle>
+
+  <circle cx="436" cy="256" r="6" fill="#818CF8" opacity="0.7">
+    <animateTransform
+      attributeName="transform"
+      type="rotate"
+      from="0 256 256"
+      to="360 256 256"
+      dur="15s"
+      repeatCount="indefinite"/>
+  </circle>
+
+  <circle cx="256" cy="436" r="6" fill="#34D399" opacity="0.7">
+    <animateTransform
+      attributeName="transform"
+      type="rotate"
+      from="0 256 256"
+      to="360 256 256"
+      dur="18s"
+      repeatCount="indefinite"/>
+  </circle>
+
+  <circle cx="76" cy="256" r="8" fill="#A78BFA" opacity="0.8">
+    <animateTransform
+      attributeName="transform"
+      type="rotate"
+      from="0 256 256"
+      to="360 256 256"
+      dur="22s"
+      repeatCount="indefinite"/>
+  </circle>
+
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#38BDF8;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#818CF8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A78BFA;stop-opacity:1" />
+    </linearGradient>
+
+    <linearGradient id="gradient2" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#34D399;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#38BDF8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#818CF8;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+</svg>
