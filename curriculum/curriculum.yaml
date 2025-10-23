@@ -27,48 +27,157 @@ summary: 'Senior Fullstack Developer with over 10 years of experience building r
 
   '
 experience:
-- company: Freelance / Consulting
-  role: Senior Fullstack Developer
-  location: Guadalajara, Jalisco, MX
-  start_date: 2020-01
+- company: JLL
+  role: Software Developer | Full-Stack Engineer | AI Integration Specialist
+  location: Los Angeles, CA (Hybrid)
+  start_date: 2025-07
   end_date: null
   current: true
-  description: Leading full-stack development projects for diverse clients, specializing
-    in .NET Core, React, and Azure cloud solutions. Architecting scalable systems
-    and modernizing legacy applications.
+  description: 'Developed AI-powered real estate solutions integrating ChatGPT APIs
+    with enterprise systems.
+
+    Built scalable frontend modules with React.js and optimized backend services for
+    high availability.
+
+    Collaborated with cross-functional teams to deliver hybrid AI + business workflows.
+
+    '
   achievements:
-  - Transformed multiple legacy desktop applications into modern web platforms
-  - Delivered enterprise-grade solutions using .NET Core, React, and Azure
-  - Established modern development practices and CI/CD pipelines
-  - Reverse-engineered and integrated complex hardware systems
+  - Integrated ChatGPT APIs with enterprise real estate systems
+  - Built scalable React.js frontend modules for high availability
+  - Delivered hybrid AI + business workflow solutions
   tech_stack:
-  - .NET Core
-  - C#
-  - React
-  - TypeScript
-  - SQL Server
-  - Azure
-  - Docker
-- company: Various Technology Companies
+  - React.js
+  - ChatGPT API
+  - .NET
+  - Enterprise Systems Integration
+- company: PlanetTogether
   role: Full Stack Developer
-  location: Guadalajara, Jalisco, MX
-  start_date: 2014-06
-  end_date: 2020-01
+  location: California, USA
+  start_date: 2023-01
+  end_date: 2025-06
   current: false
-  description: Developed robust software systems across multiple industries, focusing
-    on backend development with .NET and frontend with modern JavaScript frameworks.
+  description: 'Designed and implemented full-stack solutions combining React.js,
+    .NET, and cloud-based APIs.
+
+    Improved system scalability and performance for advanced planning and scheduling
+    platforms.
+
+    Drove adoption of modern CI/CD practices, streamlining deployment cycles.
+
+    '
   achievements:
-  - Built scalable web applications serving thousands of users
-  - Implemented complex business logic and data processing systems
-  - Mentored junior developers in best practices
-  - Led critical migration projects from legacy systems
+  - Improved system scalability for planning/scheduling platforms
+  - Implemented modern CI/CD practices, streamlining deployments
+  - Designed full-stack solutions with React.js, .NET, and cloud APIs
   tech_stack:
-  - .NET Framework
-  - ASP.NET
-  - Angular
-  - JavaScript
+  - React.js
+  - .NET
+  - Cloud APIs
+  - CI/CD
+  - Supply Chain Systems
+- company: PlanetTogether
+  role: React Developer
+  location: California, USA
+  start_date: 2021-05
+  end_date: 2023-01
+  current: false
+  description: 'Delivered modular, responsive interfaces with React.js and TypeScript.
+
+    Enhanced data visualization and analytics dashboards for supply chain planning
+    tools.
+
+    Collaborated with backend teams to integrate RESTful APIs and optimize UX.
+
+    '
+  achievements:
+  - Enhanced data visualization dashboards for supply chain tools
+  - Delivered modular, responsive React.js interfaces
+  - Integrated RESTful APIs with optimized UX
+  tech_stack:
+  - React.js
+  - TypeScript
+  - RESTful APIs
+  - Data Visualization
+- company: WorkTeam
+  role: Senior Developer
+  location: Zapopan, Jalisco, MX
+  start_date: 2019-09
+  end_date: 2021-05
+  current: false
+  description: 'Contributed to enterprise applications in logistics and HR domains.
+
+    Participated in system integrations and modernization projects using .NET and
+    SQL.
+
+    Mentored junior developers on coding standards and agile methodologies.
+
+    '
+  achievements:
+  - Contributed to enterprise logistics and HR applications
+  - Led system integrations and modernization with .NET and SQL
+  - Mentored junior developers on coding standards
+  tech_stack:
+  - .NET
   - SQL Server
-  - HTML/CSS
+  - Logistics Systems
+  - HR Systems
+- company: Corporativo FRAGUA
+  role: Senior Developer
+  location: Guadalajara, MX
+  start_date: 2019-04
+  end_date: 2019-09
+  current: false
+  description: 'Supported internal system enhancements with focus on performance and
+    reliability.
+
+    Assisted in data integration and migration processes across business applications.
+
+    '
+  achievements:
+  - Enhanced system performance and reliability
+  - Supported data integration and migration processes
+  tech_stack:
+  - .NET
+  - SQL Server
+  - Data Migration
+- company: Dalton Efectivo Seguro
+  role: System Software Developer
+  location: Zapopan, MX
+  start_date: 2018-10
+  end_date: 2019-03
+  current: false
+  description: 'Developed and maintained backend services supporting financial operations.
+
+    Implemented process automation solutions, improving internal system efficiency.
+
+    '
+  achievements:
+  - Developed backend services for financial operations
+  - Implemented process automation improving system efficiency
+  tech_stack:
+  - .NET
+  - SQL Server
+  - Financial Systems
+  - Process Automation
+- company: EC Ideas
+  role: Software Developer
+  location: Guadalajara, MX
+  start_date: 2014-07
+  end_date: 2017-09
+  current: false
+  description: 'Early career development across multiple client projects.
+
+    Gained foundational experience in .NET development and software engineering practices.
+
+    '
+  achievements:
+  - Gained foundational .NET development experience
+  - Contributed to multiple client projects
+  tech_stack:
+  - .NET
+  - C#
+  - SQL Server
 projects:
 - name: Legacy System Overhaul
   tagline: It works. It lasts. And now, it grows.
@@ -301,7 +410,7 @@ languages:
 - name: English
   proficiency: professional
 metadata:
-  last_updated: '2025-10-22'
+  last_updated: '2025-10-16'
   version: 1.0.0
   source: CV PDF extraction
   generated_by: ClaudeInsult via SerenityOps
