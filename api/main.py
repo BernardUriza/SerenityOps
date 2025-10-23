@@ -1654,6 +1654,400 @@ async def get_single_icon(tech_name: str):
         )
 
 # ========================
+# Opportunities Endpoints
+# ========================
+
+# Path to opportunities structure
+OPPORTUNITIES_PATH = BASE_DIR / "opportunities" / "structure.yaml"
+
+# Pydantic models for opportunities
+class OpportunityContact(BaseModel):
+    name: str
+    role: str
+    email: Optional[str] = None
+    linkedin: Optional[str] = None
+    source: Optional[str] = None
+
+class OpportunityTimeline(BaseModel):
+    discovered: Optional[str] = None
+    applied: Optional[str] = None
+    first_interview: Optional[str] = None
+    final_interview: Optional[str] = None
+    offer_received: Optional[str] = None
+    decision_deadline: Optional[str] = None
+    closed: Optional[str] = None
+
+class OpportunityNote(BaseModel):
+    date: str
+    content: str
+
+class OpportunityFitAnalysis(BaseModel):
+    technical_match: Optional[float] = None
+    cultural_match: Optional[float] = None
+    growth_potential: Optional[float] = None
+    decline_reason: Optional[str] = None
+    red_flags: List[str] = []
+    green_flags: List[str] = []
+
+class OpportunityDetails(BaseModel):
+    description: str
+    location: str
+    salary_range: str
+    work_schedule: Optional[str] = None
+    sector: Optional[str] = None
+    tech_stack: List[str] = []
+    benefits: Optional[List[str]] = None
+    requirements: Optional[List[str]] = None
+
+class Opportunity(BaseModel):
+    id: str
+    company: str
+    role: str
+    stage: str  # discovered | applied | interviewing | offer | closed
+    priority: str  # high | medium | low
+    outcome: Optional[str] = None  # declined | rejected | accepted | withdrawn
+    details: OpportunityDetails
+    timeline: OpportunityTimeline
+    contacts: List[OpportunityContact] = []
+    notes: List[OpportunityNote] = []
+    fit_analysis: OpportunityFitAnalysis
+
+class CreateOpportunityRequest(BaseModel):
+    company: str
+    role: str
+    stage: str = "discovered"
+    priority: str = "medium"
+    details: OpportunityDetails
+    contacts: Optional[List[OpportunityContact]] = None
+    notes: Optional[List[OpportunityNote]] = None
+
+
+@app.get("/api/opportunities")
+def get_opportunities():
+    """
+    Get all opportunities data from opportunities/structure.yaml
+
+    Returns:
+        Complete opportunities data including pipeline, active_count, and goals
+    """
+    try:
+        if not OPPORTUNITIES_PATH.exists():
+            raise HTTPException(
+                status_code=404,
+                detail=f"Opportunities file not found: {OPPORTUNITIES_PATH}"
+            )
+
+        with open(OPPORTUNITIES_PATH, 'r', encoding='utf-8') as f:
+            opportunities_data = yaml.safe_load(f)
+
+        return opportunities_data
+
+    except yaml.YAMLError as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error parsing YAML: {str(e)}"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error reading opportunities: {str(e)}"
+        )
+
+
+@app.get("/api/opportunities/{opportunity_id}")
+def get_opportunity_by_id(opportunity_id: str):
+    """
+    Get a specific opportunity by ID
+
+    Path parameters:
+        opportunity_id: Unique identifier for the opportunity
+
+    Returns:
+        Single opportunity object
+    """
+    try:
+        with open(OPPORTUNITIES_PATH, 'r', encoding='utf-8') as f:
+            opportunities_data = yaml.safe_load(f)
+
+        # Find opportunity in pipeline
+        for opportunity in opportunities_data.get('pipeline', []):
+            if opportunity.get('id') == opportunity_id:
+                return opportunity
+
+        raise HTTPException(
+            status_code=404,
+            detail=f"Opportunity not found: {opportunity_id}"
+        )
+
+    except yaml.YAMLError as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error parsing YAML: {str(e)}"
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error reading opportunity: {str(e)}"
+        )
+
+
+@app.post("/api/opportunities")
+def create_opportunity(request: CreateOpportunityRequest):
+    """
+    Create a new opportunity
+
+    Request body:
+        CreateOpportunityRequest with company, role, stage, priority, details, etc.
+
+    Returns:
+        Created opportunity object with generated ID
+    """
+    try:
+        # Load existing data
+        with open(OPPORTUNITIES_PATH, 'r', encoding='utf-8') as f:
+            opportunities_data = yaml.safe_load(f)
+
+        # Generate new ID
+        existing_ids = [opp.get('id', '') for opp in opportunities_data.get('pipeline', [])]
+        # Extract company prefix and number
+        company_prefix = request.company.lower().replace(' ', '-')[:10]
+        max_num = 0
+        for existing_id in existing_ids:
+            if existing_id.startswith(company_prefix):
+                try:
+                    num = int(existing_id.split('-')[-1])
+                    max_num = max(max_num, num)
+                except:
+                    pass
+        new_id = f"{company_prefix}-{max_num + 1:03d}"
+
+        # Create new opportunity
+        new_opportunity = {
+            'id': new_id,
+            'company': request.company,
+            'role': request.role,
+            'stage': request.stage,
+            'priority': request.priority,
+            'outcome': None,
+            'details': request.details.model_dump(),
+            'timeline': {
+                'discovered': datetime.now().strftime('%Y-%m-%d'),
+                'applied': None,
+                'first_interview': None,
+                'final_interview': None,
+                'offer_received': None,
+                'decision_deadline': None,
+                'closed': None
+            },
+            'contacts': [contact.model_dump() for contact in (request.contacts or [])],
+            'notes': [note.model_dump() for note in (request.notes or [])],
+            'fit_analysis': {
+                'technical_match': None,
+                'cultural_match': None,
+                'growth_potential': None,
+                'decline_reason': None,
+                'red_flags': [],
+                'green_flags': []
+            }
+        }
+
+        # Add to pipeline
+        if 'pipeline' not in opportunities_data:
+            opportunities_data['pipeline'] = []
+        opportunities_data['pipeline'].append(new_opportunity)
+
+        # Update active_count
+        stage_counts = {}
+        for opp in opportunities_data['pipeline']:
+            stage = opp.get('stage', 'discovered')
+            stage_counts[stage] = stage_counts.get(stage, 0) + 1
+
+        opportunities_data['active_count'] = {
+            'discovered': stage_counts.get('discovered', 0),
+            'applied': stage_counts.get('applied', 0),
+            'interviewing': stage_counts.get('interviewing', 0),
+            'offer': stage_counts.get('offer', 0),
+            'closed': stage_counts.get('closed', 0),
+            'total': sum(1 for opp in opportunities_data['pipeline'] if opp.get('stage') != 'closed')
+        }
+
+        # Update last_updated
+        opportunities_data['meta']['last_updated'] = datetime.now().strftime('%Y-%m-%d')
+
+        # Save updated data
+        with open(OPPORTUNITIES_PATH, 'w', encoding='utf-8') as f:
+            yaml.dump(opportunities_data, f, allow_unicode=True, sort_keys=False, default_flow_style=False)
+
+        return new_opportunity
+
+    except yaml.YAMLError as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error writing YAML: {str(e)}"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error creating opportunity: {str(e)}"
+        )
+
+
+@app.put("/api/opportunities/{opportunity_id}")
+def update_opportunity(opportunity_id: str, updates: Dict[str, Any]):
+    """
+    Update an existing opportunity
+
+    Path parameters:
+        opportunity_id: Unique identifier for the opportunity
+
+    Request body:
+        Partial opportunity object with fields to update
+
+    Returns:
+        Updated opportunity object
+    """
+    try:
+        # Load existing data
+        with open(OPPORTUNITIES_PATH, 'r', encoding='utf-8') as f:
+            opportunities_data = yaml.safe_load(f)
+
+        # Find and update opportunity
+        found = False
+        for i, opportunity in enumerate(opportunities_data.get('pipeline', [])):
+            if opportunity.get('id') == opportunity_id:
+                # Deep merge updates
+                for key, value in updates.items():
+                    if key in ['details', 'timeline', 'fit_analysis'] and isinstance(value, dict):
+                        # Merge nested dicts
+                        if key not in opportunity:
+                            opportunity[key] = {}
+                        opportunity[key].update(value)
+                    elif key in ['contacts', 'notes'] and isinstance(value, list):
+                        # Replace lists
+                        opportunity[key] = value
+                    else:
+                        opportunity[key] = value
+
+                opportunities_data['pipeline'][i] = opportunity
+                found = True
+                break
+
+        if not found:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Opportunity not found: {opportunity_id}"
+            )
+
+        # Update active_count
+        stage_counts = {}
+        for opp in opportunities_data['pipeline']:
+            stage = opp.get('stage', 'discovered')
+            stage_counts[stage] = stage_counts.get(stage, 0) + 1
+
+        opportunities_data['active_count'] = {
+            'discovered': stage_counts.get('discovered', 0),
+            'applied': stage_counts.get('applied', 0),
+            'interviewing': stage_counts.get('interviewing', 0),
+            'offer': stage_counts.get('offer', 0),
+            'closed': stage_counts.get('closed', 0),
+            'total': sum(1 for opp in opportunities_data['pipeline'] if opp.get('stage') != 'closed')
+        }
+
+        # Update last_updated
+        opportunities_data['meta']['last_updated'] = datetime.now().strftime('%Y-%m-%d')
+
+        # Save updated data
+        with open(OPPORTUNITIES_PATH, 'w', encoding='utf-8') as f:
+            yaml.dump(opportunities_data, f, allow_unicode=True, sort_keys=False, default_flow_style=False)
+
+        # Return updated opportunity
+        for opportunity in opportunities_data['pipeline']:
+            if opportunity.get('id') == opportunity_id:
+                return opportunity
+
+    except yaml.YAMLError as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error writing YAML: {str(e)}"
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error updating opportunity: {str(e)}"
+        )
+
+
+@app.delete("/api/opportunities/{opportunity_id}")
+def delete_opportunity(opportunity_id: str):
+    """
+    Delete an opportunity
+
+    Path parameters:
+        opportunity_id: Unique identifier for the opportunity
+
+    Returns:
+        Success message
+    """
+    try:
+        # Load existing data
+        with open(OPPORTUNITIES_PATH, 'r', encoding='utf-8') as f:
+            opportunities_data = yaml.safe_load(f)
+
+        # Find and remove opportunity
+        initial_count = len(opportunities_data.get('pipeline', []))
+        opportunities_data['pipeline'] = [
+            opp for opp in opportunities_data.get('pipeline', [])
+            if opp.get('id') != opportunity_id
+        ]
+
+        if len(opportunities_data['pipeline']) == initial_count:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Opportunity not found: {opportunity_id}"
+            )
+
+        # Update active_count
+        stage_counts = {}
+        for opp in opportunities_data['pipeline']:
+            stage = opp.get('stage', 'discovered')
+            stage_counts[stage] = stage_counts.get(stage, 0) + 1
+
+        opportunities_data['active_count'] = {
+            'discovered': stage_counts.get('discovered', 0),
+            'applied': stage_counts.get('applied', 0),
+            'interviewing': stage_counts.get('interviewing', 0),
+            'offer': stage_counts.get('offer', 0),
+            'closed': stage_counts.get('closed', 0),
+            'total': sum(1 for opp in opportunities_data['pipeline'] if opp.get('stage') != 'closed')
+        }
+
+        # Update last_updated
+        opportunities_data['meta']['last_updated'] = datetime.now().strftime('%Y-%m-%d')
+
+        # Save updated data
+        with open(OPPORTUNITIES_PATH, 'w', encoding='utf-8') as f:
+            yaml.dump(opportunities_data, f, allow_unicode=True, sort_keys=False, default_flow_style=False)
+
+        return {"message": f"Opportunity {opportunity_id} deleted successfully"}
+
+    except yaml.YAMLError as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error writing YAML: {str(e)}"
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error deleting opportunity: {str(e)}"
+        )
+
+# ========================
 # Main Entry Point
 # ========================
 

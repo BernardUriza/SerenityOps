@@ -29,7 +29,8 @@
       "Bash(pnpm add:*)",
       "Bash(pnpm run build:*)",
       "Bash(node scripts/generate_favicon.js:*)",
-      "Bash(lsof:*)"
+      "Bash(lsof:*)",
+      "Bash(git branch:*)"
     ],
     "deny": [],
     "ask": []

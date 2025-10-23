@@ -8,6 +8,7 @@ import EducationList from './components/EducationList';
 import CVManager from './components/CVManager';
 import QuickImport from './components/QuickImport';
 import { ChatManager } from './components/chat';
+import OpportunityManager from './components/opportunities/OpportunityManager';
 import { useCVJobStore, loadJobFromLocalStorage } from './stores/cvJobStore';
 
 // API configuration
@@ -272,14 +273,7 @@ function App() {
           )}
 
           {activeTab === 'opportunities' && (
-            <div className="bg-slate-800 border border-slate-700 rounded-lg shadow-sm p-8">
-              <h2 className="text-2xl font-bold text-slate-50 mb-4">Opportunities</h2>
-              <div className="bg-slate-900 border border-slate-700 rounded-lg p-6">
-                <p className="text-slate-400">
-                  Opportunities tracker coming soon. Will integrate with opportunities/structure.yaml
-                </p>
-              </div>
-            </div>
+            <OpportunityManager apiBaseUrl={API_BASE_URL} />
           )}
         </div>
       </div>
