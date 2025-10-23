@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 import ProfileForm from './components/ProfileForm';
 import { ExperienceEditor } from './components/experience';
-import ProjectsManager from './components/ProjectsManager';
+import { ProjectsManager } from './components/projects';
 import SkillsEditor from './components/SkillsEditor';
 import EducationList from './components/EducationList';
 import CVManager from './components/CVManager';
@@ -233,12 +233,7 @@ function App() {
           )}
 
           {activeTab === 'projects' && (
-            <ProjectsManager
-              projects={curriculum.projects}
-              onChange={(projects) =>
-                setCurriculum({ ...curriculum, projects })
-              }
-            />
+            <ProjectsManager />
           )}
 
           {activeTab === 'skills' && (
