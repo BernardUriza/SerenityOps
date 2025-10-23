@@ -1,15 +1,4 @@
 import React from 'react';
-import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  Grid,
-  TextField,
-  Button,
-  IconButton
-} from '@mui/material';
-import { Add, Delete } from '@mui/icons-material';
 
 interface EducationListProps {
   education: any[];
@@ -21,7 +10,6 @@ interface EducationListProps {
 const EducationList: React.FC<EducationListProps> = ({
   education,
   languages,
-  certifications,
   onChange
 }) => {
   const handleEducationUpdate = (index: number, field: string, value: any) => {
@@ -66,146 +54,193 @@ const EducationList: React.FC<EducationListProps> = ({
   };
 
   return (
-    <Box>
-      <Typography variant="h5" gutterBottom>
+    <div className="space-y-4">
+      <h2 className="text-xl font-semibold text-macText">
         Education & Languages
-      </Typography>
+      </h2>
 
       {/* Education */}
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-            <Typography variant="h6">Education</Typography>
-            <Button size="small" startIcon={<Add />} onClick={handleAddEducation}>
-              Add Education
-            </Button>
-          </Box>
+      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-4">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-base font-semibold text-macText">Education</h3>
+          <button
+            onClick={handleAddEducation}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-macAccent hover:bg-macAccent/80 text-white text-xs font-medium rounded-mac transition-all duration-300 ease-mac"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Add Education
+          </button>
+        </div>
 
+        <div className="space-y-3">
           {education.map((edu, index) => (
-            <Card key={index} variant="outlined" sx={{ mb: 2, p: 2 }}>
-              <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                <Typography variant="subtitle1">Education {index + 1}</Typography>
-                <IconButton size="small" onClick={() => handleDeleteEducation(index)}>
-                  <Delete />
-                </IconButton>
-              </Box>
+            <div
+              key={index}
+              className="bg-macPanel/60 border border-macBorder/40 rounded-mac p-3"
+            >
+              <div className="flex justify-between items-center mb-3">
+                <h4 className="text-sm font-medium text-macText">Education {index + 1}</h4>
+                <button
+                  onClick={() => handleDeleteEducation(index)}
+                  className="p-1.5 bg-macPanel/60 hover:bg-macHover/60 border border-macBorder/40 rounded-mac transition-all duration-300 ease-mac"
+                >
+                  <svg className="w-4 h-4 text-macSubtext" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
 
-              <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Institution"
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs text-macSubtext uppercase mb-1">
+                    Institution
+                  </label>
+                  <input
+                    type="text"
                     value={edu.institution || ''}
                     onChange={(e) => handleEducationUpdate(index, 'institution', e.target.value)}
+                    className="w-full px-3 py-1.5 text-sm bg-macPanel/60 border border-macBorder/40 rounded-mac text-macText placeholder-macSubtext/50 focus:border-macAccent focus:ring-1 focus:ring-macAccent/40 focus:outline-none transition-all duration-300 ease-mac"
                   />
-                </Grid>
+                </div>
 
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Degree"
+                <div>
+                  <label className="block text-xs text-macSubtext uppercase mb-1">
+                    Degree
+                  </label>
+                  <input
+                    type="text"
                     value={edu.degree || ''}
                     onChange={(e) => handleEducationUpdate(index, 'degree', e.target.value)}
+                    className="w-full px-3 py-1.5 text-sm bg-macPanel/60 border border-macBorder/40 rounded-mac text-macText placeholder-macSubtext/50 focus:border-macAccent focus:ring-1 focus:ring-macAccent/40 focus:outline-none transition-all duration-300 ease-mac"
                   />
-                </Grid>
+                </div>
 
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Field of Study"
+                <div className="md:col-span-2">
+                  <label className="block text-xs text-macSubtext uppercase mb-1">
+                    Field of Study
+                  </label>
+                  <input
+                    type="text"
                     value={edu.field || ''}
                     onChange={(e) => handleEducationUpdate(index, 'field', e.target.value)}
+                    className="w-full px-3 py-1.5 text-sm bg-macPanel/60 border border-macBorder/40 rounded-mac text-macText placeholder-macSubtext/50 focus:border-macAccent focus:ring-1 focus:ring-macAccent/40 focus:outline-none transition-all duration-300 ease-mac"
                   />
-                </Grid>
+                </div>
 
-                <Grid item xs={12} md={4}>
-                  <TextField
-                    fullWidth
-                    label="Start Date"
+                <div>
+                  <label className="block text-xs text-macSubtext uppercase mb-1">
+                    Start Date
+                  </label>
+                  <input
+                    type="text"
                     placeholder="YYYY-MM"
                     value={edu.start_date || ''}
                     onChange={(e) => handleEducationUpdate(index, 'start_date', e.target.value)}
+                    className="w-full px-3 py-1.5 text-sm bg-macPanel/60 border border-macBorder/40 rounded-mac text-macText placeholder-macSubtext/50 focus:border-macAccent focus:ring-1 focus:ring-macAccent/40 focus:outline-none transition-all duration-300 ease-mac"
                   />
-                </Grid>
+                </div>
 
-                <Grid item xs={12} md={4}>
-                  <TextField
-                    fullWidth
-                    label="End Date"
+                <div>
+                  <label className="block text-xs text-macSubtext uppercase mb-1">
+                    End Date
+                  </label>
+                  <input
+                    type="text"
                     placeholder="YYYY-MM"
                     value={edu.end_date || ''}
                     onChange={(e) => handleEducationUpdate(index, 'end_date', e.target.value)}
+                    className="w-full px-3 py-1.5 text-sm bg-macPanel/60 border border-macBorder/40 rounded-mac text-macText placeholder-macSubtext/50 focus:border-macAccent focus:ring-1 focus:ring-macAccent/40 focus:outline-none transition-all duration-300 ease-mac"
                   />
-                </Grid>
+                </div>
 
-                <Grid item xs={12} md={4}>
-                  <TextField
-                    fullWidth
-                    label="Status"
+                <div className="md:col-span-2">
+                  <label className="block text-xs text-macSubtext uppercase mb-1">
+                    Status
+                  </label>
+                  <input
+                    type="text"
                     value={edu.status || ''}
                     onChange={(e) => handleEducationUpdate(index, 'status', e.target.value)}
-                    helperText="completed, in-progress, etc."
+                    className="w-full px-3 py-1.5 text-sm bg-macPanel/60 border border-macBorder/40 rounded-mac text-macText placeholder-macSubtext/50 focus:border-macAccent focus:ring-1 focus:ring-macAccent/40 focus:outline-none transition-all duration-300 ease-mac"
                   />
-                </Grid>
-              </Grid>
-            </Card>
+                  <p className="text-xs text-macSubtext/70 mt-1">completed, in-progress, etc.</p>
+                </div>
+              </div>
+            </div>
           ))}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Languages */}
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-            <Typography variant="h6">Spoken Languages</Typography>
-            <Button size="small" startIcon={<Add />} onClick={handleAddLanguage}>
-              Add Language
-            </Button>
-          </Box>
+      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-4">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-base font-semibold text-macText">Spoken Languages</h3>
+          <button
+            onClick={handleAddLanguage}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-macAccent hover:bg-macAccent/80 text-white text-xs font-medium rounded-mac transition-all duration-300 ease-mac"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Add Language
+          </button>
+        </div>
 
+        <div className="space-y-3">
           {languages.map((lang, index) => (
-            <Grid container spacing={2} key={index} sx={{ mb: 2 }}>
-              <Grid item xs={12} md={5}>
-                <TextField
-                  fullWidth
-                  size="small"
-                  label="Language"
+            <div key={index} className="grid grid-cols-1 md:grid-cols-12 gap-3 items-start">
+              <div className="md:col-span-5">
+                <label className="block text-xs text-macSubtext uppercase mb-1">
+                  Language
+                </label>
+                <input
+                  type="text"
                   value={lang.name || ''}
                   onChange={(e) => handleLanguageUpdate(index, 'name', e.target.value)}
+                  className="w-full px-3 py-1.5 text-sm bg-macPanel/60 border border-macBorder/40 rounded-mac text-macText placeholder-macSubtext/50 focus:border-macAccent focus:ring-1 focus:ring-macAccent/40 focus:outline-none transition-all duration-300 ease-mac"
                 />
-              </Grid>
-              <Grid item xs={12} md={5}>
-                <TextField
-                  fullWidth
-                  size="small"
-                  label="Proficiency"
+              </div>
+
+              <div className="md:col-span-6">
+                <label className="block text-xs text-macSubtext uppercase mb-1">
+                  Proficiency
+                </label>
+                <input
+                  type="text"
                   value={lang.proficiency || ''}
                   onChange={(e) => handleLanguageUpdate(index, 'proficiency', e.target.value)}
-                  helperText="native, fluent, professional, etc."
+                  className="w-full px-3 py-1.5 text-sm bg-macPanel/60 border border-macBorder/40 rounded-mac text-macText placeholder-macSubtext/50 focus:border-macAccent focus:ring-1 focus:ring-macAccent/40 focus:outline-none transition-all duration-300 ease-mac"
                 />
-              </Grid>
-              <Grid item xs={12} md={2}>
-                <IconButton onClick={() => handleDeleteLanguage(index)}>
-                  <Delete />
-                </IconButton>
-              </Grid>
-            </Grid>
+                <p className="text-xs text-macSubtext/70 mt-1">native, fluent, professional, etc.</p>
+              </div>
+
+              <div className="md:col-span-1 md:pt-6">
+                <button
+                  onClick={() => handleDeleteLanguage(index)}
+                  className="p-1.5 bg-macPanel/60 hover:bg-macHover/60 border border-macBorder/40 rounded-mac transition-all duration-300 ease-mac"
+                >
+                  <svg className="w-4 h-4 text-macSubtext" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+            </div>
           ))}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Certifications */}
-      <Card>
-        <CardContent>
-          <Typography variant="h6" gutterBottom>
-            Certifications
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Certifications section coming soon. You can manually edit the YAML for now.
-          </Typography>
-        </CardContent>
-      </Card>
-    </Box>
+      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-4">
+        <h3 className="text-base font-semibold text-macText mb-2">
+          Certifications
+        </h3>
+        <p className="text-sm text-macSubtext">
+          Certifications section coming soon. You can manually edit the YAML for now.
+        </p>
+      </div>
+    </div>
   );
 };
 

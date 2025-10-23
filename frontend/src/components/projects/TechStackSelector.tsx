@@ -113,15 +113,15 @@ export const TechStackSelector: React.FC<TechStackSelectorProps> = ({
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsAdding(true)}
-            className="flex items-center gap-1 px-3 py-1.5 bg-surface-elevated/50 border border-border border-dashed rounded text-xs text-text-tertiary hover:text-primary hover:border-sky-500 transition-colors"
+            className="flex items-center gap-1 px-3 py-1.5 bg-macPanel/50 backdrop-blur-md border border-macBorder/40 border-dashed rounded-mac text-xs text-macSubtext hover:text-macAccent hover:border-sky-500 transition-all duration-300 ease-mac"
           >
             <Plus size={11} />
             <span>Add tech</span>
           </motion.button>
         ) : (
           <div className="relative">
-            <div className="flex items-center gap-1 px-3 py-1.5 bg-surface-elevated border border-sky-500 rounded">
-              <Search size={11} className="text-primary" />
+            <div className="flex items-center gap-1 px-3 py-1.5 bg-macPanel/70 backdrop-blur-md border border-sky-500 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)]">
+              <Search size={11} className="text-macAccent" />
               <input
                 type="text"
                 value={searchQuery}
@@ -134,7 +134,7 @@ export const TechStackSelector: React.FC<TechStackSelectorProps> = ({
                   }, 200);
                 }}
                 placeholder="Search tech..."
-                className="bg-transparent outline-none text-xs text-text-primary w-32"
+                className="bg-transparent outline-none text-xs text-macText w-32"
                 autoFocus
               />
             </div>
@@ -144,13 +144,13 @@ export const TechStackSelector: React.FC<TechStackSelectorProps> = ({
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="absolute top-full left-0 mt-1 w-64 bg-surface-elevated border border-border rounded shadow-lg z-10 max-h-64 overflow-y-auto"
+                className="absolute top-full left-0 mt-2 w-64 bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] z-10 max-h-64 overflow-y-auto"
               >
                 {searchResults.map((result) => (
                   <button
                     key={result.name}
                     onClick={() => handleAddTech(result.name)}
-                    className="w-full flex items-center gap-1 px-3 py-1 hover:bg-surface-elevated text-left transition-colors"
+                    className="w-full flex items-center gap-1 px-3 py-1 hover:bg-macHover/60 text-left transition-all duration-300 ease-mac"
                   >
                     {result.svg_url ? (
                       <img
@@ -162,8 +162,8 @@ export const TechStackSelector: React.FC<TechStackSelectorProps> = ({
                     ) : result.emoji ? (
                       <span className="text-xs">{result.emoji}</span>
                     ) : null}
-                    <span className="text-xs text-text-primary">{result.name}</span>
-                    <span className="ml-auto text-xs text-text-tertiary">{result.category}</span>
+                    <span className="text-xs text-macText">{result.name}</span>
+                    <span className="ml-auto text-xs text-macSubtext">{result.category}</span>
                   </button>
                 ))}
               </motion.div>

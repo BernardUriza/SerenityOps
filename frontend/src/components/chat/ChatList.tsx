@@ -7,7 +7,6 @@ import React, { useMemo } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { ChatItem } from './ChatItem';
 import { useChatManager } from './hooks/useChatManager';
-import type { Chat } from '../../types/chat';
 
 export const ChatList: React.FC = () => {
   const {
@@ -56,7 +55,7 @@ export const ChatList: React.FC = () => {
   if (filteredAndSortedChats.length === 0) {
     return (
       <div className="flex items-center justify-center h-32">
-        <p className="text-xs text-text-tertiary">
+        <p className="text-xs text-macSubtext">
           {filter ? 'No chats match your search' : 'No chats yet'}
         </p>
       </div>

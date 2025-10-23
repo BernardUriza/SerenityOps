@@ -83,40 +83,40 @@ export const AchievementsEditor: React.FC<AchievementsEditorProps> = ({
             className="group"
           >
             {editingIndex === index ? (
-              <div className="flex items-start gap-1 p-2 bg-surface-elevated border border-sky-500 rounded">
+              <div className="flex items-start gap-1 p-2 bg-macPanel/70 backdrop-blur-md border border-sky-500 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)]">
                 <textarea
                   value={editValue}
                   onChange={(e) => setEditValue(e.target.value)}
                   onKeyDown={(e) => handleKeyDown(e, 'edit')}
-                  className="flex-1 bg-transparent outline-none text-xs text-text-primary resize-none"
+                  className="flex-1 bg-transparent outline-none text-xs text-macText resize-none"
                   rows={2}
                   autoFocus
                 />
                 <button
                   onClick={handleSaveEdit}
-                  className="p-1 text-success hover:bg-success/10 rounded transition-colors"
+                  className="p-1 text-success hover:bg-success/10 rounded-mac transition-all duration-300 ease-mac"
                 >
                   <Check size={12} />
                 </button>
                 <button
                   onClick={() => setEditingIndex(null)}
-                  className="p-1 text-error hover:bg-error/10 rounded transition-colors"
+                  className="p-1 text-error hover:bg-error/10 rounded-mac transition-all duration-300 ease-mac"
                 >
                   <X size={12} />
                 </button>
               </div>
             ) : (
-              <div className="flex items-start gap-1 p-2 pl-4 bg-surface-elevated/50 border border-border rounded hover:border-border-strong transition-colors">
-                <span className="text-primary mt-1">•</span>
+              <div className="flex items-start gap-1 p-2 pl-4 bg-macPanel/50 backdrop-blur-md border border-macBorder/40 rounded-mac hover:border-macBorder/40 transition-all duration-300 ease-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)]">
+                <span className="text-macAccent mt-1">•</span>
                 <p
-                  className="flex-1 text-xs text-text-secondary cursor-pointer"
+                  className="flex-1 text-xs text-macSubtext cursor-pointer"
                   onClick={() => handleEdit(index)}
                 >
                   {achievement}
                 </p>
                 <button
                   onClick={() => handleDelete(index)}
-                  className="opacity-0 group-hover:opacity-100 p-1 text-text-tertiary hover:text-error transition-all"
+                  className="opacity-0 group-hover:opacity-100 p-1 text-macSubtext hover:text-error transition-all duration-300 ease-mac"
                 >
                   <X size={11} />
                 </button>
@@ -131,7 +131,7 @@ export const AchievementsEditor: React.FC<AchievementsEditorProps> = ({
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-start gap-1 p-2 bg-surface-elevated border border-sky-500 rounded"
+          className="flex items-start gap-1 p-2 bg-macPanel/70 backdrop-blur-md border border-sky-500 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)]"
         >
           <textarea
             value={newAchievement}
@@ -145,13 +145,13 @@ export const AchievementsEditor: React.FC<AchievementsEditorProps> = ({
               }, 200);
             }}
             placeholder="Describe a key achievement or impact..."
-            className="flex-1 bg-transparent outline-none text-xs text-text-primary resize-none"
+            className="flex-1 bg-transparent outline-none text-xs text-macText resize-none"
             rows={2}
             autoFocus
           />
           <button
             onClick={handleAdd}
-            className="p-1 text-success hover:bg-success/10 rounded transition-colors"
+            className="p-1 text-success hover:bg-success/10 rounded-mac transition-all duration-300 ease-mac"
           >
             <Check size={12} />
           </button>
@@ -161,7 +161,7 @@ export const AchievementsEditor: React.FC<AchievementsEditorProps> = ({
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => setIsAdding(true)}
-          className="w-full flex items-center justify-center gap-1 p-2 bg-surface-elevated/30 border border-border border-dashed rounded text-xs text-text-tertiary hover:text-primary hover:border-sky-500 transition-colors"
+          className="w-full flex items-center justify-center gap-1 p-2 bg-macPanel/50 backdrop-blur-md border border-macBorder/40 border-dashed rounded-mac text-xs text-macSubtext hover:text-macAccent hover:border-sky-500 transition-all duration-300 ease-mac"
         >
           <Plus size={11} />
           <span>Add achievement</span>

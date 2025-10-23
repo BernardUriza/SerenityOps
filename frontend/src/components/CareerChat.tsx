@@ -191,24 +191,24 @@ const CareerChat: React.FC<CareerChatProps> = ({ apiBaseUrl }) => {
   return (
     <div className="flex h-full">
       {/* Sidebar - Conversation History */}
-      <div className={`${showHistory ? 'w-64' : 'w-12'} bg-slate-900 border-r border-slate-700 transition-all duration-300 flex flex-col`}>
-        <div className="p-3 border-b border-slate-700 flex items-center justify-between">
+      <div className={`${showHistory ? 'w-64' : 'w-12'} bg-macBg border-r border-macBorder/40 transition-all duration-300 ease-mac flex flex-col`}>
+        <div className="p-3 border-b border-macBorder/40 flex items-center justify-between">
           <button
             onClick={() => setShowHistory(!showHistory)}
-            className="p-2 hover:bg-slate-800 rounded transition-colors"
+            className="p-2 hover:bg-macHover/60 rounded-mac transition-all duration-300 ease-mac"
             title={showHistory ? 'Hide history' : 'Show history'}
           >
-            <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-macSubtext" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
           {showHistory && (
             <button
               onClick={startNewConversation}
-              className="p-2 hover:bg-slate-800 rounded transition-colors"
+              className="p-2 hover:bg-macHover/60 rounded-mac transition-all duration-300 ease-mac"
               title="New conversation"
             >
-              <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-macSubtext" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
             </button>
@@ -218,26 +218,26 @@ const CareerChat: React.FC<CareerChatProps> = ({ apiBaseUrl }) => {
         {showHistory && (
           <div className="flex-1 overflow-y-auto p-2">
             {conversations.length === 0 ? (
-              <p className="text-sm text-slate-500 text-center mt-4">No conversations yet</p>
+              <p className="text-sm text-macSubtext text-center mt-4">No conversations yet</p>
             ) : (
-              <div className="space-y-2">
+              <div className="space-y-4">
                 {conversations.map(conv => (
                   <button
                     key={conv.id}
                     onClick={() => loadConversation(conv.id)}
-                    className={`w-full text-left p-3 rounded-lg transition-colors ${
+                    className={`w-full text-left p-3 rounded-mac transition-all duration-300 ease-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] ${
                       conversationId === conv.id
                         ? 'bg-blue-900/30 border border-blue-700'
-                        : 'hover:bg-slate-800 border border-transparent'
+                        : 'hover:bg-macHover/60 border border-transparent'
                     }`}
                   >
-                    <div className="text-sm font-medium text-slate-300 truncate">
+                    <div className="text-sm font-medium text-macText truncate">
                       Conversation
                     </div>
-                    <div className="text-xs text-slate-500 mt-1">
+                    <div className="text-xs text-macSubtext mt-1">
                       {conv.message_count} messages
                     </div>
-                    <div className="text-xs text-slate-600 mt-1">
+                    <div className="text-xs text-macSubtext mt-1">
                       {new Date(conv.date).toLocaleDateString()}
                     </div>
                   </button>
@@ -249,14 +249,14 @@ const CareerChat: React.FC<CareerChatProps> = ({ apiBaseUrl }) => {
       </div>
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col bg-slate-800">
+      <div className="flex-1 flex flex-col bg-macBg">
         {/* Header */}
-        <div className="p-6 border-b border-slate-700 bg-slate-900">
-          <h2 className="text-2xl font-bold text-slate-50 flex items-center">
+        <div className="p-6 border-b border-macBorder/40 bg-macPanel/50 backdrop-blur-md">
+          <h2 className="text-2xl font-bold text-macText flex items-center">
             <span className="text-2xl mr-3">💬</span>
             Career Chat
           </h2>
-          <p className="text-slate-400 mt-1">
+          <p className="text-macSubtext mt-1">
             Conversational AI assistant with full context of your career
           </p>
         </div>
@@ -267,15 +267,15 @@ const CareerChat: React.FC<CareerChatProps> = ({ apiBaseUrl }) => {
             <div className="flex items-center justify-center h-full">
               <div className="text-center max-w-md">
                 <div className="text-6xl mb-4">🤖</div>
-                <h3 className="text-xl font-semibold text-slate-300 mb-2">
+                <h3 className="text-xl font-semibold text-macText mb-2">
                   Hi! I'm SerenityOps
                 </h3>
-                <p className="text-slate-400 mb-4">
+                <p className="text-macSubtext mb-4">
                   Your career intelligence assistant. I have full context of your CV, projects, and opportunities.
                 </p>
-                <div className="bg-slate-900 border border-slate-700 rounded-lg p-4 text-left">
-                  <p className="text-sm text-slate-300 font-medium mb-2">You can ask me to:</p>
-                  <ul className="space-y-1 text-sm text-slate-400">
+                <div className="bg-macPanel/50 backdrop-blur-md border border-macBorder/40 rounded-mac p-4 text-left shadow-[0_2px_6px_rgba(0,0,0,0.2)]">
+                  <p className="text-sm text-macText font-medium mb-2">You can ask me to:</p>
+                  <ul className="space-y-1 text-sm text-macSubtext">
                     <li>• Track new projects and experiences</li>
                     <li>• Suggest CV improvements</li>
                     <li>• Analyze job opportunities</li>
@@ -293,10 +293,10 @@ const CareerChat: React.FC<CareerChatProps> = ({ apiBaseUrl }) => {
                   className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-3xl rounded-lg p-4 ${
+                    className={`max-w-3xl rounded-mac p-4 backdrop-blur-md shadow-[0_2px_6px_rgba(0,0,0,0.2)] ${
                       msg.role === 'user'
                         ? 'bg-blue-600 text-white'
-                        : 'bg-slate-900 border border-slate-700 text-slate-100'
+                        : 'bg-macPanel/50 border border-macBorder/40 text-macText'
                     }`}
                   >
                     <div className="flex items-start">
@@ -306,7 +306,7 @@ const CareerChat: React.FC<CareerChatProps> = ({ apiBaseUrl }) => {
                       <div className="flex-1">
                         <ChatMessage content={msg.content} role={msg.role} apiBaseUrl={apiBaseUrl} />
                         <p className={`text-xs mt-2 ${
-                          msg.role === 'user' ? 'text-blue-200' : 'text-slate-500'
+                          msg.role === 'user' ? 'text-blue-200' : 'text-macSubtext'
                         }`}>
                           {new Date(msg.timestamp).toLocaleTimeString()}
                         </p>
@@ -320,7 +320,7 @@ const CareerChat: React.FC<CareerChatProps> = ({ apiBaseUrl }) => {
               ))}
               {sending && (
                 <div className="flex justify-start">
-                  <div className="bg-slate-900 border border-slate-700 rounded-lg p-4 max-w-3xl">
+                  <div className="bg-macPanel/50 backdrop-blur-md border border-macBorder/40 rounded-mac p-4 max-w-3xl shadow-[0_2px_6px_rgba(0,0,0,0.2)]">
                     <div className="flex items-center space-x-2">
                       <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
                       <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
@@ -335,21 +335,21 @@ const CareerChat: React.FC<CareerChatProps> = ({ apiBaseUrl }) => {
         </div>
 
         {/* Input Area */}
-        <div className="p-4 border-t border-slate-700 bg-slate-900">
+        <div className="p-4 border-t border-macBorder/40 bg-macPanel/50 backdrop-blur-md">
           <div className="flex gap-3">
             <textarea
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type your message... (Shift+Enter for new line)"
-              className="flex-1 px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-slate-50 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              className="flex-1 px-4 py-3 bg-macBg border border-macBorder/40 rounded-mac text-macText placeholder-macSubtext focus:outline-none focus:ring-2 focus:ring-macAccent focus:border-transparent resize-none transition-all duration-300 ease-mac"
               rows={2}
               disabled={sending}
             />
             <button
               onClick={handleSendMessage}
               disabled={sending || !inputMessage.trim()}
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-mac transition-all duration-300 ease-mac disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
             >
               {sending ? (
                 <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
@@ -368,7 +368,7 @@ const CareerChat: React.FC<CareerChatProps> = ({ apiBaseUrl }) => {
         {/* Notification Toast */}
         {notification && (
           <div className="fixed bottom-4 right-4 z-50">
-            <div className={`rounded-lg shadow-lg p-4 max-w-md border ${
+            <div className={`rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] backdrop-blur-md p-4 max-w-md border ${
               notification.type === 'success'
                 ? 'bg-emerald-900 border-emerald-700'
                 : 'bg-red-900 border-red-700'

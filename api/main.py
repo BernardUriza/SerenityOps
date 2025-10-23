@@ -30,6 +30,9 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
+# Base directory for the project
+BASE_DIR = Path(__file__).parent.parent
+
 # Import cv_builder functions
 try:
     from scripts.cv_builder import (

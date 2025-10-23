@@ -15,7 +15,7 @@ const STORAGE_KEYS = {
   sortBy: 'serenity_chat_sort',
 };
 
-export const useChatManager = create<ChatStore>((set, get) => ({
+export const useChatManager = create<ChatStore>((set) => ({
   // State
   chats: [],
   activeChat: null,

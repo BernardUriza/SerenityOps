@@ -65,9 +65,9 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
   }, [tech]);
 
   const sizeClasses = {
-    sm: 'px-2 py-1 text-xs',
+    sm: 'px-3 py-2 text-xs',
     md: 'px-3 py-1.5 text-xs',
-    lg: 'px-2 py-1 text-xs',
+    lg: 'px-3 py-2 text-xs',
   };
 
   const iconSizes = {
@@ -78,9 +78,9 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
 
   if (isLoading) {
     return (
-      <div className={`flex items-center gap-1.5 bg-surface-elevated/50 border border-border rounded ${sizeClasses[size]} animate-pulse`}>
-        <div className={`${iconSizes[size]} bg-surface-hover rounded`}></div>
-        <span className="text-text-tertiary">{tech}</span>
+      <div className={`flex items-center gap-4 bg-macPanel/50 backdrop-blur-md border border-macBorder/40 rounded-mac ${sizeClasses[size]} animate-pulse`}>
+        <div className={`${iconSizes[size]} bg-macHover/60 rounded`}></div>
+        <span className="text-macSubtext">{tech}</span>
       </div>
     );
   }
@@ -91,7 +91,7 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
       animate={{ scale: 1, opacity: 1 }}
       exit={{ scale: 0, opacity: 0 }}
       whileHover={editable ? { scale: 1.05 } : {}}
-      className={`flex items-center gap-1.5 bg-surface-elevated border border-border rounded ${sizeClasses[size]} group`}
+      className={`flex items-center gap-4 bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac ${sizeClasses[size]} group shadow-[0_2px_6px_rgba(0,0,0,0.2)] transition-all duration-300 ease-mac`}
       style={{
         borderColor: iconData?.color ? `${iconData.color}40` : undefined,
       }}
@@ -127,12 +127,12 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
         </span>
       )}
 
-      <span className="text-text-primary">{tech}</span>
+      <span className="text-macText">{tech}</span>
 
       {editable && onRemove && (
         <button
           onClick={onRemove}
-          className="ml-1 text-text-tertiary hover:text-error transition-colors opacity-0 group-hover:opacity-100"
+          className="ml-1 text-macSubtext hover:text-error transition-all duration-300 ease-mac opacity-0 group-hover:opacity-100"
         >
           <X size={size === 'sm' ? 12 : size === 'md' ? 14 : 16} />
         </button>

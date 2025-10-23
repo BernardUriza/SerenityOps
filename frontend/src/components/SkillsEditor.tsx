@@ -1,16 +1,4 @@
 import React from 'react';
-import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  Grid,
-  TextField,
-  Button,
-  IconButton,
-  Chip
-} from '@mui/material';
-import { Add, Delete } from '@mui/icons-material';
 
 interface SkillsEditorProps {
   skills: any;
@@ -76,235 +64,285 @@ const SkillsEditor: React.FC<SkillsEditorProps> = ({ skills, onChange }) => {
   };
 
   return (
-    <Box>
-      <Typography variant="h5" gutterBottom>
-        Skills
-      </Typography>
+    <div className="space-y-4">
+      <h2 className="text-lg font-bold text-macText mb-2">Skills</h2>
 
       {/* Programming Languages */}
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-            <Typography variant="h6">Programming Languages</Typography>
-            <Button size="small" startIcon={<Add />} onClick={handleAddLanguage}>
-              Add Language
-            </Button>
-          </Box>
+      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-3">
+        <div className="flex justify-between items-center mb-2">
+          <h3 className="text-sm font-semibold text-macText">Programming Languages</h3>
+          <button
+            onClick={handleAddLanguage}
+            className="px-3 py-2 bg-macAccent hover:bg-macAccent/80 text-white text-xs font-medium rounded-mac transition-all duration-300 ease-mac flex items-center gap-1"
+          >
+            <span className="text-sm">+</span>
+            Add Language
+          </button>
+        </div>
 
+        <div className="space-y-4">
           {skills.languages?.map((lang: any, index: number) => (
-            <Grid container spacing={2} key={index} sx={{ mb: 2 }}>
-              <Grid item xs={12} md={4}>
-                <TextField
-                  fullWidth
-                  size="small"
-                  label="Language"
+            <div key={index} className="grid grid-cols-12 gap-4">
+              <div className="col-span-12 md:col-span-4">
+                <label className="block text-xs text-macSubtext mb-0.5">Language</label>
+                <input
+                  type="text"
                   value={lang.name || ''}
                   onChange={(e) => handleLanguageUpdate(index, 'name', e.target.value)}
+                  className="w-full h-10 px-3 py-2 bg-macPanel/50 backdrop-blur-md border border-macBorder/40 text-macText text-sm rounded-mac focus:ring-1 focus:ring-macAccent focus:border-macAccent transition-all duration-300 ease-mac"
                 />
-              </Grid>
-              <Grid item xs={12} md={3}>
-                <TextField
-                  fullWidth
-                  size="small"
-                  label="Proficiency"
+              </div>
+              <div className="col-span-12 md:col-span-3">
+                <label className="block text-xs text-macSubtext mb-0.5">Proficiency</label>
+                <input
+                  type="text"
                   value={lang.proficiency || ''}
                   onChange={(e) => handleLanguageUpdate(index, 'proficiency', e.target.value)}
                   placeholder="beginner/intermediate/advanced/expert"
+                  className="w-full h-10 px-3 py-2 bg-macPanel/50 backdrop-blur-md border border-macBorder/40 text-macText text-sm rounded-mac focus:ring-1 focus:ring-macAccent focus:border-macAccent transition-all duration-300 ease-mac placeholder-text-disabled"
                 />
-              </Grid>
-              <Grid item xs={12} md={3}>
-                <TextField
-                  fullWidth
-                  size="small"
+              </div>
+              <div className="col-span-12 md:col-span-3">
+                <label className="block text-xs text-macSubtext mb-0.5">Years</label>
+                <input
                   type="number"
-                  label="Years"
                   value={lang.years || ''}
                   onChange={(e) => handleLanguageUpdate(index, 'years', parseInt(e.target.value))}
+                  className="w-full h-10 px-3 py-2 bg-macPanel/50 backdrop-blur-md border border-macBorder/40 text-macText text-sm rounded-mac focus:ring-1 focus:ring-macAccent focus:border-macAccent transition-all duration-300 ease-mac"
                 />
-              </Grid>
-              <Grid item xs={12} md={2}>
-                <IconButton onClick={() => handleDeleteLanguage(index)}>
-                  <Delete />
-                </IconButton>
-              </Grid>
-            </Grid>
+              </div>
+              <div className="col-span-12 md:col-span-2 flex items-end">
+                <button
+                  onClick={() => handleDeleteLanguage(index)}
+                  className="w-full h-10 px-2 bg-error/20 hover:bg-error/30 text-error rounded-mac transition-all duration-300 ease-mac flex items-center justify-center"
+                  aria-label="Delete language"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+            </div>
           ))}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Frameworks */}
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Typography variant="h6" gutterBottom>
-            Frameworks
-          </Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Backend Frameworks (comma-separated)"
-                value={skills.frameworks?.backend?.join(', ') || ''}
-                onChange={(e) => handleFrameworksChange('backend', e.target.value)}
-                helperText="e.g., .NET Core, ASP.NET, Entity Framework"
-              />
-              <Box mt={1}>
-                {skills.frameworks?.backend?.map((fw: string, i: number) => (
-                  <Chip key={i} label={fw} size="small" sx={{ mr: 0.5, mb: 0.5 }} />
+      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-3">
+        <h3 className="text-sm font-semibold text-macText mb-2">Frameworks</h3>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-xs font-medium text-macSubtext mb-1">
+              Backend Frameworks (comma-separated)
+            </label>
+            <input
+              type="text"
+              value={skills.frameworks?.backend?.join(', ') || ''}
+              onChange={(e) => handleFrameworksChange('backend', e.target.value)}
+              placeholder="e.g., .NET Core, ASP.NET, Entity Framework"
+              className="w-full h-10 px-3 py-2 bg-macPanel/50 backdrop-blur-md border border-macBorder/40 text-macText text-sm rounded-mac focus:ring-1 focus:ring-macAccent focus:border-macAccent transition-all duration-300 ease-mac placeholder-text-disabled"
+            />
+            {skills.frameworks?.backend?.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-1">
+                {skills.frameworks.backend.map((fw: string, i: number) => (
+                  <span key={i} className="px-1.5 py-0.5 bg-primary-subtle text-macAccent text-xs rounded-mac border border-primary-muted">
+                    {fw}
+                  </span>
                 ))}
-              </Box>
-            </Grid>
+              </div>
+            )}
+          </div>
 
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Frontend Frameworks (comma-separated)"
-                value={skills.frameworks?.frontend?.join(', ') || ''}
-                onChange={(e) => handleFrameworksChange('frontend', e.target.value)}
-                helperText="e.g., React, Angular, Next.js"
-              />
-              <Box mt={1}>
-                {skills.frameworks?.frontend?.map((fw: string, i: number) => (
-                  <Chip key={i} label={fw} size="small" sx={{ mr: 0.5, mb: 0.5 }} />
+          <div>
+            <label className="block text-xs font-medium text-macSubtext mb-1">
+              Frontend Frameworks (comma-separated)
+            </label>
+            <input
+              type="text"
+              value={skills.frameworks?.frontend?.join(', ') || ''}
+              onChange={(e) => handleFrameworksChange('frontend', e.target.value)}
+              placeholder="e.g., React, Angular, Next.js"
+              className="w-full h-10 px-3 py-2 bg-macPanel/50 backdrop-blur-md border border-macBorder/40 text-macText text-sm rounded-mac focus:ring-1 focus:ring-macAccent focus:border-macAccent transition-all duration-300 ease-mac placeholder-text-disabled"
+            />
+            {skills.frameworks?.frontend?.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-1">
+                {skills.frameworks.frontend.map((fw: string, i: number) => (
+                  <span key={i} className="px-1.5 py-0.5 bg-primary-subtle text-macAccent text-xs rounded-mac border border-primary-muted">
+                    {fw}
+                  </span>
                 ))}
-              </Box>
-            </Grid>
+              </div>
+            )}
+          </div>
 
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Mobile Frameworks (comma-separated)"
-                value={skills.frameworks?.mobile?.join(', ') || ''}
-                onChange={(e) => handleFrameworksChange('mobile', e.target.value)}
-                helperText="e.g., Ionic Framework, React Native"
-              />
-              <Box mt={1}>
-                {skills.frameworks?.mobile?.map((fw: string, i: number) => (
-                  <Chip key={i} label={fw} size="small" sx={{ mr: 0.5, mb: 0.5 }} />
+          <div>
+            <label className="block text-xs font-medium text-macSubtext mb-1">
+              Mobile Frameworks (comma-separated)
+            </label>
+            <input
+              type="text"
+              value={skills.frameworks?.mobile?.join(', ') || ''}
+              onChange={(e) => handleFrameworksChange('mobile', e.target.value)}
+              placeholder="e.g., Ionic Framework, React Native"
+              className="w-full h-10 px-3 py-2 bg-macPanel/50 backdrop-blur-md border border-macBorder/40 text-macText text-sm rounded-mac focus:ring-1 focus:ring-macAccent focus:border-macAccent transition-all duration-300 ease-mac placeholder-text-disabled"
+            />
+            {skills.frameworks?.mobile?.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-1">
+                {skills.frameworks.mobile.map((fw: string, i: number) => (
+                  <span key={i} className="px-1.5 py-0.5 bg-primary-subtle text-macAccent text-xs rounded-mac border border-primary-muted">
+                    {fw}
+                  </span>
                 ))}
-              </Box>
-            </Grid>
+              </div>
+            )}
+          </div>
 
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="UI Libraries (comma-separated)"
-                value={skills.frameworks?.ui?.join(', ') || ''}
-                onChange={(e) => handleFrameworksChange('ui', e.target.value)}
-                helperText="e.g., Bootstrap, Material-UI, DevExpress"
-              />
-              <Box mt={1}>
-                {skills.frameworks?.ui?.map((fw: string, i: number) => (
-                  <Chip key={i} label={fw} size="small" sx={{ mr: 0.5, mb: 0.5 }} />
+          <div>
+            <label className="block text-xs font-medium text-macSubtext mb-1">
+              UI Libraries (comma-separated)
+            </label>
+            <input
+              type="text"
+              value={skills.frameworks?.ui?.join(', ') || ''}
+              onChange={(e) => handleFrameworksChange('ui', e.target.value)}
+              placeholder="e.g., Bootstrap, Material-UI, DevExpress"
+              className="w-full h-10 px-3 py-2 bg-macPanel/50 backdrop-blur-md border border-macBorder/40 text-macText text-sm rounded-mac focus:ring-1 focus:ring-macAccent focus:border-macAccent transition-all duration-300 ease-mac placeholder-text-disabled"
+            />
+            {skills.frameworks?.ui?.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-1">
+                {skills.frameworks.ui.map((fw: string, i: number) => (
+                  <span key={i} className="px-1.5 py-0.5 bg-primary-subtle text-macAccent text-xs rounded-mac border border-primary-muted">
+                    {fw}
+                  </span>
                 ))}
-              </Box>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
 
       {/* Databases */}
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-            <Typography variant="h6">Databases</Typography>
-            <Button size="small" startIcon={<Add />} onClick={handleAddDatabase}>
-              Add Database
-            </Button>
-          </Box>
+      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-3">
+        <div className="flex justify-between items-center mb-2">
+          <h3 className="text-sm font-semibold text-macText">Databases</h3>
+          <button
+            onClick={handleAddDatabase}
+            className="px-3 py-2 bg-macAccent hover:bg-macAccent/80 text-white text-xs font-medium rounded-mac transition-all duration-300 ease-mac flex items-center gap-1"
+          >
+            <span className="text-sm">+</span>
+            Add Database
+          </button>
+        </div>
 
+        <div className="space-y-4">
           {skills.databases?.map((db: any, index: number) => (
-            <Grid container spacing={2} key={index} sx={{ mb: 2 }}>
-              <Grid item xs={12} md={5}>
-                <TextField
-                  fullWidth
-                  size="small"
-                  label="Database"
+            <div key={index} className="grid grid-cols-12 gap-4">
+              <div className="col-span-12 md:col-span-5">
+                <label className="block text-xs text-macSubtext mb-0.5">Database</label>
+                <input
+                  type="text"
                   value={db.name || ''}
                   onChange={(e) => handleDatabaseUpdate(index, 'name', e.target.value)}
+                  className="w-full h-10 px-3 py-2 bg-macPanel/50 backdrop-blur-md border border-macBorder/40 text-macText text-sm rounded-mac focus:ring-1 focus:ring-macAccent focus:border-macAccent transition-all duration-300 ease-mac"
                 />
-              </Grid>
-              <Grid item xs={12} md={5}>
-                <TextField
-                  fullWidth
-                  size="small"
-                  label="Proficiency"
+              </div>
+              <div className="col-span-12 md:col-span-5">
+                <label className="block text-xs text-macSubtext mb-0.5">Proficiency</label>
+                <input
+                  type="text"
                   value={db.proficiency || ''}
                   onChange={(e) => handleDatabaseUpdate(index, 'proficiency', e.target.value)}
+                  className="w-full h-10 px-3 py-2 bg-macPanel/50 backdrop-blur-md border border-macBorder/40 text-macText text-sm rounded-mac focus:ring-1 focus:ring-macAccent focus:border-macAccent transition-all duration-300 ease-mac"
                 />
-              </Grid>
-              <Grid item xs={12} md={2}>
-                <IconButton onClick={() => handleDeleteDatabase(index)}>
-                  <Delete />
-                </IconButton>
-              </Grid>
-            </Grid>
+              </div>
+              <div className="col-span-12 md:col-span-2 flex items-end">
+                <button
+                  onClick={() => handleDeleteDatabase(index)}
+                  className="w-full h-10 px-2 bg-error/20 hover:bg-error/30 text-error rounded-mac transition-all duration-300 ease-mac flex items-center justify-center"
+                  aria-label="Delete database"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+            </div>
           ))}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Cloud & DevOps */}
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Typography variant="h6" gutterBottom>
-            Cloud & DevOps
-          </Typography>
-          <TextField
-            fullWidth
-            label="Cloud & DevOps Tools (comma-separated)"
-            value={skills.cloud_devops?.join(', ') || ''}
-            onChange={(e) => handleListChange('cloud_devops', e.target.value)}
-            helperText="e.g., Azure, AWS, Docker, Kubernetes, GitLab CI/CD"
-          />
-          <Box mt={1}>
-            {skills.cloud_devops?.map((tool: string, i: number) => (
-              <Chip key={i} label={tool} size="small" sx={{ mr: 0.5, mb: 0.5 }} />
+      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-3">
+        <h3 className="text-sm font-semibold text-macText mb-2">Cloud & DevOps</h3>
+        <label className="block text-xs font-medium text-macSubtext mb-1">
+          Cloud & DevOps Tools (comma-separated)
+        </label>
+        <input
+          type="text"
+          value={skills.cloud_devops?.join(', ') || ''}
+          onChange={(e) => handleListChange('cloud_devops', e.target.value)}
+          placeholder="e.g., Azure, AWS, Docker, Kubernetes, GitLab CI/CD"
+          className="w-full h-10 px-3 py-2 bg-macPanel/50 backdrop-blur-md border border-macBorder/40 text-macText text-sm rounded-mac focus:ring-1 focus:ring-macAccent focus:border-macAccent transition-all duration-300 ease-mac placeholder-text-disabled"
+        />
+        {skills.cloud_devops?.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-1">
+            {skills.cloud_devops.map((tool: string, i: number) => (
+              <span key={i} className="px-1.5 py-0.5 bg-success-muted text-success text-xs rounded-md border border-success/30">
+                {tool}
+              </span>
             ))}
-          </Box>
-        </CardContent>
-      </Card>
+          </div>
+        )}
+      </div>
 
       {/* Tools */}
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Typography variant="h6" gutterBottom>
-            Tools
-          </Typography>
-          <TextField
-            fullWidth
-            label="Development Tools (comma-separated)"
-            value={skills.tools?.join(', ') || ''}
-            onChange={(e) => handleListChange('tools', e.target.value)}
-            helperText="e.g., Git, Visual Studio, VS Code"
-          />
-          <Box mt={1}>
-            {skills.tools?.map((tool: string, i: number) => (
-              <Chip key={i} label={tool} size="small" sx={{ mr: 0.5, mb: 0.5 }} />
+      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-3">
+        <h3 className="text-sm font-semibold text-macText mb-2">Tools</h3>
+        <label className="block text-xs font-medium text-macSubtext mb-1">
+          Development Tools (comma-separated)
+        </label>
+        <input
+          type="text"
+          value={skills.tools?.join(', ') || ''}
+          onChange={(e) => handleListChange('tools', e.target.value)}
+          placeholder="e.g., Git, Visual Studio, VS Code"
+          className="w-full h-10 px-3 py-2 bg-macPanel/50 backdrop-blur-md border border-macBorder/40 text-macText text-sm rounded-mac focus:ring-1 focus:ring-macAccent focus:border-macAccent transition-all duration-300 ease-mac placeholder-text-disabled"
+        />
+        {skills.tools?.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-1">
+            {skills.tools.map((tool: string, i: number) => (
+              <span key={i} className="px-1.5 py-0.5 bg-warning-muted text-warning text-xs rounded-md border border-warning/30">
+                {tool}
+              </span>
             ))}
-          </Box>
-        </CardContent>
-      </Card>
+          </div>
+        )}
+      </div>
 
       {/* Domain Expertise */}
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Typography variant="h6" gutterBottom>
-            Domain Expertise
-          </Typography>
-          <TextField
-            fullWidth
-            label="Domain Areas (comma-separated)"
-            value={skills.domain_expertise?.join(', ') || ''}
-            onChange={(e) => handleListChange('domain_expertise', e.target.value)}
-            helperText="e.g., Finance, Real Estate Technology, Supply Chain"
-          />
-          <Box mt={1}>
-            {skills.domain_expertise?.map((domain: string, i: number) => (
-              <Chip key={i} label={domain} size="small" sx={{ mr: 0.5, mb: 0.5 }} />
+      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-3">
+        <h3 className="text-sm font-semibold text-macText mb-2">Domain Expertise</h3>
+        <label className="block text-xs font-medium text-macSubtext mb-1">
+          Domain Areas (comma-separated)
+        </label>
+        <input
+          type="text"
+          value={skills.domain_expertise?.join(', ') || ''}
+          onChange={(e) => handleListChange('domain_expertise', e.target.value)}
+          placeholder="e.g., Finance, Real Estate Technology, Supply Chain"
+          className="w-full h-10 px-3 py-2 bg-macPanel/50 backdrop-blur-md border border-macBorder/40 text-macText text-sm rounded-mac focus:ring-1 focus:ring-macAccent focus:border-macAccent transition-all duration-300 ease-mac placeholder-text-disabled"
+        />
+        {skills.domain_expertise?.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-1">
+            {skills.domain_expertise.map((domain: string, i: number) => (
+              <span key={i} className="px-1.5 py-0.5 bg-primary-subtle text-macAccent text-xs rounded-mac border border-primary-muted">
+                {domain}
+              </span>
             ))}
-          </Box>
-        </CardContent>
-      </Card>
-    </Box>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 

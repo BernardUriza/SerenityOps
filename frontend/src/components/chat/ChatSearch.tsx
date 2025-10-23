@@ -16,19 +16,19 @@ export const ChatSearch: React.FC<ChatSearchProps> = ({
     <div className="relative">
       <Search
         size={12}
-        className="absolute left-2 top-1/2 -translate-y-1/2 text-text-tertiary"
+        className="absolute left-2 top-1/2 -translate-y-1/2 text-macSubtext"
       />
       <input
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full h-7 bg-surface-elevated border border-border rounded pl-7 pr-7 text-xs text-text-primary placeholder-text-tertiary focus:outline-none focus:ring-1 focus:ring-primary/50 focus:border-primary transition-all"
+        className="w-full h-7 bg-macPanel/60 backdrop-blur-md border border-macBorder/40 rounded-mac pl-7 pr-7 text-xs text-macText placeholder-macSubtext focus:outline-none focus:ring-1 focus:ring-macAccent/40 focus:border-macAccent transition-all duration-300 ease-mac"
       />
       {value && (
         <button
           onClick={() => onChange('')}
-          className="absolute right-2 top-1/2 -translate-y-1/2 text-text-tertiary hover:text-text-secondary transition-colors"
+          className="absolute right-2 top-1/2 -translate-y-1/2 text-macSubtext hover:text-macText transition-all duration-300 ease-mac"
           title="Clear search"
         >
           <X size={12} />

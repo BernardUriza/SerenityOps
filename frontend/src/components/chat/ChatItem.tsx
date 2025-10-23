@@ -80,10 +80,10 @@ export const ChatItem: React.FC<ChatItemProps> = ({
       onClick={onSelect}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
-      className={`group relative flex items-center h-row px-2 cursor-pointer transition-all ${
+      className={`group relative flex items-center h-row px-2 cursor-pointer transition-all duration-300 ease-mac ${
         isActive
-          ? 'bg-surface-elevated border-l-2 border-primary'
-          : 'hover:bg-surface-hover border-l-2 border-transparent'
+          ? 'bg-macPanel/70 backdrop-blur-md border-l-2 border-macAccent shadow-[inset_0_0_6px_rgba(10,132,255,0.1)]'
+          : 'hover:bg-macHover/60 border-l-2 border-transparent'
       } ${chat.archived ? 'opacity-60' : ''}`}
       title={`${chat.name} - ${chat.message_count} messages - ${new Date(
         chat.last_updated
@@ -98,13 +98,13 @@ export const ChatItem: React.FC<ChatItemProps> = ({
           onChange={(e) => setRenameDraft(e.target.value)}
           onBlur={handleRenameSubmit}
           onKeyDown={handleKeyDown}
-          className="flex-1 bg-surface-elevated border border-primary/50 rounded px-1 py-0 text-xs text-text-primary outline-none"
+          className="flex-1 bg-macPanel/60 border border-macAccent/50 rounded-mac px-1 py-0 text-xs text-macText outline-none focus:ring-1 focus:ring-macAccent/40"
           onClick={(e) => e.stopPropagation()}
         />
       ) : (
         <div className="flex-1 flex items-center min-w-0">
-          <span className="text-xs text-text-primary truncate">{chat.name}</span>
-          <span className="ml-auto text-[10px] text-text-tertiary ml-2 flex-shrink-0">
+          <span className="text-xs text-macText truncate">{chat.name}</span>
+          <span className="ml-auto text-[10px] text-macSubtext ml-2 flex-shrink-0">
             {chat.message_count}
           </span>
         </div>
@@ -117,37 +117,37 @@ export const ChatItem: React.FC<ChatItemProps> = ({
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.1 }}
-          className="absolute right-1 flex items-center gap-0.5 bg-surface-elevated/95 rounded px-1"
+          className="absolute right-1 flex items-center gap-0.5 bg-macPanel/95 backdrop-blur-md rounded-mac px-1 shadow-[0_2px_6px_rgba(0,0,0,0.2)]"
           onClick={(e) => e.stopPropagation()}
         >
           <button
             onClick={handleRenameStart}
-            className="p-0.5 hover:bg-surface-hover rounded transition-colors"
+            className="p-0.5 hover:bg-macHover/60 rounded-mac transition-all duration-300 ease-mac"
             title="Rename"
           >
-            <Edit3 size={11} className="text-text-secondary" />
+            <Edit3 size={11} className="text-macSubtext" />
           </button>
           <button
             onClick={(e) => handleActionClick(e, onDuplicate)}
-            className="p-0.5 hover:bg-surface-hover rounded transition-colors"
+            className="p-0.5 hover:bg-macHover/60 rounded-mac transition-all duration-300 ease-mac"
             title="Duplicate"
           >
-            <Copy size={11} className="text-text-secondary" />
+            <Copy size={11} className="text-macSubtext" />
           </button>
           <button
             onClick={(e) => handleActionClick(e, () => onArchive(!chat.archived))}
-            className="p-0.5 hover:bg-surface-hover rounded transition-colors"
+            className="p-0.5 hover:bg-macHover/60 rounded-mac transition-all duration-300 ease-mac"
             title={chat.archived ? 'Unarchive' : 'Archive'}
           >
             {chat.archived ? (
-              <ArchiveX size={11} className="text-text-secondary" />
+              <ArchiveX size={11} className="text-macSubtext" />
             ) : (
-              <Archive size={11} className="text-text-secondary" />
+              <Archive size={11} className="text-macSubtext" />
             )}
           </button>
           <button
             onClick={(e) => handleActionClick(e, onDelete)}
-            className="p-0.5 hover:bg-error/10 rounded transition-colors"
+            className="p-0.5 hover:bg-error/10 rounded-mac transition-all duration-300 ease-mac"
             title="Delete"
           >
             <Trash2 size={11} className="text-error" />

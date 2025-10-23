@@ -52,7 +52,7 @@ export const ChatManager: React.FC<ChatManagerProps> = ({ apiBaseUrl }) => {
   }, [createChat, setFilter]);
 
   return (
-    <div className="flex h-full bg-background">
+    <div className="flex h-full bg-macBg">
       {/* Sidebar - Compact */}
       <ChatSidebar />
 
@@ -60,27 +60,27 @@ export const ChatManager: React.FC<ChatManagerProps> = ({ apiBaseUrl }) => {
       {activeChat ? (
         <ChatView conversationId={activeChat} apiBaseUrl={apiBaseUrl} />
       ) : (
-        <div className="flex-1 flex items-center justify-center bg-surface">
+        <div className="flex-1 flex items-center justify-center bg-macBg">
           <div className="text-center max-w-xs">
             <div className="text-3xl mb-2">💬</div>
-            <h2 className="text-sm font-semibold text-text-primary mb-1">No chat selected</h2>
-            <p className="text-xs text-text-secondary mb-3">
+            <h2 className="text-sm font-semibold text-macText mb-1">No chat selected</h2>
+            <p className="text-xs text-macSubtext mb-3">
               Select a chat from the sidebar or create a new one
             </p>
             <button
               onClick={() => createChat()}
-              className="h-7 px-3 bg-success hover:bg-success-hover text-white text-xs font-semibold rounded transition-colors"
+              className="h-7 px-3 bg-macAccent hover:bg-macAccent/80 text-white text-xs font-semibold rounded-mac transition-all duration-300 ease-mac"
             >
               Start New Chat
             </button>
-            <div className="mt-3 text-xs text-text-tertiary space-y-0.5">
+            <div className="mt-3 text-xs text-macSubtext space-y-0.5">
               <p className="font-medium text-[10px]">Keyboard shortcuts:</p>
-              <div className="flex items-center justify-center gap-1.5 text-[10px]">
-                <kbd className="px-1 py-0.5 bg-surface-elevated border border-border rounded">Cmd+N</kbd>
+              <div className="flex items-center justify-center gap-4 text-[10px]">
+                <kbd className="px-1 py-0.5 bg-macPanel/60 backdrop-blur-md border border-macBorder/40 rounded-mac">Cmd+N</kbd>
                 <span>New Chat</span>
               </div>
-              <div className="flex items-center justify-center gap-1.5 text-[10px]">
-                <kbd className="px-1 py-0.5 bg-surface-elevated border border-border rounded">Cmd+K</kbd>
+              <div className="flex items-center justify-center gap-4 text-[10px]">
+                <kbd className="px-1 py-0.5 bg-macPanel/60 backdrop-blur-md border border-macBorder/40 rounded-mac">Cmd+K</kbd>
                 <span>Search</span>
               </div>
             </div>

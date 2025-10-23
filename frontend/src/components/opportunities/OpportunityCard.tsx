@@ -11,24 +11,24 @@ interface OpportunityCardProps {
 
 const stageColors: Record<OpportunityStage, string> = {
   discovered: 'bg-slate-600',
-  applied: 'bg-primary',
+  applied: 'bg-macAccent',
   interviewing: 'bg-indigo-600',
   offer: 'bg-green-600',
-  closed: 'bg-surface-hover'
+  closed: 'bg-macHover/60'
 };
 
 const stageBorderColors: Record<OpportunityStage, string> = {
   discovered: 'border-slate-500',
-  applied: 'border-blue-500',
+  applied: 'border-macAccent',
   interviewing: 'border-indigo-500',
   offer: 'border-green-500',
-  closed: 'border-border-strong'
+  closed: 'border-macBorder/40'
 };
 
 const priorityColors: Record<OpportunityPriority, string> = {
   high: 'text-error',
   medium: 'text-yellow-400',
-  low: 'text-text-tertiary'
+  low: 'text-macSubtext'
 };
 
 const OpportunityCard: React.FC<OpportunityCardProps> = ({
@@ -52,18 +52,18 @@ const OpportunityCard: React.FC<OpportunityCardProps> = ({
   };
 
   const getOutcomeColor = (outcome: string | undefined) => {
-    if (!outcome) return 'text-text-tertiary';
+    if (!outcome) return 'text-macSubtext';
     switch (outcome) {
       case 'accepted': return 'text-success';
       case 'declined': return 'text-yellow-400';
       case 'rejected': return 'text-error';
-      case 'withdrawn': return 'text-text-tertiary';
-      default: return 'text-text-tertiary';
+      case 'withdrawn': return 'text-macSubtext';
+      default: return 'text-macSubtext';
     }
   };
 
   const getTechMatchColor = (match: number | null) => {
-    if (match === null) return 'text-text-tertiary';
+    if (match === null) return 'text-macSubtext';
     if (match >= 0.8) return 'text-success';
     if (match >= 0.6) return 'text-yellow-400';
     return 'text-error';
@@ -74,14 +74,14 @@ const OpportunityCard: React.FC<OpportunityCardProps> = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className={`bg-surface-elevated border ${stageBorder} rounded p-5 hover:shadow-lg transition-shadow cursor-pointer`}
+      className={`bg-macPanel/70 backdrop-blur-md border ${stageBorder} rounded-mac p-5 hover:shadow-[0_2px_6px_rgba(0,0,0,0.2)] transition-all duration-300 ease-mac cursor-pointer shadow-[0_2px_6px_rgba(0,0,0,0.2)]`}
       onClick={() => onSelect(opportunity)}
     >
       {/* Header */}
-      <div className="flex justify-between items-start mb-1.5">
+      <div className="flex justify-between items-start mb-4">
         <div className="flex-1">
-          <h3 className="text-xs font-semibold text-text-primary">{opportunity.company}</h3>
-          <p className="text-xs text-text-tertiary">{opportunity.role}</p>
+          <h3 className="text-xs font-semibold text-macText">{opportunity.company}</h3>
+          <p className="text-xs text-macSubtext">{opportunity.role}</p>
         </div>
         <div className="flex items-center gap-1">
           {/* Priority indicator */}
@@ -92,7 +92,7 @@ const OpportunityCard: React.FC<OpportunityCardProps> = ({
       </div>
 
       {/* Stage badge */}
-      <div className="mb-1.5">
+      <div className="mb-4">
         <span className={`inline-block px-3 py-1 text-xs font-medium text-white ${stageColor} rounded-full`}>
           {opportunity.stage}
         </span>
@@ -106,17 +106,17 @@ const OpportunityCard: React.FC<OpportunityCardProps> = ({
       {/* Details */}
       <div className="space-y-1 text-xs">
         <div className="flex items-center gap-1">
-          <span className="text-text-tertiary">Location:</span>
-          <span className="text-text-secondary">{opportunity.details.location}</span>
+          <span className="text-macSubtext">Location:</span>
+          <span className="text-macText">{opportunity.details.location}</span>
         </div>
         <div className="flex items-center gap-1">
-          <span className="text-text-tertiary">Salary:</span>
-          <span className="text-text-secondary">{opportunity.details.salary_range}</span>
+          <span className="text-macSubtext">Salary:</span>
+          <span className="text-macText">{opportunity.details.salary_range}</span>
         </div>
         {opportunity.details.sector && (
           <div className="flex items-center gap-1">
-            <span className="text-text-tertiary">Sector:</span>
-            <span className="text-text-secondary">{opportunity.details.sector}</span>
+            <span className="text-macSubtext">Sector:</span>
+            <span className="text-macText">{opportunity.details.sector}</span>
           </div>
         )}
       </div>
@@ -124,18 +124,18 @@ const OpportunityCard: React.FC<OpportunityCardProps> = ({
       {/* Tech stack preview */}
       {opportunity.details.tech_stack.length > 0 && (
         <div className="mt-1.5">
-          <p className="text-xs text-text-tertiary mb-1">Tech Stack:</p>
+          <p className="text-xs text-macSubtext mb-1">Tech Stack:</p>
           <div className="flex flex-wrap gap-1">
             {opportunity.details.tech_stack.slice(0, 5).map((tech, idx) => (
               <span
                 key={idx}
-                className="px-2 py-1 bg-surface-hover text-text-secondary text-xs rounded"
+                className="px-3 py-2 bg-macHover/60 backdrop-blur-md text-macText text-xs rounded-mac"
               >
                 {tech}
               </span>
             ))}
             {opportunity.details.tech_stack.length > 5 && (
-              <span className="px-2 py-1 bg-surface-hover text-text-tertiary text-xs rounded">
+              <span className="px-3 py-2 bg-macHover/60 backdrop-blur-md text-macSubtext text-xs rounded-mac">
                 +{opportunity.details.tech_stack.length - 5} more
               </span>
             )}
@@ -146,12 +146,12 @@ const OpportunityCard: React.FC<OpportunityCardProps> = ({
       {/* Fit analysis */}
       {(opportunity.fit_analysis.technical_match !== null ||
         opportunity.fit_analysis.cultural_match !== null) && (
-        <div className="mt-1.5 pt-3 border-t border-border">
-          <p className="text-xs text-text-tertiary mb-1">Fit Analysis:</p>
+        <div className="mt-1.5 pt-3 border-t border-macBorder/40">
+          <p className="text-xs text-macSubtext mb-1">Fit Analysis:</p>
           <div className="flex gap-1 text-xs">
             {opportunity.fit_analysis.technical_match !== null && (
               <div>
-                <span className="text-text-tertiary">Tech: </span>
+                <span className="text-macSubtext">Tech: </span>
                 <span className={getTechMatchColor(opportunity.fit_analysis.technical_match)}>
                   {(opportunity.fit_analysis.technical_match * 100).toFixed(0)}%
                 </span>
@@ -159,7 +159,7 @@ const OpportunityCard: React.FC<OpportunityCardProps> = ({
             )}
             {opportunity.fit_analysis.cultural_match !== null && (
               <div>
-                <span className="text-text-tertiary">Culture: </span>
+                <span className="text-macSubtext">Culture: </span>
                 <span className={getTechMatchColor(opportunity.fit_analysis.cultural_match)}>
                   {(opportunity.fit_analysis.cultural_match * 100).toFixed(0)}%
                 </span>
@@ -170,7 +170,7 @@ const OpportunityCard: React.FC<OpportunityCardProps> = ({
       )}
 
       {/* Timeline */}
-      <div className="mt-1.5 pt-3 border-t border-border text-xs text-text-tertiary">
+      <div className="mt-1.5 pt-3 border-t border-macBorder/40 text-xs text-macSubtext">
         <div className="flex justify-between">
           <span>Discovered: {formatDate(opportunity.timeline.discovered)}</span>
           {opportunity.timeline.closed && (
@@ -180,18 +180,18 @@ const OpportunityCard: React.FC<OpportunityCardProps> = ({
       </div>
 
       {/* Actions */}
-      <div className="mt-1 flex gap-1" onClick={(e) => e.stopPropagation()}>
+      <div className="mt-2 flex gap-1" onClick={(e) => e.stopPropagation()}>
         {opportunity.stage !== 'closed' && (
           <button
             onClick={() => onUpdateStage(opportunity.id, 'closed')}
-            className="px-3 py-1 bg-surface-hover hover:bg-slate-600 text-text-secondary text-xs rounded transition-colors"
+            className="px-3 py-1 bg-macHover/60 backdrop-blur-md hover:bg-macHover text-macText text-xs rounded-mac transition-all duration-300 ease-mac shadow-[inset_0_0_6px_rgba(10,132,255,0.1)]"
           >
             Close
           </button>
         )}
         <button
           onClick={() => onDelete(opportunity.id)}
-          className="px-3 py-1 bg-red-900/30 hover:bg-red-900/50 text-error text-xs rounded transition-colors"
+          className="px-3 py-1 bg-red-900/30 hover:bg-red-900/50 text-error text-xs rounded-mac transition-all duration-300 ease-mac"
         >
           Delete
         </button>

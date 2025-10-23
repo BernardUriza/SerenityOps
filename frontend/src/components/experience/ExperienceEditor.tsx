@@ -80,7 +80,7 @@ export const ExperienceEditor: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 size={16} className="animate-spin text-primary" />
+        <Loader2 size={16} className="animate-spin text-macAccent" />
       </div>
     );
   }
@@ -90,11 +90,11 @@ export const ExperienceEditor: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center mb-3">
         <div>
-          <h1 className="text-base font-bold text-text-primary mb-1">Experience</h1>
-          <div className="flex items-center gap-2 text-xs text-text-tertiary">
+          <h1 className="text-base font-bold text-macText mb-1">Experience</h1>
+          <div className="flex items-center gap-2 text-xs text-macSubtext">
             <span>{experiences.length} positions</span>
             {isSaving && (
-              <span className="flex items-center gap-1 text-primary">
+              <span className="flex items-center gap-1 text-macAccent">
                 <Loader2 size={12} className="animate-spin" />
                 Saving...
               </span>
@@ -116,10 +116,10 @@ export const ExperienceEditor: React.FC = () => {
           <button
             onClick={() => setEditMode(editMode === 'edit' ? 'presentation' : 'edit')}
             className={`
-              flex items-center gap-1.5 px-3 py-1.5 rounded font-medium text-xs transition-all
+              flex items-center gap-4 px-3 py-1.5 rounded-mac font-medium text-xs transition-all duration-300 ease-mac backdrop-blur-md
               ${editMode === 'edit'
-                ? 'bg-primary text-white hover:bg-primary-hover'
-                : 'bg-surface-elevated text-text-secondary hover:bg-surface-hover'
+                ? 'bg-macAccent text-white hover:bg-macAccent shadow-[inset_0_0_6px_rgba(10,132,255,0.1)]'
+                : 'bg-macPanel/70 text-macSubtext hover:bg-macHover/60'
               }
             `}
           >
@@ -142,7 +142,7 @@ export const ExperienceEditor: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleAddExperience}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-success text-white rounded font-medium text-xs hover:bg-success-hover transition-colors"
+              className="flex items-center gap-4 px-3 py-1.5 bg-success text-white rounded-mac font-medium text-xs hover:bg-success-hover transition-all duration-300 ease-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] backdrop-blur-md"
             >
               <Plus size={14} />
               Add Experience
@@ -160,10 +160,10 @@ export const ExperienceEditor: React.FC = () => {
             exit={{ opacity: 0 }}
             className="text-center py-8"
           >
-            <p className="text-text-secondary text-sm mb-3">No experiences yet</p>
+            <p className="text-macSubtext text-sm mb-3">No experiences yet</p>
             <button
               onClick={handleAddExperience}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary text-white rounded font-medium text-xs hover:bg-primary-hover transition-colors"
+              className="inline-flex items-center gap-4 px-3 py-1.5 bg-macAccent text-white rounded-mac font-medium text-xs hover:bg-macAccent transition-all duration-300 ease-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] backdrop-blur-md"
             >
               <Plus size={14} />
               Add Your First Experience
@@ -187,11 +187,11 @@ export const ExperienceEditor: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-3 text-center text-xs text-text-tertiary"
+          className="mt-3 text-center text-xs text-macSubtext"
         >
-          <kbd className="px-1.5 py-0.5 bg-surface-elevated border border-border rounded">Ctrl</kbd>
+          <kbd className="px-1.5 py-0.5 bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)]">Ctrl</kbd>
           {' + '}
-          <kbd className="px-1.5 py-0.5 bg-surface-elevated border border-border rounded">E</kbd>
+          <kbd className="px-1.5 py-0.5 bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)]">E</kbd>
           {' to toggle preview mode'}
         </motion.div>
       )}

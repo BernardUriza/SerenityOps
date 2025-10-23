@@ -123,24 +123,24 @@ function App() {
     }
   };
 
-  // Loading state - Compact Precision
+  // Loading state - macOS Style
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-background">
+      <div className="flex items-center justify-center min-h-screen bg-macBg">
         <div className="text-center">
           <div className="mb-4 animate-pulse">
             <img
               src="/logo.svg"
               alt="SerenityOps"
               className="w-16 h-16 mx-auto"
-              style={{ filter: 'drop-shadow(0 0 12px rgba(46, 151, 255, 0.4))' }}
+              style={{ filter: 'drop-shadow(0 0 12px rgba(10, 132, 255, 0.4))' }}
             />
           </div>
-          <h2 className="text-lg font-semibold text-text-primary mb-1">SerenityOps</h2>
-          <p className="text-xs text-text-secondary">Loading intelligence system...</p>
+          <h2 className="text-lg font-semibold text-macText mb-1">SerenityOps</h2>
+          <p className="text-xs text-macSubtext">Loading intelligence system...</p>
           <div className="mt-3">
-            <div className="w-32 h-0.5 bg-surface-elevated rounded-full mx-auto overflow-hidden">
-              <div className="h-full bg-primary animate-pulse"></div>
+            <div className="w-32 h-0.5 bg-macPanel/60 rounded-full mx-auto overflow-hidden">
+              <div className="h-full bg-macAccent animate-pulse"></div>
             </div>
           </div>
         </div>
@@ -148,21 +148,21 @@ function App() {
     );
   }
 
-  // Error state - Compact Precision
+  // Error state - macOS Style
   if (!curriculum) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-background">
-        <div className="bg-surface-elevated border border-border-strong p-4 rounded max-w-sm">
+      <div className="flex items-center justify-center min-h-screen bg-macBg">
+        <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 p-4 rounded-mac max-w-sm shadow-[0_2px_6px_rgba(0,0,0,0.2)]">
           <div className="text-error mb-3">
             <svg className="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
           </div>
-          <h2 className="text-sm font-semibold text-text-primary mb-1 text-center">Failed to load curriculum</h2>
-          <p className="text-xs text-text-secondary text-center mb-3">
+          <h2 className="text-sm font-semibold text-macText mb-1 text-center">Failed to load curriculum</h2>
+          <p className="text-xs text-macSubtext text-center mb-3">
             Make sure the FastAPI backend is running on port 8000.
           </p>
-          <code className="block bg-surface p-2 rounded text-xs text-center text-text-tertiary">
+          <code className="block bg-macPanel/60 p-2 rounded-mac text-xs text-center text-macSubtext border border-macBorder/30">
             cd api && uvicorn main:app --reload
           </code>
         </div>
@@ -184,12 +184,12 @@ function App() {
   ];
 
   return (
-    <div className="flex h-screen bg-background text-text-primary">
-      {/* Compact Precision Sidebar - 52px */}
-      <div className="w-sidebar bg-surface border-r border-border flex flex-col">
-        {/* Header - Compact */}
-        <div className="h-header border-b border-border flex items-center justify-center">
-          <h1 className="text-sm font-bold text-primary">SO</h1>
+    <div className="flex h-screen bg-macBg text-macText">
+      {/* macOS Sidebar - Translucent */}
+      <div className="w-sidebar bg-macPanel/60 backdrop-blur-md border-r border-macBorder/40 flex flex-col">
+        {/* Header - macOS Style */}
+        <div className="h-header border-b border-macBorder/40 flex items-center justify-center">
+          <h1 className="text-sm font-bold text-macAccent">SO</h1>
         </div>
 
         {/* Navigation - Icon Only */}
@@ -199,28 +199,28 @@ function App() {
               key={item.id}
               onClick={() => setActiveTab(item.id)}
               title={item.label}
-              className={`w-full h-sidebar-icon flex items-center justify-center transition-colors relative group ${
+              className={`w-full h-sidebar-icon flex items-center justify-center transition-all duration-300 ease-mac relative group ${
                 activeTab === item.id
-                  ? 'bg-primary/10 border-l-2 border-primary text-primary'
-                  : 'text-text-tertiary hover:bg-surface-hover hover:text-text-secondary'
+                  ? 'bg-macAccent/20 border-l-2 border-macAccent text-macAccent shadow-[inset_0_0_6px_rgba(10,132,255,0.1)]'
+                  : 'text-slate-300 hover:bg-macHover/60 hover:text-macText'
               }`}
             >
               <span className="text-lg">{item.icon}</span>
-              {/* Tooltip */}
-              <span className="absolute left-full ml-2 px-2 py-1 bg-surface-elevated border border-border-strong rounded text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-tooltip">
+              {/* Tooltip - macOS Style */}
+              <span className="absolute left-full ml-2 px-2 py-1 bg-macPanel/90 backdrop-blur-sm border border-macBorder/40 rounded-md text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-tooltip shadow-md">
                 {item.label}
               </span>
             </button>
           ))}
         </nav>
 
-        {/* Actions - Compact */}
-        <div className="p-2 border-t border-border space-y-1">
+        {/* Actions - macOS Style */}
+        <div className="p-2 border-t border-macBorder/40 space-y-1">
           <button
             onClick={handleSave}
             disabled={saving}
             title="Save Changes (Ctrl+S)"
-            className="w-full h-7 bg-surface-elevated hover:bg-surface-hover text-text-primary text-xs font-medium rounded transition-colors disabled:opacity-40 border border-border-strong flex items-center justify-center"
+            className="w-full h-7 bg-macPanel/60 hover:bg-macHover/60 text-macText text-xs font-medium rounded-mac transition-all duration-300 ease-mac disabled:opacity-40 border border-macBorder/40 flex items-center justify-center"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
@@ -230,7 +230,7 @@ function App() {
             onClick={handleGenerateCV}
             disabled={generating}
             title="Generate CV"
-            className="w-full h-7 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded transition-colors disabled:opacity-40 flex items-center justify-center"
+            className="w-full h-7 bg-macAccent hover:bg-macAccent/80 text-white text-xs font-semibold rounded-mac transition-all duration-300 ease-mac disabled:opacity-40 flex items-center justify-center shadow-[0_2px_4px_rgba(10,132,255,0.2)]"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -306,10 +306,10 @@ function App() {
           )}
 
           {activeTab === 'finances' && (
-            <div className="bg-surface-elevated border border-border rounded p-3">
-              <h2 className="text-sm font-semibold text-text-primary mb-2">Finances</h2>
-              <div className="bg-surface border border-border rounded p-3">
-                <p className="text-xs text-text-secondary">
+            <div className="bg-macPanel/50 backdrop-blur-md border border-macBorder/30 rounded-mac p-3 shadow-[0_2px_6px_rgba(0,0,0,0.2)]">
+              <h2 className="text-sm font-semibold text-macText mb-2">Finances</h2>
+              <div className="bg-macPanel/60 border border-macBorder/40 rounded-mac p-3">
+                <p className="text-xs text-macSubtext">
                   Finances module coming soon. Will integrate with finances/structure.yaml
                 </p>
               </div>
@@ -322,13 +322,13 @@ function App() {
         </div>
       </div>
 
-      {/* Notification Toast - Compact Precision */}
+      {/* Notification Toast - macOS Style */}
       {notification && (
         <div className="fixed bottom-3 right-3 z-50 animate-slide-up">
-          <div className={`rounded p-2 max-w-sm border text-xs ${
+          <div className={`rounded-mac p-2.5 max-w-sm backdrop-blur-md border text-xs shadow-[0_4px_12px_rgba(0,0,0,0.3)] ${
             notification.type === 'success'
-              ? 'bg-success/10 border-success text-success'
-              : 'bg-error/10 border-error text-error'
+              ? 'bg-success/10 border-success/40 text-success'
+              : 'bg-error/10 border-error/40 text-error'
           }`}>
             <div className="flex items-start gap-2">
               {notification.type === 'success' ? (

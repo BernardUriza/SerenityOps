@@ -122,8 +122,8 @@ const CVManager: React.FC<CVManagerProps> = ({ apiBaseUrl }) => {
 
   if (loading) {
     return (
-      <div className="bg-surface-elevated border border-border rounded shadow-sm p-8">
-        <h2 className="text-sm font-bold text-slate-50 mb-1.5">Generated CVs</h2>
+      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6">
+        <h2 className="text-sm font-bold text-macText mb-4">Generated CVs</h2>
         <div className="flex items-center justify-center py-12">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
@@ -132,23 +132,23 @@ const CVManager: React.FC<CVManagerProps> = ({ apiBaseUrl }) => {
   }
 
   return (
-    <div className="bg-surface-elevated border border-border rounded shadow-sm p-8">
-      <div className="flex items-center justify-between mb-1.5">
+    <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6">
+      <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-sm font-bold text-slate-50">Generated CVs</h2>
-          <p className="text-text-tertiary mt-1">{cvs.length} CV{cvs.length !== 1 ? 's' : ''} generated</p>
+          <h2 className="text-sm font-bold text-macText">Generated CVs</h2>
+          <p className="text-macSubtext mt-1">{cvs.length} CV{cvs.length !== 1 ? 's' : ''} generated</p>
         </div>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-4">
           <button
             onClick={handleGenerate}
             disabled={generating}
-            className="px-2 py-2 bg-primary hover:bg-primary-hover text-white font-semibold rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+            className="px-3 py-2.5 bg-macAccent hover:bg-macAccent/80 text-white font-semibold rounded-mac transition-all duration-300 ease-mac disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_2px_6px_rgba(0,0,0,0.2)]"
           >
             {generating ? 'Starting...' : 'Generate CV'}
           </button>
           <button
             onClick={loadCVs}
-            className="px-2 py-2 text-primary hover:text-blue-300 hover:bg-surface-hover font-medium rounded transition-colors border border-border-strong hover:border-blue-500"
+            className="px-3 py-2.5 text-macAccent hover:text-blue-300 hover:bg-macHover/60 font-medium rounded-mac transition-all duration-300 ease-mac border border-macBorder/40 hover:border-blue-500"
           >
             Refresh
           </button>
@@ -156,7 +156,7 @@ const CVManager: React.FC<CVManagerProps> = ({ apiBaseUrl }) => {
       </div>
 
       {/* CV Job Progress Tracker */}
-      <div className="mb-1.5">
+      <div className="mb-4">
         <CVJobProgress
           onComplete={() => {
             // Reload CVs when generation is complete
@@ -173,33 +173,33 @@ const CVManager: React.FC<CVManagerProps> = ({ apiBaseUrl }) => {
           <svg className="w-16 h-16 text-slate-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          <h3 className="text-sm font-medium text-slate-50 mb-2">No CVs generated yet</h3>
-          <p className="text-text-tertiary">
+          <h3 className="text-sm font-medium text-macText mb-2">No CVs generated yet</h3>
+          <p className="text-macSubtext">
             Click "Generate CV" to create your first professional CV
           </p>
         </div>
       ) : (
-        <div className="space-y-2">
+        <div className="space-y-4">
           {cvs.map((cv, index) => (
             <div
               key={cv.filename}
-              className={`border rounded p-3 hover:shadow-md transition-shadow ${
-                index === 0 ? 'ring-2 ring-blue-500 bg-surface-hover border-blue-500' : 'bg-surface-elevated border-border'
+              className={`border rounded-mac p-3 backdrop-blur-md transition-all duration-300 ease-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] ${
+                index === 0 ? 'ring-2 ring-blue-500 bg-macHover/60 border-blue-500' : 'bg-macPanel/50 border-macBorder/40'
               }`}
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <h3 className="text-sm font-semibold text-slate-50">
+                    <h3 className="text-sm font-semibold text-macText">
                       {cv.filename}
                     </h3>
                     {index === 0 && (
-                      <span className="px-2 py-1 bg-primary text-white text-xs font-medium rounded">
+                      <span className="px-3 py-2 bg-macAccent text-white text-xs font-medium rounded-mac">
                         Latest
                       </span>
                     )}
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-text-tertiary">
+                  <div className="flex items-center gap-2 text-sm text-macSubtext">
                     <span className="flex items-center gap-1">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -212,7 +212,7 @@ const CVManager: React.FC<CVManagerProps> = ({ apiBaseUrl }) => {
                       </svg>
                       {cv.size_kb} KB
                     </span>
-                    <span className="px-2 py-0.5 bg-surface-hover text-text-secondary text-xs rounded uppercase font-medium">
+                    <span className="px-2 py-0.5 bg-macHover/60 text-macSubtext text-xs rounded-mac uppercase font-medium">
                       {cv.format}
                     </span>
                   </div>
@@ -221,7 +221,7 @@ const CVManager: React.FC<CVManagerProps> = ({ apiBaseUrl }) => {
                 <div className="flex items-center gap-2 ml-4">
                   <button
                     onClick={() => handlePreview(cv.filename)}
-                    className="px-2 py-2 bg-primary hover:bg-primary-hover text-white font-semibold rounded transition-colors flex items-center gap-2 shadow-sm"
+                    className="px-3 py-2.5 bg-macAccent hover:bg-macAccent/80 text-white font-semibold rounded-mac transition-all duration-300 ease-mac flex items-center gap-2 shadow-[0_2px_6px_rgba(0,0,0,0.2)]"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -232,7 +232,7 @@ const CVManager: React.FC<CVManagerProps> = ({ apiBaseUrl }) => {
 
                   <button
                     onClick={() => handleDownload(cv.filename)}
-                    className="px-2 py-2 bg-surface-hover hover:bg-slate-600 text-slate-50 font-medium rounded transition-colors flex items-center gap-2 border border-border-strong hover:border-slate-500"
+                    className="px-3 py-2.5 bg-macHover/60 hover:bg-slate-600 text-macText font-medium rounded-mac transition-all duration-300 ease-mac flex items-center gap-2 border border-macBorder/40 hover:border-slate-500"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -243,7 +243,7 @@ const CVManager: React.FC<CVManagerProps> = ({ apiBaseUrl }) => {
                   <button
                     onClick={() => handleDelete(cv.filename)}
                     disabled={deleting === cv.filename}
-                    className="px-2 py-2 bg-red-600 hover:bg-red-500 text-white font-medium rounded transition-colors flex items-center gap-2 disabled:opacity-50 shadow-sm"
+                    className="px-3 py-2.5 bg-red-600 hover:bg-red-500 text-white font-medium rounded-mac transition-all duration-300 ease-mac flex items-center gap-2 disabled:opacity-50 shadow-[0_2px_6px_rgba(0,0,0,0.2)]"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

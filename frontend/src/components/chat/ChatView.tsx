@@ -103,23 +103,23 @@ export const ChatView: React.FC<ChatViewProps> = ({ conversationId, apiBaseUrl }
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-surface h-full">
+    <div className="flex-1 flex flex-col bg-macBg h-full">
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-2">
+      <div className="flex-1 overflow-y-auto p-3 space-y-4">
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center max-w-sm">
               <div className="text-4xl mb-3">🤖</div>
-              <h3 className="text-sm font-semibold text-text-primary mb-1">
+              <h3 className="text-sm font-semibold text-macText mb-1">
                 Hi! I'm SerenityOps
               </h3>
-              <p className="text-xs text-text-secondary mb-3">
+              <p className="text-xs text-macSubtext mb-3">
                 Your career intelligence assistant. I have full context of your CV, projects, and
                 opportunities.
               </p>
-              <div className="bg-surface-elevated border border-border rounded p-3 text-left">
-                <p className="text-xs text-text-primary font-medium mb-2">You can ask me to:</p>
-                <ul className="space-y-1 text-xs text-text-secondary">
+              <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac p-3 text-left shadow-[0_2px_6px_rgba(0,0,0,0.2)]">
+                <p className="text-xs text-macText font-medium mb-2">You can ask me to:</p>
+                <ul className="space-y-1 text-xs text-macSubtext">
                   <li>• Track new projects and experiences</li>
                   <li>• Suggest CV improvements</li>
                   <li>• Analyze job opportunities</li>
@@ -137,10 +137,10 @@ export const ChatView: React.FC<ChatViewProps> = ({ conversationId, apiBaseUrl }
                 className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-3xl rounded p-2 ${
+                  className={`max-w-3xl rounded-[12px] p-2 backdrop-blur-md transition-all duration-300 ease-mac ${
                     msg.role === 'user'
-                      ? 'bg-primary text-white'
-                      : 'bg-surface-elevated border border-border text-text-primary'
+                      ? 'bg-macAccent text-white shadow-[inset_0_0_6px_rgba(10,132,255,0.1)]'
+                      : 'bg-macPanel/70 border border-macBorder/40 text-macText'
                   }`}
                 >
                   <div className="flex items-start">
@@ -150,8 +150,8 @@ export const ChatView: React.FC<ChatViewProps> = ({ conversationId, apiBaseUrl }
                     <div className="flex-1">
                       <ChatMessage content={msg.content} role={msg.role} apiBaseUrl={apiBaseUrl} />
                       <p
-                        className={`text-xs mt-1 ${
-                          msg.role === 'user' ? 'text-white/70' : 'text-text-tertiary'
+                        className={`text-xs mt-2 ${
+                          msg.role === 'user' ? 'text-white/70' : 'text-macSubtext'
                         }`}
                       >
                         {new Date(msg.timestamp).toLocaleTimeString()}
@@ -164,15 +164,15 @@ export const ChatView: React.FC<ChatViewProps> = ({ conversationId, apiBaseUrl }
             ))}
             {sending && (
               <div className="flex justify-start">
-                <div className="bg-surface-elevated border border-border rounded p-2 max-w-3xl">
+                <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-[12px] p-2 max-w-3xl">
                   <div className="flex items-center space-x-2">
-                    <div className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce"></div>
+                    <div className="w-1.5 h-1.5 bg-macAccent rounded-full animate-bounce"></div>
                     <div
-                      className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce"
+                      className="w-1.5 h-1.5 bg-macAccent rounded-full animate-bounce"
                       style={{ animationDelay: '0.1s' }}
                     ></div>
                     <div
-                      className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce"
+                      className="w-1.5 h-1.5 bg-macAccent rounded-full animate-bounce"
                       style={{ animationDelay: '0.2s' }}
                     ></div>
                   </div>
@@ -185,21 +185,21 @@ export const ChatView: React.FC<ChatViewProps> = ({ conversationId, apiBaseUrl }
       </div>
 
       {/* Input Area */}
-      <div className="p-2 border-t border-border bg-surface-elevated">
+      <div className="p-2 border-t border-macBorder/40 bg-macPanel/70 backdrop-blur-md">
         <div className="flex gap-2">
           <textarea
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Type your message... (Shift+Enter for new line)"
-            className="flex-1 px-2 py-1.5 bg-surface border border-border rounded text-text-primary text-xs placeholder-text-tertiary focus:outline-none focus:ring-1 focus:ring-primary/50 focus:border-primary resize-none transition-all"
+            className="flex-1 px-3 py-2 bg-macPanel/60 border border-macBorder/40 rounded-mac text-macText text-xs placeholder-macSubtext focus:outline-none focus:ring-1 focus:ring-macAccent/40 focus:border-macAccent resize-none transition-all duration-300 ease-mac"
             rows={2}
             disabled={sending}
           />
           <button
             onClick={handleSendMessage}
             disabled={sending || !inputMessage.trim()}
-            className="px-3 py-1.5 bg-primary hover:bg-primary-hover text-white text-xs font-semibold rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+            className="px-3 py-1.5 bg-macAccent hover:bg-macAccent/80 text-white text-xs font-semibold rounded-mac transition-all duration-300 ease-mac disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
           >
             {sending ? (
               <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">

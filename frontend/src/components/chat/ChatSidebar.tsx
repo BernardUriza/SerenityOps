@@ -25,16 +25,16 @@ export const ChatSidebar: React.FC = () => {
   const archivedCount = chats.filter((c) => c.archived).length;
 
   return (
-    <div className="w-chat-sidebar bg-surface border-r border-border flex flex-col h-full">
+    <div className="w-chat-sidebar bg-macPanel/50 backdrop-blur-md border-r border-macBorder/40 flex flex-col h-full">
       {/* Header - Compact */}
-      <div className="h-header px-2 border-b border-border flex items-center justify-between">
-        <div className="flex items-center gap-1.5">
-          <MessageSquare size={14} className="text-primary" />
-          <h2 className="text-sm font-semibold text-text-primary">Chats</h2>
+      <div className="h-header px-2 border-b border-macBorder/40 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <MessageSquare size={14} className="text-macAccent" />
+          <h2 className="text-sm font-semibold text-macText">Chats</h2>
         </div>
         <button
           onClick={handleNewChat}
-          className="h-6 w-6 bg-success hover:bg-success-hover rounded flex items-center justify-center transition-colors"
+          className="h-6 w-6 bg-macAccent hover:bg-macAccent/80 rounded-mac flex items-center justify-center transition-all duration-300 ease-mac"
           title="New Chat (Cmd+N)"
         >
           <Plus size={12} className="text-white" />
@@ -48,11 +48,11 @@ export const ChatSidebar: React.FC = () => {
 
       {/* Sort controls - Compact */}
       <div className="px-2 pb-2 flex items-center gap-1">
-        <ArrowUpDown size={11} className="text-text-tertiary flex-shrink-0" />
+        <ArrowUpDown size={11} className="text-macSubtext flex-shrink-0" />
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as any)}
-          className="flex-1 h-6 bg-surface-elevated border border-border rounded px-1.5 text-xs text-text-primary focus:outline-none focus:ring-1 focus:ring-primary/50 transition-colors"
+          className="flex-1 h-6 bg-macPanel/60 backdrop-blur-md border border-macBorder/40 rounded-mac px-1.5 text-xs text-macText focus:outline-none focus:ring-1 focus:ring-macAccent/40 focus:border-macAccent transition-all duration-300 ease-mac"
         >
           <option value="date-desc">Latest First</option>
           <option value="date-asc">Oldest First</option>
@@ -67,7 +67,7 @@ export const ChatSidebar: React.FC = () => {
       </div>
 
       {/* Footer stats - Compact */}
-      <div className="h-7 px-2 border-t border-border bg-surface-elevated flex items-center justify-between text-xs text-text-tertiary">
+      <div className="h-7 px-2 border-t border-macBorder/40 bg-macPanel/70 backdrop-blur-md flex items-center justify-between text-xs text-macSubtext">
         <span>{chats.length} chats</span>
         <span>{totalMessages} msgs</span>
         {archivedCount > 0 && <span>{archivedCount} archived</span>}

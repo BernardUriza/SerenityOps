@@ -63,7 +63,7 @@ export const ProjectsManager: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 size={16} className="animate-spin text-primary" />
+        <Loader2 size={16} className="animate-spin text-macAccent" />
       </div>
     );
   }
@@ -74,13 +74,13 @@ export const ProjectsManager: React.FC = () => {
       <div className="flex justify-between items-center mb-3">
         <div>
           <div className="flex items-center gap-2">
-            <Rocket size={14} className="text-primary" />
-            <h1 className="text-base font-bold text-text-primary">Projects</h1>
+            <Rocket size={14} className="text-macAccent" />
+            <h1 className="text-base font-bold text-macText">Projects</h1>
           </div>
-          <div className="flex items-center gap-2 text-xs text-text-tertiary mt-1">
+          <div className="flex items-center gap-2 text-xs text-macSubtext mt-1">
             <span>{projects.length} projects</span>
             {isSaving && (
-              <span className="flex items-center gap-1 text-primary">
+              <span className="flex items-center gap-1 text-macAccent">
                 <Loader2 size={12} className="animate-spin" />
                 Saving...
               </span>
@@ -101,7 +101,7 @@ export const ProjectsManager: React.FC = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleAddProject}
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-success text-white rounded font-medium text-xs hover:bg-success-hover transition-colors"
+          className="flex items-center gap-4 px-3 py-1.5 bg-success text-white rounded-mac font-medium text-xs hover:bg-success-hover transition-all duration-300 ease-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)]"
         >
           <Plus size={14} />
           Add Project
@@ -117,11 +117,11 @@ export const ProjectsManager: React.FC = () => {
             exit={{ opacity: 0 }}
             className="text-center py-8"
           >
-            <Rocket size={24} className="text-text-tertiary mx-auto mb-3" />
-            <p className="text-text-secondary text-sm mb-3">No projects yet</p>
+            <Rocket size={24} className="text-macSubtext mx-auto mb-3" />
+            <p className="text-macSubtext text-sm mb-3">No projects yet</p>
             <button
               onClick={handleAddProject}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary text-white rounded font-medium text-xs hover:bg-primary-hover transition-colors"
+              className="inline-flex items-center gap-4 px-3 py-1.5 bg-macAccent text-white rounded-mac font-medium text-xs hover:bg-macAccent/80 transition-all duration-300 ease-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)]"
             >
               <Plus size={14} />
               Add Your First Project
@@ -144,7 +144,7 @@ export const ProjectsManager: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-3 text-center text-xs text-text-tertiary"
+          className="mt-3 text-center text-xs text-macSubtext"
         >
           Projects auto-save after 3 seconds of inactivity
         </motion.div>

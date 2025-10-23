@@ -5,13 +5,104 @@
 
 meta:
   version: "1.0.0"
-  last_updated: "2025-10-22"
+  last_updated: "2025-10-23"
   owner: "Bernard Orozco"
   timezone: "America/Mexico_City"
 
 pipeline:
   # Active opportunities organized by stage
   # Stages: discovered | applied | interviewing | offer | closed
+
+  - id: "paylocity-001"
+    company: "Paylocity Corporation"
+    role: "Senior Engineer Software Testing - Workflows"
+    stage: "interviewing"
+    priority: "high"  # high | medium | low
+    outcome: null  # declined | rejected | accepted | withdrawn
+
+    details:
+      description: "Design and implement comprehensive automated testing solutions across functional, API, performance, and security domains. Develop and maintain test plans. Integrate tests into CI/CD pipelines. Expand automated test coverage."
+      location: "Remote - Based in Guadalajara, Jalisco (Required)"
+      salary_range: "To be discussed"
+      work_schedule: "Full-time, within 4 hours of EST"
+      sector: "HR & Payroll SaaS"
+      tech_stack:
+        - "Jest"
+        - "Cypress"
+        - "Playwright"
+        - "Selenium"
+        - "API Testing"
+        - "CI/CD"
+        - "Git"
+        - "SQL"
+        - "Agile"
+        - "Test Automation"
+        - "Performance Testing"
+        - "Security Testing"
+      benefits:
+        - "Remote work"
+        - "Award-winning company (G2 Top 100)"
+        - "Modern tech stack"
+        - "Growth opportunities"
+      requirements:
+        - "Bachelor's degree in Computer Science or related field"
+        - "Minimum 2 years professional software engineering experience"
+        - "Proficiency in Cypress, Playwright, or Selenium"
+        - "Strong API testing knowledge"
+        - "CI/CD tools experience"
+        - "Git expertise"
+        - "SQL knowledge"
+        - "Based in Guadalajara"
+
+    timeline:
+      discovered: "2025-10-23"
+      applied: "2025-10-22"
+      first_interview: "2025-10-24"  # TOMORROW!
+      final_interview: null
+      offer_received: null
+      decision_deadline: null
+      closed: null
+
+    contacts:
+      - name: "Paylocity Recruiter"
+        role: "Recruiter"
+        source: "LinkedIn/Job Board"
+
+    notes:
+      - date: "2025-10-23"
+        content: "FAVORITE OPPORTUNITY! Interview scheduled for tomorrow. Company rating 3.2/5. This is a QA/Testing role requiring automation expertise. I have Jest + Cypress experience with 90% coverage achieved at JLL on JLLGPT project."
+      - date: "2025-10-23"
+        content: "PREPARATION COMPLETED: Created comprehensive interview guide at opportunities/paylocity_interview_prep.md and quick brief at opportunities/paylocity_quick_brief.md. Updated CV to highlight testing experience."
+      - date: "2025-10-23"
+        content: "KEY STRENGTHS: 10+ years experience (5X requirement), Jest + Cypress expertise, 90% test coverage on JLLGPT, CI/CD integration experience, based in Guadalajara (required location)."
+      - date: "2025-10-23"
+        content: "GAP TO ADDRESS: Limited Selenium/Playwright production experience (but Cypress is conceptually identical). Performance/Security testing limited (growth area)."
+      - date: "2025-10-23"
+        content: "STRATEGY: Lead with 90% coverage achievement. Emphasize end-to-end ownership of quality. Position Selenium/Playwright as natural extension of Cypress expertise."
+
+    fit_analysis:
+      technical_match: 0.85  # Strong match - have Jest/Cypress, need to learn Selenium/Playwright
+      cultural_match: 0.90   # Remote, modern company, growth-focused
+      growth_potential: 0.95 # G2 Top 100 company, modern QA practices, room to expand into performance/security testing
+      decline_reason: null
+      red_flags:
+        - "Company rating only 3.2/5 stars (check Glassdoor reviews)"
+        - "QA role might have less development opportunities"
+      green_flags:
+        - "REMOTE from Guadalajara (perfect location match)"
+        - "G2 Top 100 Software Companies (prestigious)"
+        - "Modern testing stack (Jest, Cypress, Playwright)"
+        - "HR/Payroll domain is stable and growing"
+        - "Experience requirement met 5X over (10 years vs 2 required)"
+        - "I have exact tools they want (Jest, Cypress)"
+        - "90% test coverage at JLL proves capability"
+        - "CI/CD integration experience is critical differentiator"
+        - "Employer of Record model shows global expansion"
+
+    preparation_docs:
+      - "opportunities/paylocity_interview_prep.md"  # Full preparation guide
+      - "opportunities/paylocity_quick_brief.md"     # 5-minute pre-interview brief
+      - "curriculum/versions/cv_paylocity_2025-10-23.html"  # Tailored CV
 
   - id: "toka-001"
     company: "Grupo Toka Internacional"
@@ -104,10 +195,10 @@ active_count:
   # Auto-calculated metrics
   discovered: 0
   applied: 0
-  interviewing: 0
+  interviewing: 1  # Paylocity - Interview tomorrow!
   offer: 0
   closed: 1
-  total: 0
+  total: 1
 
 goals:
   weekly:

@@ -30,7 +30,12 @@
       "Bash(pnpm run build:*)",
       "Bash(node scripts/generate_favicon.js:*)",
       "Bash(lsof:*)",
-      "Bash(git branch:*)"
+      "Bash(git branch:*)",
+      "Read(//private/tmp/**)",
+      "Bash(ProjectCard.tsx TechBadge.tsx TechStackSelector.tsx AchievementsEditor.tsx)",
+      "Bash(ActionExecutor.tsx CVJobProgress.tsx CVManager.tsx EducationList.tsx ExperienceList.tsx ProfileForm.tsx QuickImport.tsx SkillsEditor.tsx)",
+      "Bash(find:*)",
+      "Bash({} ;)"
     ],
     "deny": [],
     "ask": []

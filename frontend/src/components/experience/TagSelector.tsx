@@ -103,7 +103,7 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0, opacity: 0 }}
               whileHover={{ scale: 1.05 }}
-              className="flex items-center gap-1 px-2 py-1 bg-surface-elevated border border-border rounded text-xs group"
+              className="flex items-center gap-1 px-3 py-2 bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac text-xs group shadow-[0_2px_6px_rgba(0,0,0,0.2)] transition-all duration-300 ease-mac"
               style={{ borderColor: icon?.color ? `${icon.color}40` : undefined }}
             >
               {icon?.emoji && <span className="text-sm">{icon.emoji}</span>}
@@ -115,10 +115,10 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
                   style={{ filter: 'brightness(0.9)' }}
                 />
               )}
-              <span className="text-text-primary">{tag}</span>
+              <span className="text-macText">{tag}</span>
               <button
                 onClick={() => handleRemoveTag(tag)}
-                className="ml-0.5 text-text-tertiary hover:text-error transition-colors opacity-0 group-hover:opacity-100"
+                className="ml-0.5 text-macSubtext hover:text-error transition-all duration-300 ease-mac opacity-0 group-hover:opacity-100"
               >
                 <X size={11} />
               </button>
@@ -133,15 +133,15 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setIsAdding(true)}
-          className="flex items-center gap-1 px-2 py-1 bg-surface-elevated/50 border border-border border-dashed rounded text-xs text-text-tertiary hover:text-primary hover:border-primary transition-colors"
+          className="flex items-center gap-1 px-3 py-2 bg-macPanel/50 backdrop-blur-md border border-macBorder/40 border-dashed rounded-mac text-xs text-macSubtext hover:text-macAccent hover:border-macAccent transition-all duration-300 ease-mac"
         >
           <Plus size={11} />
           <span>Add tech</span>
         </motion.button>
       ) : (
         <div className="relative">
-          <div className="flex items-center gap-1.5 px-2 py-1 bg-surface-elevated border border-primary rounded">
-            <Search size={11} className="text-primary" />
+          <div className="flex items-center gap-4 px-3 py-2 bg-macPanel/70 backdrop-blur-md border border-macAccent rounded-mac shadow-[inset_0_0_6px_rgba(10,132,255,0.1)]">
+            <Search size={11} className="text-macAccent" />
             <input
               type="text"
               value={searchQuery}
@@ -153,7 +153,7 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
                 }, 200);
               }}
               placeholder="Search tech..."
-              className="bg-transparent outline-none text-xs text-text-primary w-24"
+              className="bg-transparent outline-none text-xs text-macText w-24"
               autoFocus
             />
           </div>
@@ -163,13 +163,13 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="absolute top-full left-0 mt-1 w-56 bg-surface-elevated border border-border rounded shadow-lg z-10 max-h-48 overflow-y-auto"
+              className="absolute top-full left-0 mt-2 w-56 bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] z-10 max-h-48 overflow-y-auto"
             >
               {searchResults.map((result) => (
                 <button
                   key={result.name}
                   onClick={() => handleAddTag(result.name, result)}
-                  className="w-full flex items-center gap-1.5 px-2 py-1.5 hover:bg-surface-hover text-left transition-colors"
+                  className="w-full flex items-center gap-4 px-3 py-2 hover:bg-macHover/60 text-left transition-all duration-300 ease-mac"
                 >
                   {result.emoji && <span className="text-sm">{result.emoji}</span>}
                   {result.svg_url && (
@@ -180,8 +180,8 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
                       style={{ filter: 'brightness(0.9)' }}
                     />
                   )}
-                  <span className="text-xs text-text-primary">{result.name}</span>
-                  <span className="ml-auto text-[10px] text-text-tertiary">{result.category}</span>
+                  <span className="text-xs text-macText">{result.name}</span>
+                  <span className="ml-auto text-[10px] text-macSubtext">{result.category}</span>
                 </button>
               ))}
             </motion.div>

@@ -1,18 +1,4 @@
 import React from 'react';
-import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  Grid,
-  TextField,
-  Button,
-  IconButton,
-  Chip,
-  FormControlLabel,
-  Checkbox
-} from '@mui/material';
-import { Add, Delete } from '@mui/icons-material';
 
 interface ExperienceListProps {
   experiences: any[];
@@ -66,150 +52,197 @@ const ExperienceList: React.FC<ExperienceListProps> = ({ experiences, onChange }
   };
 
   return (
-    <Box>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <Typography variant="h5">Work Experience</Typography>
-        <Button variant="contained" startIcon={<Add />} onClick={handleAddExperience}>
+    <div className="space-y-4">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-semibold text-macText">Work Experience</h2>
+        <button
+          onClick={handleAddExperience}
+          className="flex items-center gap-2 px-4 py-2 bg-macAccent hover:bg-macAccent/80 text-white rounded-mac transition-all duration-300 ease-mac shadow-sm"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
           Add Experience
-        </Button>
-      </Box>
+        </button>
+      </div>
 
+      {/* Experience Cards */}
       {experiences.map((exp, index) => (
-        <Card key={index} sx={{ mb: 3 }}>
-          <CardContent>
-            <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-              <Typography variant="h6">Experience {index + 1}</Typography>
-              <IconButton color="error" onClick={() => handleDelete(index)}>
-                <Delete />
-              </IconButton>
-            </Box>
+        <div
+          key={index}
+          className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-5"
+        >
+          {/* Card Header */}
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-base font-semibold text-macText">Experience {index + 1}</h3>
+            <button
+              onClick={() => handleDelete(index)}
+              className="p-2 hover:bg-red-500/10 rounded-mac transition-all duration-300 ease-mac text-red-500"
+              aria-label="Delete experience"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          </div>
 
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  label="Company"
-                  value={exp.company || ''}
-                  onChange={(e) => handleUpdate(index, 'company', e.target.value)}
+          {/* Form Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Company */}
+            <div>
+              <label className="block text-xs text-macSubtext mb-1.5">Company</label>
+              <input
+                type="text"
+                value={exp.company || ''}
+                onChange={(e) => handleUpdate(index, 'company', e.target.value)}
+                className="w-full px-3 py-2 bg-macPanel/60 border border-macBorder/40 rounded-mac text-macText text-sm focus:border-macAccent focus:ring-1 focus:ring-macAccent/40 focus:outline-none transition-all duration-300 ease-mac"
+              />
+            </div>
+
+            {/* Role */}
+            <div>
+              <label className="block text-xs text-macSubtext mb-1.5">Role</label>
+              <input
+                type="text"
+                value={exp.role || ''}
+                onChange={(e) => handleUpdate(index, 'role', e.target.value)}
+                className="w-full px-3 py-2 bg-macPanel/60 border border-macBorder/40 rounded-mac text-macText text-sm focus:border-macAccent focus:ring-1 focus:ring-macAccent/40 focus:outline-none transition-all duration-300 ease-mac"
+              />
+            </div>
+
+            {/* Location */}
+            <div className="md:col-span-2 lg:col-span-1">
+              <label className="block text-xs text-macSubtext mb-1.5">Location</label>
+              <input
+                type="text"
+                value={exp.location || ''}
+                onChange={(e) => handleUpdate(index, 'location', e.target.value)}
+                className="w-full px-3 py-2 bg-macPanel/60 border border-macBorder/40 rounded-mac text-macText text-sm focus:border-macAccent focus:ring-1 focus:ring-macAccent/40 focus:outline-none transition-all duration-300 ease-mac"
+              />
+            </div>
+
+            {/* Start Date */}
+            <div className="md:col-span-1">
+              <label className="block text-xs text-macSubtext mb-1.5">Start Date</label>
+              <input
+                type="text"
+                placeholder="YYYY-MM"
+                value={exp.start_date || ''}
+                onChange={(e) => handleUpdate(index, 'start_date', e.target.value)}
+                className="w-full px-3 py-2 bg-macPanel/60 border border-macBorder/40 rounded-mac text-macText text-sm focus:border-macAccent focus:ring-1 focus:ring-macAccent/40 focus:outline-none transition-all duration-300 ease-mac"
+              />
+            </div>
+
+            {/* End Date */}
+            <div className="md:col-span-2 lg:col-span-1">
+              <label className="block text-xs text-macSubtext mb-1.5">End Date</label>
+              <input
+                type="text"
+                placeholder="YYYY-MM or leave empty"
+                value={exp.end_date || ''}
+                onChange={(e) => handleUpdate(index, 'end_date', e.target.value || null)}
+                disabled={exp.current}
+                className="w-full px-3 py-2 bg-macPanel/60 border border-macBorder/40 rounded-mac text-macText text-sm focus:border-macAccent focus:ring-1 focus:ring-macAccent/40 focus:outline-none transition-all duration-300 ease-mac disabled:opacity-50 disabled:cursor-not-allowed"
+              />
+            </div>
+
+            {/* Currently Working Checkbox */}
+            <div className="md:col-span-2">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={exp.current || false}
+                  onChange={(e) => {
+                    handleUpdate(index, 'current', e.target.checked);
+                    if (e.target.checked) {
+                      handleUpdate(index, 'end_date', null);
+                    }
+                  }}
+                  className="w-4 h-4 rounded border-macBorder/40 text-macAccent focus:ring-macAccent/40 focus:ring-offset-0 cursor-pointer"
                 />
-              </Grid>
+                <span className="text-sm text-macText">Currently working here</span>
+              </label>
+            </div>
 
-              <Grid item xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  label="Role"
-                  value={exp.role || ''}
-                  onChange={(e) => handleUpdate(index, 'role', e.target.value)}
-                />
-              </Grid>
+            {/* Description */}
+            <div className="md:col-span-2">
+              <label className="block text-xs text-macSubtext mb-1.5">Description</label>
+              <textarea
+                value={exp.description || ''}
+                onChange={(e) => handleUpdate(index, 'description', e.target.value)}
+                rows={3}
+                className="w-full px-3 py-2 bg-macPanel/60 border border-macBorder/40 rounded-mac text-macText text-sm focus:border-macAccent focus:ring-1 focus:ring-macAccent/40 focus:outline-none transition-all duration-300 ease-mac resize-y"
+              />
+            </div>
 
-              <Grid item xs={12} md={4}>
-                <TextField
-                  fullWidth
-                  label="Location"
-                  value={exp.location || ''}
-                  onChange={(e) => handleUpdate(index, 'location', e.target.value)}
-                />
-              </Grid>
-
-              <Grid item xs={12} md={4}>
-                <TextField
-                  fullWidth
-                  label="Start Date"
-                  placeholder="YYYY-MM"
-                  value={exp.start_date || ''}
-                  onChange={(e) => handleUpdate(index, 'start_date', e.target.value)}
-                />
-              </Grid>
-
-              <Grid item xs={12} md={4}>
-                <TextField
-                  fullWidth
-                  label="End Date"
-                  placeholder="YYYY-MM or leave empty"
-                  value={exp.end_date || ''}
-                  onChange={(e) => handleUpdate(index, 'end_date', e.target.value || null)}
-                  disabled={exp.current}
-                />
-              </Grid>
-
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={exp.current || false}
-                      onChange={(e) => {
-                        handleUpdate(index, 'current', e.target.checked);
-                        if (e.target.checked) {
-                          handleUpdate(index, 'end_date', null);
-                        }
-                      }}
-                    />
-                  }
-                  label="Currently working here"
-                />
-              </Grid>
-
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={3}
-                  label="Description"
-                  value={exp.description || ''}
-                  onChange={(e) => handleUpdate(index, 'description', e.target.value)}
-                />
-              </Grid>
-
-              <Grid item xs={12}>
-                <Typography variant="subtitle2" gutterBottom>
-                  Achievements
-                </Typography>
+            {/* Achievements */}
+            <div className="md:col-span-2">
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-xs text-macSubtext">Achievements</label>
+              </div>
+              <div className="space-y-2">
                 {exp.achievements?.map((achievement: string, achIndex: number) => (
-                  <Box key={achIndex} display="flex" gap={1} mb={1}>
-                    <TextField
-                      fullWidth
-                      size="small"
+                  <div key={achIndex} className="flex items-center gap-2">
+                    <input
+                      type="text"
                       value={achievement}
                       onChange={(e) => handleAchievementChange(index, achIndex, e.target.value)}
                       placeholder="Achievement description"
+                      className="flex-1 px-3 py-2 bg-macPanel/60 border border-macBorder/40 rounded-mac text-macText text-sm focus:border-macAccent focus:ring-1 focus:ring-macAccent/40 focus:outline-none transition-all duration-300 ease-mac"
                     />
-                    <IconButton
-                      size="small"
+                    <button
                       onClick={() => {
                         const updated = [...experiences];
                         updated[index].achievements.splice(achIndex, 1);
                         onChange(updated);
                       }}
+                      className="p-2 hover:bg-red-500/10 rounded-mac transition-all duration-300 ease-mac text-red-500"
+                      aria-label="Delete achievement"
                     >
-                      <Delete />
-                    </IconButton>
-                  </Box>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  </div>
                 ))}
-                <Button size="small" onClick={() => handleAddAchievement(index)}>
+                <button
+                  onClick={() => handleAddAchievement(index)}
+                  className="px-3 py-1.5 text-sm text-macAccent hover:bg-macAccent/10 rounded-mac transition-all duration-300 ease-mac"
+                >
                   Add Achievement
-                </Button>
-              </Grid>
+                </button>
+              </div>
+            </div>
 
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Tech Stack (comma-separated)"
-                  value={exp.tech_stack?.join(', ') || ''}
-                  onChange={(e) => handleTechStackChange(index, e.target.value)}
-                  helperText="e.g., React, TypeScript, Node.js"
-                />
-                <Box mt={1}>
-                  {exp.tech_stack?.map((tech: string, i: number) => (
-                    <Chip key={i} label={tech} size="small" sx={{ mr: 0.5, mb: 0.5 }} />
+            {/* Tech Stack */}
+            <div className="md:col-span-2">
+              <label className="block text-xs text-macSubtext mb-1.5">Tech Stack (comma-separated)</label>
+              <input
+                type="text"
+                value={exp.tech_stack?.join(', ') || ''}
+                onChange={(e) => handleTechStackChange(index, e.target.value)}
+                placeholder="e.g., React, TypeScript, Node.js"
+                className="w-full px-3 py-2 bg-macPanel/60 border border-macBorder/40 rounded-mac text-macText text-sm focus:border-macAccent focus:ring-1 focus:ring-macAccent/40 focus:outline-none transition-all duration-300 ease-mac"
+              />
+              <p className="mt-1 text-xs text-macSubtext">e.g., React, TypeScript, Node.js</p>
+              {exp.tech_stack && exp.tech_stack.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {exp.tech_stack.map((tech: string, i: number) => (
+                    <span
+                      key={i}
+                      className="px-2 py-1 bg-macPanel/60 backdrop-blur-md border border-macBorder/40 rounded-mac text-xs text-macSubtext"
+                    >
+                      {tech}
+                    </span>
                   ))}
-                </Box>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       ))}
-    </Box>
+    </div>
   );
 };
 
