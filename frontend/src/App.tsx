@@ -79,10 +79,26 @@ function App() {
   const handleSave = async () => {
     try {
       setSaving(true);
+
+      // Fetch current curriculum to preserve data managed by other stores (experience, projects)
+      const currentResponse = await fetch(`${API_BASE_URL}/api/curriculum`);
+      if (!currentResponse.ok) throw new Error('Failed to fetch current curriculum');
+      const currentCurriculum = await currentResponse.json();
+
+      // Merge: preserve experience/projects from current, update personal/summary from local state
+      const updatedCurriculum = {
+        ...currentCurriculum,
+        personal: curriculum.personal,
+        summary: curriculum.summary,
+        // Preserve these fields that are managed by separate stores
+        experience: currentCurriculum.experience,
+        projects: currentCurriculum.projects,
+      };
+
       const response = await fetch(`${API_BASE_URL}/api/curriculum`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(curriculum)
+        body: JSON.stringify(updatedCurriculum)
       });
 
       if (!response.ok) throw new Error('Failed to save curriculum');
@@ -123,25 +139,44 @@ function App() {
     }
   };
 
-  // Loading state - macOS Style
+  // Loading state - Enhanced with Liquid Glass
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-macBg">
-        <div className="text-center">
-          <div className="mb-4 animate-pulse">
+      <div className="flex items-center justify-center min-h-screen bg-macBg relative overflow-hidden">
+        {/* Animated background */}
+        <div className="fixed inset-0 gradient-mesh opacity-40"></div>
+        <div className="gradient-orb fixed top-[10%] right-[30%] w-[600px] h-[600px] bg-macAccent/30"></div>
+
+        <div className="text-center relative z-10 animate-bounce-in">
+          <div className="mb-6 relative">
             <img
               src="/logo.svg"
               alt="SerenityOps"
-              className="w-16 h-16 mx-auto"
-              style={{ filter: 'drop-shadow(0 0 12px rgba(10, 132, 255, 0.4))' }}
+              className="w-20 h-20 mx-auto animate-glow-pulse"
+              style={{ filter: 'drop-shadow(0 0 20px rgba(10, 132, 255, 0.6))' }}
             />
-          </div>
-          <h2 className="text-lg font-semibold text-macText mb-1">SerenityOps</h2>
-          <p className="text-xs text-macSubtext">Loading intelligence system...</p>
-          <div className="mt-3">
-            <div className="w-32 h-0.5 bg-macPanel/60 rounded-full mx-auto overflow-hidden">
-              <div className="h-full bg-macAccent animate-pulse"></div>
+            {/* Orbiting particles */}
+            <div className="absolute top-0 left-1/2 w-full h-full -translate-x-1/2">
+              <div className="particle absolute top-0 left-1/4 animate-float"></div>
+              <div className="particle absolute top-1/4 right-1/4 animate-float" style={{ animationDelay: '1s' }}></div>
+              <div className="particle absolute bottom-1/4 left-1/3 animate-float" style={{ animationDelay: '2s' }}></div>
             </div>
+          </div>
+          <h2 className="text-lg font-semibold text-gradient mb-2">SerenityOps</h2>
+          <p className="text-xs text-macSubtext mb-4">Loading intelligence system...</p>
+
+          {/* Enhanced loading bar */}
+          <div className="mt-4 px-4">
+            <div className="w-48 h-1 liquid-glass rounded-full mx-auto overflow-hidden relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-macAccent via-cyan-400 to-macAccent animate-shimmer"></div>
+            </div>
+          </div>
+
+          {/* Skeleton preview */}
+          <div className="mt-8 liquid-glass rounded-mac p-4 w-64 mx-auto">
+            <div className="skeleton skeleton-title mb-3"></div>
+            <div className="skeleton skeleton-text mb-2"></div>
+            <div className="skeleton skeleton-text w-3/4"></div>
           </div>
         </div>
       </div>
@@ -184,45 +219,72 @@ function App() {
   ];
 
   return (
-    <div className="flex h-screen bg-macBg text-macText">
-      {/* macOS Sidebar - Translucent */}
-      <div className="w-sidebar bg-macPanel/60 backdrop-blur-md border-r border-macBorder/40 flex flex-col">
-        {/* Header - macOS Style */}
-        <div className="h-header border-b border-macBorder/40 flex items-center justify-center">
-          <h1 className="text-sm font-bold text-macAccent">SO</h1>
+    <div className="flex h-screen bg-macBg text-macText relative overflow-hidden">
+      {/* Animated gradient mesh background */}
+      <div className="fixed inset-0 gradient-mesh pointer-events-none opacity-40"></div>
+
+      {/* Floating gradient orbs */}
+      <div className="gradient-orb fixed top-[-10%] right-[20%] w-[500px] h-[500px] bg-macAccent/30" style={{ animationDelay: '0s' }}></div>
+      <div className="gradient-orb fixed bottom-[-15%] left-[10%] w-[400px] h-[400px] bg-purple-500/20" style={{ animationDelay: '4s' }}></div>
+
+      {/* macOS Sidebar - Liquid Glass */}
+      <div className="w-sidebar liquid-glass flex flex-col relative overflow-hidden z-10 shadow-xl">
+        {/* Enhanced ambient gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-macAccent/8 via-transparent to-purple-500/5 pointer-events-none animate-gradient-shift"></div>
+
+        {/* Particles effect */}
+        <div className="particle absolute top-[20%] left-[30%]" style={{ animationDelay: '0s' }}></div>
+        <div className="particle absolute top-[60%] left-[70%]" style={{ animationDelay: '2s' }}></div>
+        <div className="particle absolute top-[80%] left-[40%]" style={{ animationDelay: '4s' }}></div>
+
+        {/* Header - Liquid Glass with Glow */}
+        <div className="h-header flex items-center justify-center relative z-10 mb-4">
+          <div className="relative group cursor-pointer perspective-container">
+            <h1 className="text-sm font-bold text-gradient relative z-10 transition-all duration-300 group-hover:scale-110 animate-glow-pulse">SO</h1>
+            <div className="absolute inset-0 bg-macAccent/30 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-morph"></div>
+          </div>
         </div>
 
-        {/* Navigation - Icon Only */}
-        <nav className="flex-1 overflow-y-auto py-2">
-          {navItems.map((item) => (
+        {/* Navigation - Icon Only with Enhanced Interactions */}
+        <nav className="flex-1 overflow-y-auto py-3 relative z-10">
+          {navItems.map((item, index) => (
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
               title={item.label}
-              className={`w-full h-sidebar-icon flex items-center justify-center transition-all duration-300 ease-mac relative group ${
+              style={{ animationDelay: `${index * 50}ms` }}
+              className={`w-full h-sidebar-icon flex items-center justify-center transition-all duration-300 ease-mac relative group mb-1 animate-slide-in-left ${
                 activeTab === item.id
-                  ? 'bg-macAccent/20 border-l-2 border-macAccent text-macAccent shadow-[inset_0_0_6px_rgba(10,132,255,0.1)]'
-                  : 'text-slate-300 hover:bg-macHover/60 hover:text-macText'
+                  ? 'bg-gradient-to-r from-macAccent/25 via-macAccent/20 to-transparent border-l-2 border-macAccent text-macAccent shadow-[inset_0_0_12px_rgba(10,132,255,0.15)]'
+                  : 'text-slate-300 hover:bg-macHover/60 hover:text-macText hover:scale-105'
               }`}
             >
-              <span className="text-lg">{item.icon}</span>
-              {/* Tooltip - macOS Style */}
-              <span className="absolute left-full ml-2 px-2 py-1 bg-macPanel/90 backdrop-blur-sm border border-macBorder/40 rounded-md text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-tooltip shadow-md">
+              <span className={`text-lg transition-transform duration-300 ${activeTab === item.id ? 'scale-110' : 'group-hover:scale-110'}`}>
+                {item.icon}
+              </span>
+
+              {/* Enhanced Tooltip with Slide Animation */}
+              <span className="absolute left-full ml-3 px-3 py-1.5 glass-panel rounded-md text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100 transition-all duration-200 pointer-events-none z-tooltip">
                 {item.label}
               </span>
+
+              {/* Active indicator glow */}
+              {activeTab === item.id && (
+                <div className="absolute left-0 w-0.5 h-full bg-macAccent shadow-[0_0_10px_rgba(10,132,255,0.5)]"></div>
+              )}
             </button>
           ))}
         </nav>
 
-        {/* Actions - macOS Style */}
-        <div className="p-2 border-t border-macBorder/40 space-y-1">
+        {/* Actions - Liquid Glass with Physics */}
+        <div className="p-3 space-y-2 relative z-10 mt-auto">
           <button
             onClick={handleSave}
             disabled={saving}
             title="Save Changes (Ctrl+S)"
-            className="w-full h-7 bg-macPanel/60 hover:bg-macHover/60 text-macText text-xs font-medium rounded-mac transition-all duration-300 ease-mac disabled:opacity-40 border border-macBorder/40 flex items-center justify-center"
+            className="w-full h-8 liquid-glass text-macText text-xs font-medium rounded-mac transition-all duration-300 ease-mac disabled:opacity-40 flex items-center justify-center hover-lift group bounce-click ripple-effect"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
             </svg>
           </button>
@@ -230,18 +292,19 @@ function App() {
             onClick={handleGenerateCV}
             disabled={generating}
             title="Generate CV"
-            className="w-full h-7 bg-macAccent hover:bg-macAccent/80 text-white text-xs font-semibold rounded-mac transition-all duration-300 ease-mac disabled:opacity-40 flex items-center justify-center shadow-[0_2px_4px_rgba(10,132,255,0.2)]"
+            className="w-full h-8 liquid-glass-accent hover:shadow-accent text-white text-xs font-semibold rounded-mac transition-all duration-300 ease-mac disabled:opacity-40 flex items-center justify-center hover-lift group relative overflow-hidden bounce-click ripple-effect"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 animate-shimmer"></span>
+            <svg className="w-4 h-4 relative z-10 transition-transform duration-300 group-hover:rotate-180 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           </button>
         </div>
       </div>
 
-      {/* Main Content - Compact */}
-      <div className="flex-1 overflow-y-auto">
-        <div className={activeTab === 'chat' ? 'h-full' : 'max-w-7xl mx-auto p-3'}>
+      {/* Main Content - Centered & Spacious */}
+      <div className="flex-1 overflow-y-auto relative">
+        <div className={activeTab === 'chat' ? 'h-full' : 'max-w-6xl mx-auto px-8 py-12'}>
           {activeTab === 'chat' && (
             <ChatManager apiBaseUrl={API_BASE_URL} />
           )}
@@ -306,9 +369,9 @@ function App() {
           )}
 
           {activeTab === 'finances' && (
-            <div className="bg-macPanel/50 backdrop-blur-md border border-macBorder/30 rounded-mac p-3 shadow-[0_2px_6px_rgba(0,0,0,0.2)]">
-              <h2 className="text-sm font-semibold text-macText mb-2">Finances</h2>
-              <div className="bg-macPanel/60 border border-macBorder/40 rounded-mac p-3">
+            <div className="bg-macPanel/50 backdrop-blur-md border border-macBorder/30 rounded-mac p-6 shadow-[0_2px_6px_rgba(0,0,0,0.2)]">
+              <h2 className="text-sm font-semibold text-macText mb-4">Finances</h2>
+              <div className="bg-macPanel/60 border border-macBorder/40 rounded-mac p-4">
                 <p className="text-xs text-macSubtext">
                   Finances module coming soon. Will integrate with finances/structure.yaml
                 </p>
@@ -322,25 +385,57 @@ function App() {
         </div>
       </div>
 
-      {/* Notification Toast - macOS Style */}
+      {/* Enhanced Notification Toast with Animations */}
       {notification && (
-        <div className="fixed bottom-3 right-3 z-50 animate-slide-up">
-          <div className={`rounded-mac p-2.5 max-w-sm backdrop-blur-md border text-xs shadow-[0_4px_12px_rgba(0,0,0,0.3)] ${
+        <div className="fixed bottom-6 right-6 z-50 animate-slide-up">
+          <div className={`glass-strong rounded-mac p-4 max-w-sm border text-xs shadow-xl relative overflow-hidden group ${
             notification.type === 'success'
-              ? 'bg-success/10 border-success/40 text-success'
-              : 'bg-error/10 border-error/40 text-error'
+              ? 'border-success/40'
+              : 'border-error/40'
           }`}>
-            <div className="flex items-start gap-2">
-              {notification.type === 'success' ? (
-                <svg className="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              ) : (
-                <svg className="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              )}
-              <p className="font-medium leading-tight">{notification.message}</p>
+            {/* Animated gradient background */}
+            <div className={`absolute inset-0 opacity-10 ${
+              notification.type === 'success'
+                ? 'bg-gradient-to-br from-success/30 to-transparent'
+                : 'bg-gradient-to-br from-error/30 to-transparent'
+            }`}></div>
+
+            {/* Content */}
+            <div className="flex items-start gap-3 relative z-10">
+              <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+                notification.type === 'success'
+                  ? 'bg-success/20 text-success'
+                  : 'bg-error/20 text-error'
+              }`}>
+                {notification.type === 'success' ? (
+                  <svg className="w-5 h-5 animate-scale-in" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                ) : (
+                  <svg className="w-5 h-5 animate-scale-in" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                )}
+              </div>
+              <div className="flex-1">
+                <p className={`font-medium leading-relaxed ${
+                  notification.type === 'success' ? 'text-success' : 'text-error'
+                }`}>
+                  {notification.message}
+                </p>
+              </div>
+            </div>
+
+            {/* Progress bar */}
+            <div className="absolute bottom-0 left-0 right-0 h-1 bg-macBorder/20 overflow-hidden">
+              <div
+                className={`h-full ${
+                  notification.type === 'success' ? 'bg-success' : 'bg-error'
+                }`}
+                style={{
+                  animation: 'shrink 5s linear forwards'
+                }}
+              ></div>
             </div>
           </div>
         </div>
