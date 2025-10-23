@@ -288,6 +288,15 @@ class ChatMessageRequest(BaseModel):
     message: str
     conversation_id: Optional[str] = None
 
+class ChatCreateRequest(BaseModel):
+    name: Optional[str] = None
+
+class ChatRenameRequest(BaseModel):
+    name: str
+
+class ChatArchiveRequest(BaseModel):
+    archived: bool
+
 class MergeFieldsRequest(BaseModel):
     parsed_data: Dict[str, Any]
 
@@ -950,6 +959,205 @@ async def get_last_conversation():
         return {"conversation": data}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to load last conversation: {str(e)}")
+
+@app.get("/api/chat/list")
+async def list_chats_with_metadata():
+    """
+    Enhanced conversation list with full metadata for Chat Manager
+    Returns conversations with name, message_count, timestamps, archived status
+    """
+    try:
+        chats = []
+        for conv_file in CONVERSATIONS_DIR.glob("*.yaml"):
+            with open(conv_file, 'r', encoding='utf-8') as f:
+                data = yaml.safe_load(f)
+
+                session = data.get("session", {})
+                chats.append({
+                    "id": session.get("id", conv_file.stem),
+                    "name": session.get("name", f"Conversation {conv_file.stem}"),
+                    "message_count": len(data.get("messages", [])),
+                    "created_at": session.get("date", datetime.fromtimestamp(conv_file.stat().st_ctime).isoformat()),
+                    "last_updated": datetime.fromtimestamp(conv_file.stat().st_mtime).isoformat(),
+                    "archived": session.get("archived", False)
+                })
+
+        # Sort by last_updated descending
+        chats.sort(key=lambda x: x["last_updated"], reverse=True)
+
+        return {"chats": chats}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to list chats: {str(e)}")
+
+@app.post("/api/chat/create")
+async def create_chat(request: ChatCreateRequest):
+    """
+    Create a new conversation with optional custom name
+    """
+    try:
+        # Generate conversation ID
+        conversation_id = f"conv_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}"
+
+        # Count existing conversations for auto-naming
+        existing_count = len(list(CONVERSATIONS_DIR.glob("*.yaml")))
+        default_name = request.name or f"Chat {existing_count + 1}"
+
+        # Create conversation structure
+        conversation = {
+            "session": {
+                "id": conversation_id,
+                "name": default_name,
+                "date": datetime.now().isoformat(),
+                "type": "career_chat",
+                "archived": False
+            },
+            "messages": []
+        }
+
+        # Save to file
+        conv_file = CONVERSATIONS_DIR / f"{conversation_id}.yaml"
+        with open(conv_file, 'w', encoding='utf-8') as f:
+            yaml.dump(conversation, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+
+        return {
+            "id": conversation_id,
+            "name": default_name,
+            "message_count": 0,
+            "created_at": conversation["session"]["date"],
+            "last_updated": conversation["session"]["date"],
+            "archived": False
+        }
+    except Exception as e:
+        import traceback
+        raise HTTPException(status_code=500, detail=f"Failed to create chat: {str(e)}\n{traceback.format_exc()}")
+
+@app.patch("/api/chat/{conversation_id}/rename")
+async def rename_chat(conversation_id: str, request: ChatRenameRequest):
+    """
+    Rename an existing conversation
+    """
+    try:
+        conv_file = CONVERSATIONS_DIR / f"{conversation_id}.yaml"
+        if not conv_file.exists():
+            raise HTTPException(status_code=404, detail="Conversation not found")
+
+        # Load conversation
+        with open(conv_file, 'r', encoding='utf-8') as f:
+            data = yaml.safe_load(f)
+
+        # Update name
+        data["session"]["name"] = request.name
+
+        # Save back
+        with open(conv_file, 'w', encoding='utf-8') as f:
+            yaml.dump(data, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+
+        return {
+            "id": conversation_id,
+            "name": request.name,
+            "last_updated": datetime.now().isoformat()
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to rename chat: {str(e)}")
+
+@app.delete("/api/chat/{conversation_id}")
+async def delete_chat(conversation_id: str):
+    """
+    Delete a conversation permanently
+    """
+    try:
+        conv_file = CONVERSATIONS_DIR / f"{conversation_id}.yaml"
+        if not conv_file.exists():
+            raise HTTPException(status_code=404, detail="Conversation not found")
+
+        conv_file.unlink()
+
+        return {"success": True, "deleted_id": conversation_id}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to delete chat: {str(e)}")
+
+@app.post("/api/chat/{conversation_id}/duplicate")
+async def duplicate_chat(conversation_id: str):
+    """
+    Duplicate an existing conversation
+    """
+    try:
+        conv_file = CONVERSATIONS_DIR / f"{conversation_id}.yaml"
+        if not conv_file.exists():
+            raise HTTPException(status_code=404, detail="Conversation not found")
+
+        # Load original conversation
+        with open(conv_file, 'r', encoding='utf-8') as f:
+            original = yaml.safe_load(f)
+
+        # Create new conversation with copied messages
+        new_id = f"conv_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}"
+        original_name = original["session"].get("name", "Conversation")
+
+        duplicated = {
+            "session": {
+                "id": new_id,
+                "name": f"{original_name} (Copy)",
+                "date": datetime.now().isoformat(),
+                "type": "career_chat",
+                "archived": False
+            },
+            "messages": original.get("messages", []).copy()
+        }
+
+        # Save duplicated conversation
+        new_conv_file = CONVERSATIONS_DIR / f"{new_id}.yaml"
+        with open(new_conv_file, 'w', encoding='utf-8') as f:
+            yaml.dump(duplicated, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+
+        return {
+            "id": new_id,
+            "name": duplicated["session"]["name"],
+            "message_count": len(duplicated["messages"]),
+            "created_at": duplicated["session"]["date"],
+            "last_updated": duplicated["session"]["date"],
+            "archived": False
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        import traceback
+        raise HTTPException(status_code=500, detail=f"Failed to duplicate chat: {str(e)}\n{traceback.format_exc()}")
+
+@app.patch("/api/chat/{conversation_id}/archive")
+async def archive_chat(conversation_id: str, request: ChatArchiveRequest):
+    """
+    Archive or unarchive a conversation
+    """
+    try:
+        conv_file = CONVERSATIONS_DIR / f"{conversation_id}.yaml"
+        if not conv_file.exists():
+            raise HTTPException(status_code=404, detail="Conversation not found")
+
+        # Load conversation
+        with open(conv_file, 'r', encoding='utf-8') as f:
+            data = yaml.safe_load(f)
+
+        # Update archived status
+        data["session"]["archived"] = request.archived
+
+        # Save back
+        with open(conv_file, 'w', encoding='utf-8') as f:
+            yaml.dump(data, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+
+        return {
+            "id": conversation_id,
+            "archived": request.archived,
+            "last_updated": datetime.now().isoformat()
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to archive chat: {str(e)}")
 
 # ========================
 # Action Execution System

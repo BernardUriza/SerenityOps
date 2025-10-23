@@ -7,7 +7,7 @@ import SkillsEditor from './components/SkillsEditor';
 import EducationList from './components/EducationList';
 import CVManager from './components/CVManager';
 import QuickImport from './components/QuickImport';
-import CareerChat from './components/CareerChat';
+import { ChatManager } from './components/chat';
 import { useCVJobStore, loadJobFromLocalStorage } from './stores/cvJobStore';
 
 // API configuration
@@ -198,7 +198,7 @@ function App() {
       <div className="flex-1 overflow-y-auto">
         <div className={activeTab === 'chat' ? 'h-full' : 'max-w-6xl mx-auto p-8'}>
           {activeTab === 'chat' && (
-            <CareerChat apiBaseUrl={API_BASE_URL} />
+            <ChatManager apiBaseUrl={API_BASE_URL} />
           )}
 
           {activeTab === 'import' && (
