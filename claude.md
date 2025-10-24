@@ -744,3 +744,107 @@ if (isCollapsed) {
 - `frontend/src/components/chat/SidebarHeader.tsx`: Vertical layout for collapsed mode
 - `frontend/src/components/chat/CollapsedSidebarNav.tsx`: Spacing and animation refinements
 
+---
+
+### Main Sidebar Vertical Layout Redesign (October 2025)
+
+**User Request**: "ahora lo mismo con el sidebar principal, mejora ese orden de ser columna a ser row"
+
+**Solution Applied** (commit 9df2526): Applied same vertical stacking pattern to main application sidebar
+
+**Collapsed Mode Changes** (80px width):
+
+| Component | Before | After | Savings |
+|-----------|--------|-------|---------|
+| **Header Height** | 96px (h-24) | 64px (h-16) | -32px |
+| **Logo Size** | 48px (w-12) | 40px (w-10) | -8px |
+| **Toggle Size** | 44px (w-11) | 32px (w-8) | -12px |
+| **Nav Item Height** | 56px (h-14) | 44px (h-11) | -12px each |
+| **Icon Size** | 24px | 20px | -4px |
+| **Text Size** | text-sm (14px) | text-xs (12px) | -2px |
+| **Action Buttons** | 48px (h-12) | 40px (h-10) | -8px each |
+| **Total Vertical** | ~800px | ~644px | **-156px (25%)** |
+
+**Header Layout Pattern**:
+```tsx
+{isCollapsed ? (
+  // Collapsed: Vertical stack
+  <div className="flex flex-col items-center gap-3 px-2 py-3">
+    <Logo size={40} />
+    <ToggleButton size={32} />
+  </div>
+) : (
+  // Expanded: Horizontal
+  <div className="h-16 flex items-center justify-between px-4 py-3 gap-3">
+    <Logo + Title />
+    <ToggleButton />
+  </div>
+)}
+```
+
+**Navigation Improvements**:
+- Gap: gap-3 (12px) → gap-2 (8px) between items
+- Padding: py-4 → py-3 for nav container
+- Transitions: duration-500 → duration-300 (snappier)
+- Active indicator: Removed pulsing animation (static instead)
+- Hover scale: Removed scale-[1.02] (prevents layout shift)
+- Shadows: Reduced from shadow-2xl to shadow-lg
+
+**Action Buttons Optimization**:
+- Container: pt-3 space-y-3 border-t-2 → pt-2 space-y-2 border-t
+- Icons: w-6 h-6 → w-5 h-5 (20px)
+- Text: text-sm → text-xs
+- Padding: gap-3 px-4 → gap-2 px-3
+- Hover animations: scale 1.25 → 1.10 (subtle)
+
+**Consistency Achievements**:
+- ✅ Both ChatSidebar and main Sidebar use identical vertical pattern
+- ✅ Same dimensions: Logo 40px, Toggle 32px, Nav 44px
+- ✅ Same spacing: gap-3 for major sections, gap-2 for items
+- ✅ Same transitions: 300ms for interactions, 200ms for micro-animations
+- ✅ Same border radius: rounded-lg for compact, rounded-xl for expanded
+
+**Visual Hierarchy** (collapsed mode, top to bottom):
+```
+┌─────────────┐
+│   [Logo]    │  40px - Brand identity
+│  [Toggle]   │  32px - Primary action
+├─────────────┤
+│             │
+│  [Chat]  1  │  44px - Active with indicator
+│  [Import]   │  44px
+│  [Profile]  │  44px
+│  [Exp.]     │  44px
+│  [Proj.] ⚠  │  44px - With badge
+│  [Skills]   │  44px
+│  [Edu.]     │  44px
+│  [CVs]   ✓  │  44px - With badge
+│  [Fin.]     │  44px
+│  [Opp.]  ⚠  │  44px - With badge
+│             │
+├─────────────┤
+│  [Theme]    │  Component
+│  [Profile]  │  Component
+├─────────────┤
+│  [Save]     │  40px - Secondary action
+│  [Gen CV]   │  40px - Primary action
+└─────────────┘
+```
+
+**Performance Improvements**:
+- Eliminated complex AnimatePresence wrappers
+- Removed rotation animation (static icons instead)
+- Simpler DOM structure (cleaner render tree)
+- Reduced re-renders with conditional branches
+- Faster transitions improve perceived performance
+
+**Key Design Principles Applied**:
+1. **Vertical First**: Always stack vertically in <100px width
+2. **Consistent Sizing**: All interactive elements 32-44px (WCAG compliant)
+3. **Subtle Animations**: Scale 1.05-1.10 max, duration 200-300ms
+4. **Space Efficiency**: 25% vertical space saved while maintaining usability
+5. **Visual Clarity**: Clear hierarchy with spacing and sizing variations
+
+**Files Modified** (commit 9df2526):
+- `frontend/src/App.tsx`: Complete sidebar header and navigation redesign
+
