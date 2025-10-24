@@ -25,23 +25,27 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   onToggle,
 }) => {
   return (
-    <div className="h-24 px-6 py-4 border-b-2 border-macAccent/20 flex items-center justify-between gap-4 bg-gradient-to-br from-macPanel/40 via-macPanel/30 to-transparent backdrop-blur-xl shadow-xl">
-      {/* Left: Logo + Title - Protected from collapse */}
-      <div className="flex items-center gap-4 min-w-[160px] flex-1 flex-shrink-0">
-        <div className="w-14 h-14 rounded-2xl gradient-accent flex items-center justify-center shadow-2xl shadow-macAccent/30 ring-2 ring-macAccent/20 flex-shrink-0">
-          <MessageSquare size={26} className="text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]" />
+    <div className={`h-24 border-b-2 border-macAccent/20 flex items-center bg-gradient-to-br from-macPanel/40 via-macPanel/30 to-transparent backdrop-blur-xl shadow-xl ${
+      isCollapsed ? 'justify-center px-2 py-4' : 'justify-between px-6 py-4 gap-4'
+    }`}>
+      {/* Left: Logo + Title - Only shown when expanded */}
+      {!isCollapsed && (
+        <div className="flex items-center gap-4 min-w-[160px] flex-1 flex-shrink-0">
+          <div className="w-14 h-14 rounded-2xl gradient-accent flex items-center justify-center shadow-2xl shadow-macAccent/30 ring-2 ring-macAccent/20 flex-shrink-0">
+            <MessageSquare size={26} className="text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h2 className="text-lg font-black text-macText tracking-tight">Conversations</h2>
+            <p className="text-xs text-macSubtext font-semibold mt-0.5 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-lg shadow-green-500/50 flex-shrink-0"></span>
+              <span className="whitespace-nowrap">{chatCount} total chats</span>
+            </p>
+          </div>
         </div>
-        <div className="min-w-0 flex-1">
-          <h2 className="text-lg font-black text-macText tracking-tight">Conversations</h2>
-          <p className="text-xs text-macSubtext font-semibold mt-0.5 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-lg shadow-green-500/50 flex-shrink-0"></span>
-            <span className="whitespace-nowrap">{chatCount} total chats</span>
-          </p>
-        </div>
-      </div>
+      )}
 
       {/* Right: Actions Group */}
-      <div className="flex items-center gap-2 flex-shrink-0">
+      <div className={`flex items-center gap-2 ${isCollapsed ? 'flex-col' : 'flex-shrink-0'}`}>
         {/* Toggle Button */}
         {onToggle && (
           <motion.button

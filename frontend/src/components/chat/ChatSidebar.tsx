@@ -103,20 +103,14 @@ export const ChatSidebar: React.FC = () => {
       {/* Resize Handle */}
       <ResizeHandle />
 
-      {/* Header Section - Now includes toggle button */}
-      <motion.div
-        initial={false}
-        animate={{ opacity: isCollapsed ? 0 : 1 }}
-        transition={{ duration: 0.2 }}
-      >
-        <SidebarHeader
-          chatCount={chats.length}
-          onNewChat={handleNewChat}
-          loading={isSaving}
-          isCollapsed={isCollapsed}
-          onToggle={toggleCollapse}
-        />
-      </motion.div>
+      {/* Header Section - Always visible, adapts to collapsed state */}
+      <SidebarHeader
+        chatCount={chats.length}
+        onNewChat={handleNewChat}
+        loading={isSaving}
+        isCollapsed={isCollapsed}
+        onToggle={toggleCollapse}
+      />
 
       {/* Content - Hide when collapsed */}
       {!isCollapsed && (
