@@ -279,7 +279,7 @@ function App() {
       <motion.div
         initial={false}
         animate={{ width: isCollapsed ? APP_SIDEBAR_WIDTH.COLLAPSED : APP_SIDEBAR_WIDTH.EXPANDED }}
-        transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
+        transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
         className="liquid-glass flex flex-col justify-between h-screen relative z-sticky shadow-[0_8px_32px_rgba(0,0,0,0.3)] border-r-2 border-macAccent/30"
       >
         {/* Enhanced ambient gradient overlay - MORE VISIBLE */}
