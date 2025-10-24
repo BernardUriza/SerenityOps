@@ -45,7 +45,7 @@ export const useSidebarState = create<SidebarState>()(
       setCollapsed: (collapsed: boolean) =>
         set({ isCollapsed: collapsed }),
 
-      // Set custom width
+      // Set custom width with clamping
       setWidth: (width: number) => {
         const clampedWidth = Math.max(
           SIDEBAR_WIDTH.MIN,

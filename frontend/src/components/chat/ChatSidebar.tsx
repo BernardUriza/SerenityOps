@@ -16,6 +16,7 @@ import { SortControl } from './SortControl';
 import { SidebarToggle } from './SidebarToggle';
 import { CollapsedSidebarNav } from './CollapsedSidebarNav';
 import { SearchOverlay } from './SearchOverlay';
+import { ResizeHandle } from './ResizeHandle';
 import { useChatManager } from './hooks/useChatManager';
 import { useSidebarState, SIDEBAR_WIDTH } from '../../hooks/useSidebarState';
 
@@ -34,7 +35,7 @@ export const ChatSidebar: React.FC = () => {
     setActiveChat,
   } = useChatManager();
 
-  const { isCollapsed, width, toggleCollapse } = useSidebarState();
+  const { isCollapsed, width, isResizing, toggleCollapse } = useSidebarState();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   // Load chats on mount
@@ -87,10 +88,15 @@ export const ChatSidebar: React.FC = () => {
     <motion.div
       initial={false}
       animate={{ width: currentWidth }}
-      transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
-      className="liquid-glass border-r border-macBorder/30 flex flex-col h-full shadow-xl relative overflow-hidden"
+      transition={isResizing ? { duration: 0 } : { duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+      className={`liquid-glass border-r border-macBorder/30 flex flex-col h-full shadow-xl relative overflow-hidden ${
+        isResizing ? 'select-none' : ''
+      }`}
       style={{ minWidth: currentWidth }}
     >
+      {/* Resize Handle */}
+      <ResizeHandle />
+
       {/* Toggle Button - Floating */}
       <div className="absolute top-4 right-3 z-50">
         <SidebarToggle isCollapsed={isCollapsed} onToggle={toggleCollapse} />
