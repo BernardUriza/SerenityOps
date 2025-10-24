@@ -436,6 +436,49 @@ textarea::placeholder {
 }
 
 /* ============================================
+   2026 Ambient Effects
+   ============================================ */
+
+@keyframes ambient-glow {
+  0%, 100% {
+    box-shadow:
+      0 0 20px rgba(10, 132, 255, 0.1),
+      inset 0 0 20px rgba(10, 132, 255, 0.05);
+  }
+  50% {
+    box-shadow:
+      0 0 40px rgba(10, 132, 255, 0.2),
+      inset 0 0 40px rgba(10, 132, 255, 0.1);
+  }
+}
+
+@keyframes ambient-particles {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translateY(-30px) translateX(15px);
+    opacity: 0.4;
+  }
+}
+
+.ambient-glow {
+  animation: ambient-glow 4s ease-in-out infinite;
+}
+
+.ambient-particles {
+  animation: ambient-particles 6s ease-in-out infinite;
+}
+
+/* Smooth backdrop filter for better performance */
+@supports (backdrop-filter: blur(20px)) {
+  .liquid-glass {
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+  }
+}
+
+/* ============================================
    Enhanced Focus States
    ============================================ */
 

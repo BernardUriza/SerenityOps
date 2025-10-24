@@ -17,6 +17,7 @@ import { SidebarToggle } from './SidebarToggle';
 import { CollapsedSidebarNav } from './CollapsedSidebarNav';
 import { SearchOverlay } from './SearchOverlay';
 import { ResizeHandle } from './ResizeHandle';
+import { CommandPalette } from './CommandPalette';
 import { useChatManager } from './hooks/useChatManager';
 import { useSidebarState, SIDEBAR_WIDTH } from '../../hooks/useSidebarState';
 
@@ -37,6 +38,7 @@ export const ChatSidebar: React.FC = () => {
 
   const { isCollapsed, width, isResizing, toggleCollapse } = useSidebarState();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isCommandOpen, setIsCommandOpen] = useState(false);
 
   // Load chats on mount
   useEffect(() => {
@@ -66,6 +68,11 @@ export const ChatSidebar: React.FC = () => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'b') {
         e.preventDefault();
         toggleCollapse();
+      }
+      // Cmd+K / Ctrl+K: Command palette
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsCommandOpen(true);
       }
     };
 
@@ -183,6 +190,15 @@ export const ChatSidebar: React.FC = () => {
         onClose={() => setIsSearchOpen(false)}
         filter={filter}
         onFilterChange={setFilter}
+      />
+
+      {/* Command Palette - Global */}
+      <CommandPalette
+        isOpen={isCommandOpen}
+        onClose={() => setIsCommandOpen(false)}
+        chats={chats}
+        onSelectChat={setActiveChat}
+        onNewChat={handleNewChat}
       />
     </motion.div>
   );
