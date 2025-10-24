@@ -1,10 +1,10 @@
 /**
  * ChatManager - Main orchestrator for Chat v2
- * Combines ChatSidebar + ChatView with keyboard shortcuts
- * Compact Precision UI
+ * Combines ChatSidebar + ChatView
+ * Modern 2026 Layout with Collapsible Sidebar
  */
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { ChatSidebar } from './ChatSidebar';
 import { ChatView } from './ChatView';
 import { useChatManager } from './hooks/useChatManager';
@@ -14,42 +14,13 @@ interface ChatManagerProps {
 }
 
 export const ChatManager: React.FC<ChatManagerProps> = ({ apiBaseUrl }) => {
-  const { activeChat, loadChats, createChat, setFilter } = useChatManager();
+  const { activeChat, createChat } = useChatManager();
 
-  // Load chats on mount
-  useEffect(() => {
-    loadChats();
-  }, [loadChats]);
-
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Cmd+N or Ctrl+N: New Chat
-      if ((e.metaKey || e.ctrlKey) && e.key === 'n') {
-        e.preventDefault();
-        createChat();
-      }
-
-      // Cmd+K or Ctrl+K: Focus search
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        const searchInput = document.querySelector('input[type="text"]') as HTMLInputElement;
-        searchInput?.focus();
-      }
-
-      // Escape: Clear search / deselect chat
-      if (e.key === 'Escape') {
-        const searchInput = document.querySelector('input[type="text"]') as HTMLInputElement;
-        if (searchInput && searchInput.value) {
-          setFilter('');
-          searchInput.blur();
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [createChat, setFilter]);
+  // Note: Keyboard shortcuts are now handled in ChatSidebar
+  // ⌘N - New Chat
+  // ⌘F - Focus Search
+  // ⌘B - Toggle Sidebar
+  // ⌘K - Command Palette
 
   return (
     <div className="flex h-full bg-macBg relative overflow-hidden">
@@ -109,7 +80,7 @@ export const ChatManager: React.FC<ChatManagerProps> = ({ apiBaseUrl }) => {
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-macSubtext">Search conversations</span>
+                  <span className="text-macSubtext">Command palette</span>
                   <div className="flex items-center gap-1">
                     <kbd className="px-3 py-1.5 liquid-glass backdrop-blur-md rounded-mac shadow-sm font-semibold text-xs">⌘</kbd>
                     <span className="text-macSubtext">+</span>
@@ -117,8 +88,20 @@ export const ChatManager: React.FC<ChatManagerProps> = ({ apiBaseUrl }) => {
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-macSubtext">Clear search</span>
-                  <kbd className="px-3 py-1.5 liquid-glass backdrop-blur-md rounded-mac shadow-sm font-semibold text-xs">ESC</kbd>
+                  <span className="text-macSubtext">Toggle sidebar</span>
+                  <div className="flex items-center gap-1">
+                    <kbd className="px-3 py-1.5 liquid-glass backdrop-blur-md rounded-mac shadow-sm font-semibold text-xs">⌘</kbd>
+                    <span className="text-macSubtext">+</span>
+                    <kbd className="px-3 py-1.5 liquid-glass backdrop-blur-md rounded-mac shadow-sm font-semibold text-xs">B</kbd>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-macSubtext">Focus search</span>
+                  <div className="flex items-center gap-1">
+                    <kbd className="px-3 py-1.5 liquid-glass backdrop-blur-md rounded-mac shadow-sm font-semibold text-xs">⌘</kbd>
+                    <span className="text-macSubtext">+</span>
+                    <kbd className="px-3 py-1.5 liquid-glass backdrop-blur-md rounded-mac shadow-sm font-semibold text-xs">F</kbd>
+                  </div>
                 </div>
               </div>
             </div>
