@@ -426,3 +426,143 @@ curl http://localhost:8000/api/version
 - `frontend/src/components/VersionDetailModal.tsx` - New
 - `frontend/src/hooks/useVersionInfo.ts` - New
 - `logs/builds/latest.md` - New
+
+---
+
+### 2025-10-24: Sidebar/Header Layout Structural Correction
+
+**Objective**: Eliminate logo/toggle overlap, visibility issues, and contrast problems through architectural reorganization (not local patches).
+
+**Root Cause Analysis**:
+- Complete diagnosis documented in `docs/LAYOUT_DIAGNOSIS.md` (924 lines)
+- Validation with mathematical proofs in `docs/ROOT_CAUSE_CONFIRMATION.md` (955 lines)
+- Identified 3 primary issues + 5 additional findings
+
+**Problems Resolved**:
+
+1. **🔴 Logo/Toggle Overlap**
+   - Cause: Toggle button used `absolute top-4 right-4 z-50` floating over header
+   - Header had no reserved space for toggle, causing spatial conflict
+   - Both elements at right: 64px in collapsed state (exact overlap)
+
+2. **🔵 Toggle Button Invisibility**
+   - Triple stacking context isolation (backdrop-filter + relative z-10 + overflow-hidden)
+   - Temporary truncation during animation overshoot (~9px, 50-100ms)
+   - Visual obscuration by logo glow effect (blur-2xl extending 40px)
+
+3. **🟣 Insufficient Contrast in Action Buttons**
+   - Save button: liquid-glass with ~1.2:1 contrast (below WCAG 3:1 minimum)
+   - No visual differentiation in collapsed state
+
+**Implementation** (6 commits):
+
+#### Phase 1: Relocate Toggle into Header
+- **Commit**: `205a957` refactor(ui/sidebar): relocate toggle into header
+- Moved toggle from absolute positioning to header flex child
+- Header now uses `justify-between` (logo ←→ toggle)
+- Toggle: `w-11 h-11` (44px) for WCAG touch target compliance
+- Reduced glow in collapsed: `blur-lg opacity-50` vs `blur-2xl opacity-70`
+- Added `aria-label` for accessibility
+
+#### Phase 2: Restrict Overflow to Nav Only
+- **Commit**: `6dcf92e` refactor(ui/sidebar): restrict overflow-hidden to nav
+- Removed overflow-hidden from sidebar container
+- Removed overflow-hidden from TOP SECTION wrapper
+- Kept overflow-y-auto on nav (only place needing scroll)
+- Eliminates triple-nested overflow hierarchy
+
+#### Phase 3: Reduce Logo Glow (completed in Phase 1)
+- Glow reduced from `blur-2xl opacity-70` to `blur-lg opacity-50`
+- Prevents visual obscuration of toggle button
+
+#### Phase 4: Align Z-Index Hierarchy
+- **Commit**: `7930ea9` chore(ui/zindex): align to project scale
+- Sidebar: `z-10` → `z-sticky` (1020)
+- Notification toast: `z-50` → `z-modal` (1050)
+- Follows tailwind.config.js scale: dropdown(1000) → sticky(1020) → fixed(1030) → modal-backdrop(1040) → modal(1050) → popover(1060) → tooltip(1070)
+
+#### Phase 5: Eliminate Animation Overshoot
+- **Commit**: `472e85b` refactor(ui/animation): eliminate overshoot
+- Changed easing: `cubic-bezier(0.34, 1.56, 0.64, 1)` → `cubic-bezier(0.25, 0.1, 0.25, 1)`
+- Eliminates ~9px overshoot that caused temporary clipping
+- Trade-off: Less "dynamic" feel, better UX stability
+
+#### Phase 6: Improve Button Contrast
+- **Commit**: `db2c163` style(ui/actions): improve collapsed contrast
+- Save button: `liquid-glass` → `glass-strong` (opacity 0.85 vs 0.05-0.1)
+- Border: `border-macBorder/40` → `border-macAccent/50`
+- Hover border: `border-macAccent/60` → `border-macAccent/80`
+- Added `aria-label` to both buttons
+- New contrast: ~3.5:1 (passes WCAG AA)
+
+**Layout Rules Established** (MUST follow for all future changes):
+
+1. **Toggle Button Placement**
+   - ✅ Toggle MUST be inside Header as flex child
+   - ❌ NEVER use absolute positioning for toggle
+   - ✅ Header uses `justify-between` to separate logo and toggle
+   - ✅ Toggle has `flex-shrink-0` to prevent collapse
+
+2. **Overflow Management**
+   - ✅ Apply `overflow-hidden` ONLY to nav container
+   - ❌ NEVER apply to sidebar or TOP SECTION wrappers
+   - ✅ Nav uses `overflow-y-auto` for scrolling
+   - Purpose: Allows tooltips/popovers to escape naturally
+
+3. **Z-Index Policy**
+   - ✅ Use ONLY values from `tailwind.config.js` scale
+   - ❌ NEVER use arbitrary z-index values (z-10, z-50, etc.) outside context
+   - Hierarchy:
+     - Base layout: z-10 (relative within sidebar)
+     - Sidebar: z-sticky (1020)
+     - Modals/notifications: z-modal (1050)
+     - Tooltips: z-tooltip (1070) - always on top
+   - ✅ Tooltips use `z-tooltip` and `absolute left-full` to escape sidebar
+
+4. **Animation Standards**
+   - ✅ Use smooth easing without overshoot for layout animations
+   - ✅ Recommended: `cubic-bezier(0.25, 0.1, 0.25, 1)` (ease-in-out)
+   - ❌ AVOID spring-like easing with overshoot (values >1.0 in control points)
+   - Duration: 0.4s for sidebar width transitions
+
+5. **Accessibility Requirements**
+   - ✅ All interactive elements: minimum 44px × 44px (WCAG 2.1 SC 2.5.5)
+   - ✅ Component contrast: minimum 3:1 (WCAG 2.1 SC 1.4.3)
+   - ✅ Add `aria-label` to icon-only buttons
+   - ✅ Maintain focus visible states
+
+6. **Contrast Guidelines**
+   - ✅ Use `glass-strong` (not `liquid-glass`) for primary action buttons
+   - ✅ Borders should use `border-macAccent/50` or higher for visibility
+   - ✅ Generate CV maintains supremacy with `gradient-accent`
+   - ✅ Save button clearly distinguishable but secondary
+
+**Verification Checklist** (for future PRs):
+
+- [ ] Toggle visible in both expanded (260px) and collapsed (80px) states
+- [ ] No overlap between logo and toggle bounding boxes
+- [ ] Toggle clickable throughout entire animation (no clipping)
+- [ ] Tooltips appear above sidebar/header (not clipped)
+- [ ] Action buttons have contrast ≥3:1
+- [ ] All interactive elements ≥44px touch target
+- [ ] Focus states visible on all buttons
+- [ ] No console errors about z-index or stacking context
+- [ ] Layout stable at zoom 90-125%
+
+**Testing Performed**:
+- Mathematical position calculations (confirmed in Root Cause Report)
+- Frame-by-frame animation analysis
+- Stacking context hierarchy validation
+- WCAG 2.1 contrast measurements
+
+**Files Modified**:
+- `frontend/src/App.tsx`: All layout changes (6 commits)
+- `docs/LAYOUT_DIAGNOSIS.md`: Initial analysis
+- `docs/ROOT_CAUSE_CONFIRMATION.md`: Validation report
+- `CLAUDE.md`: This documentation
+
+**Performance Impact**:
+- ✅ No degradation (removed unnecessary overflow clipping)
+- ✅ Fewer stacking contexts (simpler paint tree)
+- ✅ Smoother animation (no overshoot recalculations)
+
