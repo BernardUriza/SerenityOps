@@ -375,22 +375,29 @@ projects:
   - Integrated Claude AI with advanced Redux architecture
   - Built real-time streaming response system
   - Implemented sophisticated conversation state management
-- name: Creative Text LLM
-  tagline: AI-powered creative text generation platform
-  description: A Large Language Model application focused on creative text generation,
-    leveraging advanced AI capabilities to produce engaging and original content.
-    The platform demonstrates integration with modern LLM APIs and sophisticated prompt
-    engineering techniques.
-  role: AI Developer
+- name: RoboPoet - nanoGPT Training & Deployment
+  tagline: Custom GPT model trained from scratch with PyTorch on NVIDIA Ada GPUs
+  description: A hands-on deep learning project implementing and training a minimal
+    GPT architecture (nanoGPT) using PyTorch. The project demonstrates end-to-end
+    machine learning workflow from model implementation to GPU-accelerated training
+    on NVIDIA Ada Lovelace architecture, showcasing practical knowledge of transformer
+    architectures, gradient optimization, CUDA programming, and model deployment.
+    This project proves capability in both understanding theoretical ML concepts and
+    implementing production-grade training pipelines.
+  role: ML Engineer
   tech_stack:
-  - LLM APIs
+  - PyTorch
+  - CUDA
   - Python
-  - Natural Language Processing
-  - Prompt Engineering
+  - NVIDIA Ada GPUs
+  - Transformer Architecture
+  - nanoGPT
+  - GPU Computing
   achievements:
-  - Built creative text generation system
-  - Implemented advanced prompt engineering
-  - Integrated modern LLM capabilities
+  - Trained GPT model from scratch using PyTorch
+  - Implemented GPU-accelerated training pipeline with CUDA
+  - Optimized training performance on NVIDIA Ada Lovelace GPUs
+  - Built end-to-end ML workflow from data to deployment
 - name: Susurro - Real-time Voice Platform
   tagline: Secure WebRTC audio streaming with end-to-end encryption
   description: Susurro is a sophisticated real-time communication platform that leverages
@@ -511,6 +518,94 @@ skills:
     - Material-UI
     - DevExpress
     - Responsive Design
+    design:
+    - UI/UX Design
+    - User Interface Design
+    - User Experience (UX)
+    - Figma
+    - Adobe XD
+    - Wireframing
+    - Prototyping
+    - Design Systems
+    - Component Libraries
+  ai_development:
+    llm_apis:
+    - ChatGPT API
+    - Anthropic Claude API
+    - OpenAI API
+    - GPT-4
+    - GPT-3.5
+    capabilities:
+    - AI Agents Development
+    - GPT Agents
+    - AI Integration
+    - LLM Integration
+    - Multi-LLM CMS Development
+    - LLM Orchestration & Model Switching
+    - Prompt Engineering
+    - Natural Language Processing
+    - AI-Powered Features
+    - Conversational AI
+    - ML-based Data Curation
+    - AI Content Management Systems
+    ai_dev_tools:
+    - Claude Code
+    - Cursor
+    - GitHub Copilot
+    - Codex CLI
+    - ChatGPT
+    - Anthropic Console
+  data_engineering:
+    pipelines:
+    - ETL/ELT Pipelines
+    - Data Ingestion Pipelines
+    - Robotic Data Processing
+    - Large-scale Data Processing
+    - Automated Data Pipelines
+    - Real-time Data Streaming
+    ml_ops:
+    - ML-based Data Curation
+    - Data Quality Automation
+    - Feature Engineering
+    - Model Deployment Pipelines
+    - Data Validation
+    processing:
+    - Batch Processing
+    - Stream Processing
+    - Data Transformation
+    - Data Cleaning & Normalization
+    - Data Enrichment
+  machine_learning:
+    frameworks:
+    - PyTorch
+    - TensorFlow
+    - scikit-learn
+    - Hugging Face Transformers
+    deep_learning:
+    - Neural Networks
+    - Deep Learning
+    - Transformer Architecture
+    - GPT Architecture (nanoGPT)
+    - Model Training
+    - Model Fine-tuning
+    - Transfer Learning
+    training:
+    - GPU Computing (CUDA)
+    - Distributed Training
+    - Model Optimization
+    - Hyperparameter Tuning
+    - Loss Function Design
+    - Gradient Descent Optimization
+    inference:
+    - Model Inference
+    - Model Serving
+    - Inference Optimization
+    - Batch Prediction
+    hardware:
+    - NVIDIA GPUs
+    - CUDA Programming
+    - Ada Lovelace Architecture
+    - GPU Memory Management
   databases:
   - name: SQL Server
     proficiency: expert
@@ -532,59 +627,6 @@ skills:
   - GitHub Actions
   - Docker
   - Kubernetes
-  apis_integration:
-  - RESTful APIs
-  - GraphQL
-  - WebSocket
-  - WebRTC
-  - Socket.io
-  - ChatGPT API
-  - Anthropic Claude API
-  - LLM APIs
-  - OAuth 2.0
-  - JWT Authentication
-  ai_ml:
-  - AI Integration
-  - LLM Integration
-  - Natural Language Processing
-  - Prompt Engineering
-  - Machine Learning APIs
-  - Conversational AI
-  architecture_patterns:
-  - Microservices
-  - Event-driven Architecture
-  - Distributed Systems
-  - Domain-Driven Design
-  - CQRS
-  - Message Queuing
-  - Service-Oriented Architecture
-  real_time_tech:
-  - WebRTC
-  - WebSocket
-  - Socket.io
-  - Signal Processing
-  - Real-time Data Processing
-  - Low-latency Systems
-  security:
-  - End-to-end Encryption
-  - OAuth 2.0
-  - JWT
-  - SSL/TLS
-  - Security Best Practices
-  - OWASP Standards
-  data_visualization:
-  - Data Visualization
-  - Chart.js
-  - D3.js
-  - Reporting Systems
-  - Analytics Dashboards
-  embedded_hardware:
-  - Circuit Design
-  - Hardware Integration
-  - GPS Systems
-  - IoT Integration
-  - Embedded Systems
-  - Signal Adaptation
   tools:
   - Git
   - GitHub
@@ -598,16 +640,61 @@ skills:
   - Azure DevOps
   - JIRA
   - Confluence
-  testing:
-  - Unit Testing
-  - Integration Testing
-  - Jest
-  - Cypress
-  - xUnit
-  - NUnit
-  - Test-Driven Development
+  - Slack
+  - Microsoft Teams
+  - Zoom
+  - Linear
+  - Notion
+  - Mermaid
+  - Lucidchart
+  - Draw.io
+  - PlantUML
+  - Excalidraw
+  methodologies:
+  - Agile
+  - Scrum
+  - Kanban
+  - Lean Software Development
+  - Test-Driven Development (TDD)
+  - Continuous Integration (CI)
+  - Continuous Deployment (CD)
+  - GitFlow
+  - Trunk-Based Development
+  - Code Review
+  - Pair Programming
+  - System Design
+  - High Level Design (HLD)
+  - Low Level Design (LLD)
+  - Architecture Documentation
+  - Technical Diagramming
+  soft_skills:
+  - Remote Work
+  - Async Communication
+  - Cross-functional Collaboration
+  - Technical Documentation
+  - Mentoring & Knowledge Sharing
+  - Problem Solving
+  - Self-Management
+  - Adaptability
+  - Time Management
+  - Stakeholder Communication
+  - Visual Design Sense
+  - Attention to Detail
+  - UI Aesthetics
+  - AI-Augmented Development
+  - Rapid Prototyping with AI Tools
+  - AI-Enhanced Productivity
   domain_expertise:
   - AI Integration & LLM Systems
+  - GPT Agents & AI Agents Development
+  - Multi-LLM CMS Development
+  - Prompt Engineering & LLM Optimization
+  - Machine Learning & Deep Learning (PyTorch)
+  - Model Training & Fine-tuning (GPU/CUDA)
+  - Transformer & GPT Architectures
+  - Data Engineering & ETL Pipelines
+  - ML-based Data Curation & Quality
+  - Large-scale Data Processing
   - Real-time Communication Platforms
   - Healthcare Systems & Patient Management
   - Finance (payment integrations, ISO 8583)
