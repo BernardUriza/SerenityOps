@@ -1,13 +1,19 @@
 /**
- * Icon Component - Smart Icon Resolver
+ * Icon Component - Smart Icon Resolver with Lucide Fallback
  * Implements Strategy Pattern for icon resolution
  * Follows Single Responsibility Principle
+ *
+ * Resolution Strategy:
+ * 1. Custom icon registry (high-quality custom icons)
+ * 2. Lucide icons (universal fallback via getIconByName)
+ * 3. Fallback icon (WrenchIcon) - only if both above fail
  */
 
 import React from 'react';
 import type { IconProps } from '../types';
 import { getIconByName } from '../constants/iconRegistry';
 import { WrenchIcon } from './WrenchIcon';
+import { CircleHelp } from 'lucide-react';
 
 export interface SmartIconProps extends IconProps {
   /** Icon name from registry */
@@ -20,23 +26,35 @@ export interface SmartIconProps extends IconProps {
 
 /**
  * Icon Component
- * Resolves icon by name from registry
- * Provides fallback for missing icons
+ * Resolves icon by name from registry with Lucide fallback
+ * Provides graceful degradation for missing icons
  */
 export const Icon: React.FC<SmartIconProps> = ({
   name,
   fallback: FallbackIcon = WrenchIcon,
-  warnOnMissing = true,
+  warnOnMissing = false, // Changed to false by default - Lucide fallback handles most cases
   ...iconProps
 }) => {
   const iconMetadata = getIconByName(name);
 
-  // Icon not found - use fallback
+  // Icon not found - use fallback (rare case, as Lucide covers most icons)
   if (!iconMetadata) {
     if (warnOnMissing && process.env.NODE_ENV === 'development') {
-      console.warn(`[Icon] Icon "${name}" not found in registry. Using fallback.`);
+      console.warn(
+        `[IconRegistry] Icon "${name}" not found in custom registry or Lucide. Using fallback icon.`
+      );
     }
-    return <FallbackIcon {...iconProps} />;
+
+    // Use CircleHelp from Lucide as the ultimate fallback
+    const { size = 20, className = '', color, ...rest } = iconProps;
+    return (
+      <CircleHelp
+        size={size}
+        className={`${color || 'text-macSubtext'} opacity-50 ${className}`}
+        strokeWidth={1.25}
+        {...rest}
+      />
+    );
   }
 
   const IconComponent = iconMetadata.component;

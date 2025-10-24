@@ -52,7 +52,23 @@ export {
   searchIcons,
   getIconsByCategory,
   getAllIconNames,
+  clearIconCache,
+  getIconCacheStats,
 } from './constants/iconRegistry';
+
+// ===== Context & Providers =====
+export {
+  IconProvider,
+  IconContext,
+  useIcon,
+  useIconDebug,
+} from './context/IconContext';
+export type {
+  IconContextConfig,
+  IconContextValue,
+  IconProviderProps,
+  IconPack,
+} from './context/IconContext';
 
 export {
   normalizeSize,

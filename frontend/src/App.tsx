@@ -10,7 +10,7 @@ import QuickImport from './components/QuickImport';
 import { ChatManager } from './components/chat';
 import OpportunitiesViewer from './apps/opportunities';
 import { useCVJobStore, loadJobFromLocalStorage } from './stores/cvJobStore';
-import { Icon } from './icons';
+import { Icon, IconProvider } from './icons';
 import VersionBadge from './components/VersionBadge';
 import { useAppSidebarState, APP_SIDEBAR_WIDTH } from './hooks/useAppSidebarState';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
@@ -241,9 +241,10 @@ function App() {
   const navItems = navItemsWithBadges;
 
   return (
-    <div className="flex h-screen bg-macBg text-macText relative overflow-hidden">
-      {/* Animated gradient mesh background */}
-      <div className="fixed inset-0 gradient-mesh pointer-events-none opacity-40"></div>
+    <IconProvider config={{ enableCache: true, debug: false }}>
+      <div className="flex h-screen bg-macBg text-macText relative overflow-hidden">
+        {/* Animated gradient mesh background */}
+        <div className="fixed inset-0 gradient-mesh pointer-events-none opacity-40"></div>
 
       {/* Floating gradient orbs */}
       <div className="gradient-orb fixed top-[-10%] right-[20%] w-[500px] h-[500px] bg-macAccent/30" style={{ animationDelay: '0s' }}></div>
@@ -672,7 +673,8 @@ function App() {
 
       {/* Version Badge - Persistent deployment info */}
       <VersionBadge />
-    </div>
+      </div>
+    </IconProvider>
   );
 }
 

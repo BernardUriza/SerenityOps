@@ -13,7 +13,6 @@ import { ChatList } from './ChatList';
 import { SidebarHeader } from './SidebarHeader';
 import { SidebarFooter } from './SidebarFooter';
 import { SortControl } from './SortControl';
-import { SidebarToggle } from './SidebarToggle';
 import { CollapsedSidebarNav } from './CollapsedSidebarNav';
 import { SearchOverlay } from './SearchOverlay';
 import { ResizeHandle } from './ResizeHandle';
@@ -104,12 +103,7 @@ export const ChatSidebar: React.FC = () => {
       {/* Resize Handle */}
       <ResizeHandle />
 
-      {/* Toggle Button - Floating */}
-      <div className="absolute top-4 right-3 z-50">
-        <SidebarToggle isCollapsed={isCollapsed} onToggle={toggleCollapse} />
-      </div>
-
-      {/* Header Section */}
+      {/* Header Section - Now includes toggle button */}
       <motion.div
         initial={false}
         animate={{ opacity: isCollapsed ? 0 : 1 }}
@@ -119,6 +113,8 @@ export const ChatSidebar: React.FC = () => {
           chatCount={chats.length}
           onNewChat={handleNewChat}
           loading={isSaving}
+          isCollapsed={isCollapsed}
+          onToggle={toggleCollapse}
         />
       </motion.div>
 

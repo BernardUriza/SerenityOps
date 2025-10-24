@@ -1,7 +1,8 @@
 /**
- * Icon Registry - Central icon mapping
+ * Icon Registry - Central icon mapping with Lucide fallback
  * Single Source of Truth for all icons
  * Follows Open/Closed Principle: Easy to extend
+ * Implements Singleton + Memoization Pattern for performance
  */
 
 import type { IconMetadata } from '../types';
@@ -31,6 +32,14 @@ import { SparklesIcon } from '../components/SparklesIcon';
 import { SearchIcon } from '../components/SearchIcon';
 import { BrainIcon } from '../components/BrainIcon';
 import { TieIcon } from '../components/TieIcon';
+import * as LucideIcons from 'lucide-react';
+import React from 'react';
+
+/**
+ * Icon resolution cache - Memoization Pattern
+ * Prevents redundant icon lookups and component creation
+ */
+const iconCache = new Map<string, IconMetadata>();
 
 /**
  * Icon Registry Map
@@ -215,11 +224,84 @@ export const ICON_REGISTRY: Record<string, IconMetadata> = {
 };
 
 /**
- * Get icon by name
- * Implements Icon Resolver interface
+ * Convert kebab-case to PascalCase for Lucide icon names
+ * Examples: "bar-chart" → "BarChart", "activity" → "Activity"
  */
-export const getIconByName = (name: string) => {
-  return ICON_REGISTRY[name.toLowerCase()] || null;
+const toPascalCase = (str: string): string => {
+  return str
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join('');
+};
+
+/**
+ * Create a Lucide icon wrapper component
+ * Wraps Lucide icon to match IconMetadata interface
+ */
+const createLucideIconWrapper = (
+  LucideComponent: React.ComponentType<any>,
+  name: string
+): IconMetadata => {
+  const WrappedComponent: React.FC<any> = (props) => {
+    const { size = 20, className = '', color, ...rest } = props;
+    return React.createElement(LucideComponent, {
+      size,
+      className: `${color || 'text-macText'} ${className}`,
+      strokeWidth: 1.75,
+      ...rest,
+    });
+  };
+
+  return {
+    name,
+    category: IconCategory.GENERAL,
+    component: WrappedComponent,
+    keywords: [name],
+    defaultColor: 'text-macText',
+  };
+};
+
+/**
+ * Get icon by name with Lucide fallback and memoization
+ * Implements Icon Resolver interface with Singleton + Memoization Pattern
+ *
+ * Resolution order:
+ * 1. Check cache (memoized results)
+ * 2. Check custom icon registry (ICON_REGISTRY)
+ * 3. Check Lucide icons (kebab-case → PascalCase conversion)
+ * 4. Return null (handled by Icon component with fallback)
+ */
+export const getIconByName = (name: string): IconMetadata | null => {
+  const normalizedName = name.toLowerCase();
+
+  // 1. Check cache first - Memoization Pattern
+  if (iconCache.has(normalizedName)) {
+    return iconCache.get(normalizedName)!;
+  }
+
+  // 2. Check custom icon registry
+  if (ICON_REGISTRY[normalizedName]) {
+    const iconMetadata = ICON_REGISTRY[normalizedName];
+    iconCache.set(normalizedName, iconMetadata);
+    return iconMetadata;
+  }
+
+  // 3. Fallback to Lucide icons - Universal Icon Library
+  try {
+    const pascalName = toPascalCase(normalizedName);
+    const LucideIcon = (LucideIcons as any)[pascalName];
+
+    if (LucideIcon && typeof LucideIcon === 'function') {
+      const lucideMetadata = createLucideIconWrapper(LucideIcon, normalizedName);
+      iconCache.set(normalizedName, lucideMetadata);
+      return lucideMetadata;
+    }
+  } catch (error) {
+    // Lucide icon not found, continue to null
+  }
+
+  // 4. Icon not found - Icon component will use fallback
+  return null;
 };
 
 /**
@@ -245,4 +327,21 @@ export const getIconsByCategory = (category: IconCategory): IconMetadata[] => {
  */
 export const getAllIconNames = (): string[] => {
   return Object.keys(ICON_REGISTRY);
+};
+
+/**
+ * Clear icon cache - useful for testing/hot reload
+ */
+export const clearIconCache = (): void => {
+  iconCache.clear();
+};
+
+/**
+ * Get cache statistics - for debugging
+ */
+export const getIconCacheStats = () => {
+  return {
+    size: iconCache.size,
+    entries: Array.from(iconCache.keys()),
+  };
 };
