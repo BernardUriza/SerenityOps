@@ -44,17 +44,20 @@ export interface IconMetadata {
 
 /**
  * Icon categories for logical grouping
+ * Using const object instead of enum for erasableSyntaxOnly compatibility
  */
-export enum IconCategory {
-  GENERAL = 'general',
-  NAVIGATION = 'navigation',
-  COMMUNICATION = 'communication',
-  BUSINESS = 'business',
-  TECHNOLOGY = 'technology',
-  STATUS = 'status',
-  ACTIONS = 'actions',
-  FINANCE = 'finance',
-}
+export const IconCategory = {
+  GENERAL: 'general',
+  NAVIGATION: 'navigation',
+  COMMUNICATION: 'communication',
+  BUSINESS: 'business',
+  TECHNOLOGY: 'technology',
+  STATUS: 'status',
+  ACTIONS: 'actions',
+  FINANCE: 'finance',
+} as const;
+
+export type IconCategory = typeof IconCategory[keyof typeof IconCategory];
 
 /**
  * Icon resolver strategy interface
@@ -66,21 +69,27 @@ export interface IconResolver {
 
 /**
  * Icon size presets for consistency
+ * Using const object instead of enum for erasableSyntaxOnly compatibility
  */
-export enum IconSize {
-  XS = 12,
-  SM = 16,
-  MD = 20,
-  LG = 24,
-  XL = 32,
-  XXL = 48,
-}
+export const IconSize = {
+  XS: 12,
+  SM: 16,
+  MD: 20,
+  LG: 24,
+  XL: 32,
+  XXL: 48,
+} as const;
+
+export type IconSize = typeof IconSize[keyof typeof IconSize];
 
 /**
  * Icon variant for different visual styles
+ * Using const object instead of enum for erasableSyntaxOnly compatibility
  */
-export enum IconVariant {
-  OUTLINE = 'outline',
-  SOLID = 'solid',
-  DUOTONE = 'duotone',
-}
+export const IconVariant = {
+  OUTLINE: 'outline',
+  SOLID: 'solid',
+  DUOTONE: 'duotone',
+} as const;
+
+export type IconVariant = typeof IconVariant[keyof typeof IconVariant];

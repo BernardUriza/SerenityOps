@@ -108,7 +108,7 @@ export const ChatItem: React.FC<ChatItemProps> = ({
       } ${chat.archived ? 'opacity-60' : ''}`}
       title={`${chat.name} - ${chat.message_count} messages - Updated ${formattedDate}`}
     >
-      <div className="flex items-center px-5 py-4">
+      <div className="flex items-start px-5 py-3 min-h-[3.5rem]">
         {/* Active indicator - Enhanced */}
         {isActive && (
           <motion.div
@@ -132,25 +132,27 @@ export const ChatItem: React.FC<ChatItemProps> = ({
             disabled={actionLoading === 'rename'}
           />
         ) : (
-          <div className="flex-1 flex items-center min-w-0 gap-3">
-            {/* Chat name */}
-            <span
-              className={`text-sm font-bold truncate transition-colors duration-300 ${
-                isActive ? 'text-macAccent drop-shadow-[0_0_8px_rgba(10,132,255,0.5)]' : 'text-macText'
-              }`}
-            >
-              {chat.name}
-            </span>
-
-            {/* Archived badge */}
-            {chat.archived && (
-              <span className="px-2 py-1 bg-warning/20 text-warning text-[10px] font-bold rounded-lg uppercase shadow-lg">
-                Archived
+          <div className="flex-1 grid grid-cols-[1fr_auto] items-center gap-3 min-w-0">
+            {/* Chat name - No truncate, allows wrapping */}
+            <div className="flex flex-col gap-1 min-w-0">
+              <span
+                className={`text-sm font-bold leading-tight break-words transition-colors duration-300 ${
+                  isActive ? 'text-macAccent drop-shadow-[0_0_8px_rgba(10,132,255,0.5)]' : 'text-macText'
+                }`}
+              >
+                {chat.name}
               </span>
-            )}
 
-            {/* Message count badge */}
-            <span className="ml-auto text-xs font-bold text-macSubtext bg-macPanel/60 px-3 py-1.5 rounded-xl flex-shrink-0 border-2 border-macBorder/30 shadow-md">
+              {/* Archived badge - Below name */}
+              {chat.archived && (
+                <span className="px-2 py-0.5 bg-warning/20 text-warning text-[9px] font-bold rounded-md uppercase shadow-lg w-fit">
+                  Archived
+                </span>
+              )}
+            </div>
+
+            {/* Message count badge - Right aligned */}
+            <span className="text-xs font-bold text-macSubtext bg-macPanel/60 px-3 py-1.5 rounded-xl flex-shrink-0 border-2 border-macBorder/30 shadow-md self-start">
               {chat.message_count}
             </span>
           </div>

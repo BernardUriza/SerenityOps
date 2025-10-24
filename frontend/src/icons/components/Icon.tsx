@@ -39,7 +39,7 @@ export const Icon: React.FC<SmartIconProps> = ({
 
   // Icon not found - use fallback (rare case, as Lucide covers most icons)
   if (!iconMetadata) {
-    if (warnOnMissing && process.env.NODE_ENV === 'development') {
+    if (warnOnMissing && import.meta.env.DEV) {
       console.warn(
         `[IconRegistry] Icon "${name}" not found in custom registry or Lucide. Using fallback icon.`
       );

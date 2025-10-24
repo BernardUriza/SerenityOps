@@ -12,7 +12,8 @@
  * - Singleton Pattern: Single source of truth for icon config
  */
 
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext } from 'react';
+import type { ReactNode } from 'react';
 import type { IconMetadata } from '../types';
 import { getIconByName, clearIconCache, getIconCacheStats } from '../constants/iconRegistry';
 

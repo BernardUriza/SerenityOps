@@ -24,14 +24,19 @@ const PitchReader: React.FC<PitchReaderProps> = ({ opportunity: selectedOpportun
   }, [selectedOpportunity]);
 
   const loadPitch = async () => {
-    if (!selectedOpportunity) return;
+    if (!selectedOpportunity) {
+      console.log('[PitchReader] No selected opportunity');
+      return;
+    }
 
+    console.log('[PitchReader] Loading pitch for:', selectedOpportunity.company);
     setLoading(true);
     try {
       const pitchText = await opportunitiesService.fetchElevatorPitch(selectedOpportunity.company);
+      console.log('[PitchReader] Pitch loaded, length:', pitchText?.length);
       setPitch(pitchText);
     } catch (error) {
-      console.error('Error loading pitch:', error);
+      console.error('[PitchReader] Error loading pitch:', error);
       setPitch('');
     } finally {
       setLoading(false);

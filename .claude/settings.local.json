@@ -42,7 +42,8 @@
       "WebFetch(domain:www.somosclear.com)",
       "Bash(git symbolic-ref:*)",
       "Bash(git fsck:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(xargs kill:*)"
     ],
     "deny": [],
     "ask": []
