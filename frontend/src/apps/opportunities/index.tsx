@@ -59,13 +59,13 @@ export const OpportunitiesViewer: React.FC<OpportunitiesViewerProps> = ({ apiBas
             </div>
             <div>
               <h2 className="text-lg font-bold text-gradient">Opportunities</h2>
-              <p className="text-xs text-macSubtext">Active: {filterByStatus('active').length}</p>
+              <p className="text-xs text-macSubtext">Active: {opportunities.filter(o => o.status !== 'closed').length}</p>
             </div>
           </div>
           {/* Quick stats */}
           <div className="grid grid-cols-3 gap-2 text-center">
             <div className="liquid-glass rounded-lg p-2">
-              <div className="text-lg font-bold text-indigo-400">{filterByStatus('interview').length}</div>
+              <div className="text-lg font-bold text-indigo-400">{filterByStatus('interviewing').length}</div>
               <div className="text-[10px] text-macSubtext">Interviews</div>
             </div>
             <div className="liquid-glass rounded-lg p-2">

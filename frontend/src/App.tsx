@@ -249,12 +249,12 @@ function App() {
       <div className="gradient-orb fixed top-[-10%] right-[20%] w-[500px] h-[500px] bg-macAccent/30" style={{ animationDelay: '0s' }}></div>
       <div className="gradient-orb fixed bottom-[-15%] left-[10%] w-[400px] h-[400px] bg-purple-500/20" style={{ animationDelay: '4s' }}></div>
 
-      {/* macOS Sidebar - ULTRA VISUAL 2026 - COLLAPSIBLE */}
+      {/* macOS Sidebar - ULTRA VISUAL 2026 - COLLAPSIBLE - FIXED LAYOUT */}
       <motion.div
         initial={false}
         animate={{ width: isCollapsed ? APP_SIDEBAR_WIDTH.COLLAPSED : APP_SIDEBAR_WIDTH.EXPANDED }}
         transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
-        className="liquid-glass flex flex-col relative overflow-hidden z-10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] border-r-2 border-macAccent/30"
+        className="liquid-glass flex flex-col justify-between h-screen relative overflow-hidden z-10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] border-r-2 border-macAccent/30"
       >
         {/* Enhanced ambient gradient overlay - MORE VISIBLE */}
         <div className="absolute inset-0 bg-gradient-to-b from-macAccent/20 via-purple-500/15 to-cyan-500/10 pointer-events-none animate-gradient-shift"></div>
@@ -279,8 +279,10 @@ function App() {
           </motion.div>
         </button>
 
-        {/* Header - Logo with DRAMATIC Glow */}
-        <div className="h-24 flex items-center justify-center relative z-10 mb-4 border-b-2 border-macAccent/20 px-4">
+        {/* TOP SECTION - Header + Navigation */}
+        <div className="flex flex-col flex-1 overflow-hidden">
+          {/* Header - Logo with DRAMATIC Glow */}
+          <div className="h-24 flex items-center justify-center relative z-10 border-b-2 border-macAccent/20 px-4 flex-shrink-0">
           <AnimatePresence mode="wait">
             {!isCollapsed && (
               <motion.div
@@ -323,10 +325,10 @@ function App() {
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
+          </div>
 
-        {/* Navigation - COLLAPSIBLE with LABELS */}
-        <nav className="flex-1 overflow-y-auto py-2 px-3 relative z-10 space-y-2">
+          {/* Navigation - COLLAPSIBLE with LABELS - WITH PROPER GAP */}
+          <nav className="flex-1 overflow-y-auto py-4 px-3 relative z-10 flex flex-col gap-3">
           {navItems.map((item, index) => (
             <button
               key={item.id}
@@ -416,20 +418,23 @@ function App() {
               )}
             </button>
           ))}
-        </nav>
-
-        {/* Theme Switcher - 2026 Trend: Mode Switching */}
-        <div className="px-3 pb-3 relative z-10 mt-auto">
-          <ThemeSwitcher isCollapsed={isCollapsed} />
+          </nav>
         </div>
 
-        {/* User Profile - 2026 Trend: Account Management */}
-        <div className="px-3 pb-3 relative z-10">
-          <AppSidebarProfile isCollapsed={isCollapsed} />
-        </div>
+        {/* BOTTOM SECTION - Theme + Profile + Actions */}
+        <div className="flex flex-col gap-2 pb-3 relative z-10 flex-shrink-0">
+          {/* Theme Switcher - 2026 Trend: Mode Switching */}
+          <div className="px-3">
+            <ThemeSwitcher isCollapsed={isCollapsed} />
+          </div>
 
-        {/* Actions - COLLAPSIBLE with LABELS */}
-        <div className="p-3 space-y-3 relative z-10 border-t-2 border-macAccent/20 bg-gradient-to-t from-macPanel/40 to-transparent">
+          {/* User Profile - 2026 Trend: Account Management */}
+          <div className="px-3">
+            <AppSidebarProfile isCollapsed={isCollapsed} />
+          </div>
+
+          {/* Actions - COLLAPSIBLE with LABELS */}
+          <div className="px-3 pt-3 space-y-3 border-t-2 border-macAccent/20 bg-gradient-to-t from-macPanel/40 to-transparent">
           <button
             onClick={handleSave}
             disabled={saving}
@@ -481,6 +486,7 @@ function App() {
               )}
             </AnimatePresence>
           </button>
+          </div>
         </div>
       </motion.div>
 
