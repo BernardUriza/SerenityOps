@@ -13,6 +13,7 @@ import { useCVJobStore, loadJobFromLocalStorage } from './stores/cvJobStore';
 import { Icon, IconProvider } from './icons';
 import VersionBadge from './components/VersionBadge';
 import { useAppSidebarState, APP_SIDEBAR_WIDTH } from './hooks/useAppSidebarState';
+import { useNotificationCounts } from './hooks/useNotificationCounts';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { AppSidebarProfile } from './components/AppSidebarProfile';
 import { ThemeSwitcher } from './components/ThemeSwitcher';
@@ -31,6 +32,7 @@ function App() {
   const [notification, setNotification] = useState<{message: string, type: 'success' | 'error'} | null>(null);
   const { setJob } = useCVJobStore();
   const { isCollapsed, toggleCollapse } = useAppSidebarState();
+  const { counts: notificationCounts } = useNotificationCounts();
 
   // Load curriculum on mount
   useEffect(() => {
@@ -224,21 +226,43 @@ function App() {
     );
   }
 
-  // Mock notification badges - in real app, these would come from API/WebSocket
-  const navItemsWithBadges = [
-    { id: 'chat' as TabType, label: 'Chat', icon: 'message-circle', badge: 3 }, // 3 unread messages
+  // Navigation items with live notification badges from API
+  const navItems = [
+    {
+      id: 'chat' as TabType,
+      label: 'Chat',
+      icon: 'message-circle',
+      badge: notificationCounts.chat,
+      badgeType: undefined // default red for unread messages
+    },
     { id: 'import' as TabType, label: 'Import', icon: 'download' },
     { id: 'profile' as TabType, label: 'Profile', icon: 'user' },
     { id: 'experience' as TabType, label: 'Experience', icon: 'briefcase' },
-    { id: 'projects' as TabType, label: 'Projects', icon: 'rocket' },
+    {
+      id: 'projects' as TabType,
+      label: 'Projects',
+      icon: 'rocket',
+      badge: notificationCounts.projects,
+      badgeType: 'warning' as const
+    },
     { id: 'skills' as TabType, label: 'Skills', icon: 'lightning' },
     { id: 'education' as TabType, label: 'Education', icon: 'graduation-cap' },
-    { id: 'cvs' as TabType, label: 'CVs', icon: 'file', badge: 2, badgeType: 'success' }, // 2 new CVs
+    {
+      id: 'cvs' as TabType,
+      label: 'CVs',
+      icon: 'file',
+      badge: notificationCounts.cvs,
+      badgeType: 'success' as const // green for new CVs
+    },
     { id: 'finances' as TabType, label: 'Finances', icon: 'dollar-sign' },
-    { id: 'opportunities' as TabType, label: 'Opportunities', icon: 'target', badge: 5, badgeType: 'warning' }, // 5 new opportunities
+    {
+      id: 'opportunities' as TabType,
+      label: 'Opportunities',
+      icon: 'target',
+      badge: notificationCounts.opportunities,
+      badgeType: 'warning' as const // orange for active opportunities
+    },
   ];
-
-  const navItems = navItemsWithBadges;
 
   return (
     <IconProvider config={{ enableCache: true, debug: false }}>

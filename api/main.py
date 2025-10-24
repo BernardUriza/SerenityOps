@@ -393,6 +393,74 @@ def update_curriculum(curriculum: Curriculum):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to save curriculum: {str(e)}")
 
+@app.get("/api/notifications/summary")
+def get_notification_summary() -> Dict[str, int]:
+    """
+    Get notification counters for sidebar badges.
+
+    Returns real-time counts based on system data:
+    - chat: recent conversations (last 7 days)
+    - cvs: recently generated CVs (last 24 hours)
+    - opportunities: active opportunities (not closed)
+    - projects: active projects without recent activity
+    """
+    try:
+        from datetime import datetime, timedelta
+
+        counts = {
+            "chat": 0,
+            "cvs": 0,
+            "opportunities": 0,
+            "projects": 0
+        }
+
+        # Count recent conversations (last 7 days)
+        conversations_dir = BASE_DIR / "logs" / "conversations"
+        if conversations_dir.exists():
+            cutoff_date = datetime.now() - timedelta(days=7)
+            for conv_file in conversations_dir.glob("conv_*.yaml"):
+                try:
+                    file_date_str = conv_file.stem.split('_')[1]  # Extract date from filename
+                    file_date = datetime.strptime(file_date_str, "%Y%m%d")
+                    if file_date >= cutoff_date:
+                        counts["chat"] += 1
+                except (IndexError, ValueError):
+                    pass
+
+        # Count recently generated CVs (last 24 hours)
+        cv_versions_dir = BASE_DIR / "curriculum" / "versions"
+        if cv_versions_dir.exists():
+            cutoff_time = datetime.now() - timedelta(hours=24)
+            for cv_file in cv_versions_dir.glob("cv_*.pdf"):
+                if cv_file.stat().st_mtime > cutoff_time.timestamp():
+                    counts["cvs"] += 1
+
+        # Count active opportunities (not closed)
+        opportunities_file = BASE_DIR / "opportunities" / "structure.yaml"
+        if opportunities_file.exists():
+            with open(opportunities_file, 'r', encoding='utf-8') as f:
+                opps_data = yaml.safe_load(f)
+                if opps_data and 'pipeline' in opps_data:
+                    for opp in opps_data['pipeline']:
+                        status = opp.get('stage') or opp.get('status', '')
+                        if status.lower() not in ['closed', 'rejected', 'declined']:
+                            counts["opportunities"] += 1
+
+        # Count projects needing attention (optional - placeholder)
+        # This could be based on projects without recent commits, missing tests, etc.
+        counts["projects"] = 0
+
+        return counts
+
+    except Exception as e:
+        # If anything fails, return zeros to avoid breaking the UI
+        return {
+            "chat": 0,
+            "cvs": 0,
+            "opportunities": 0,
+            "projects": 0
+        }
+
 @app.post("/api/cv/generate")
 def generate_cv_endpoint(request: CVGenerateRequest, background_tasks: BackgroundTasks):
     """
