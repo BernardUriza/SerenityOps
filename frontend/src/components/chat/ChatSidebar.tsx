@@ -116,7 +116,7 @@ export const ChatSidebar: React.FC = () => {
       {!isCollapsed && (
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Search Section */}
-          <div className="p-3">
+          <div className="px-3 py-2">
             <ChatSearch value={filter} onChange={setFilter} />
           </div>
 

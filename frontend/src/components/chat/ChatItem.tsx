@@ -101,14 +101,14 @@ export const ChatItem: React.FC<ChatItemProps> = ({
       onClick={onSelect}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
-      className={`group relative mx-3 mb-3 rounded-2xl cursor-pointer transition-all duration-300 ease-mac ${
+      className={`group relative mx-3 mb-2 rounded-xl cursor-pointer transition-all duration-300 ease-mac ${
         isActive
-          ? 'bg-gradient-to-r from-macAccent/20 via-macAccent/10 to-transparent backdrop-blur-md shadow-2xl shadow-macAccent/20 border-2 border-macAccent/50 scale-[1.02] ring-2 ring-macAccent/30'
-          : 'hover:bg-macPanel/60 border-2 border-transparent hover:border-macAccent/20 hover:scale-[1.01] hover:shadow-xl'
+          ? 'bg-gradient-to-r from-macAccent/20 via-macAccent/10 to-transparent backdrop-blur-md shadow-lg shadow-macAccent/20 border-2 border-macAccent/50 ring-1 ring-macAccent/30'
+          : 'hover:bg-macPanel/60 border border-transparent hover:border-macAccent/20 hover:shadow-lg'
       } ${chat.archived ? 'opacity-60' : ''}`}
       title={`${chat.name} - ${chat.message_count} messages - Updated ${formattedDate}`}
     >
-      <div className="flex items-start px-5 py-3 min-h-[3.5rem]">
+      <div className="flex items-start px-4 py-2.5 min-h-[3rem]">
         {/* Active indicator - Enhanced */}
         {isActive && (
           <motion.div
@@ -132,12 +132,12 @@ export const ChatItem: React.FC<ChatItemProps> = ({
             disabled={actionLoading === 'rename'}
           />
         ) : (
-          <div className="flex-1 grid grid-cols-[1fr_auto] items-center gap-3 min-w-0">
+          <div className="flex-1 grid grid-cols-[1fr_auto] items-center gap-2 min-w-0">
             {/* Chat name - No truncate, allows wrapping */}
-            <div className="flex flex-col gap-1 min-w-0">
+            <div className="flex flex-col gap-0.5 min-w-0">
               <span
-                className={`text-sm font-bold leading-tight break-words transition-colors duration-300 ${
-                  isActive ? 'text-macAccent drop-shadow-[0_0_8px_rgba(10,132,255,0.5)]' : 'text-macText'
+                className={`text-xs font-bold leading-tight break-words transition-colors duration-300 ${
+                  isActive ? 'text-macAccent' : 'text-macText'
                 }`}
               >
                 {chat.name}
@@ -145,14 +145,14 @@ export const ChatItem: React.FC<ChatItemProps> = ({
 
               {/* Archived badge - Below name */}
               {chat.archived && (
-                <span className="px-2 py-0.5 bg-warning/20 text-warning text-[9px] font-bold rounded-md uppercase shadow-lg w-fit">
+                <span className="px-1.5 py-0.5 bg-warning/20 text-warning text-[9px] font-bold rounded uppercase w-fit">
                   Archived
                 </span>
               )}
             </div>
 
             {/* Message count badge - Right aligned */}
-            <span className="text-xs font-bold text-macSubtext bg-macPanel/60 px-3 py-1.5 rounded-xl flex-shrink-0 border-2 border-macBorder/30 shadow-md self-start">
+            <span className="text-[10px] font-bold text-macSubtext bg-macPanel/60 px-2 py-1 rounded-lg flex-shrink-0 border border-macBorder/30 self-start">
               {chat.message_count}
             </span>
           </div>

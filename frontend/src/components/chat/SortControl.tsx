@@ -23,7 +23,7 @@ export const SortControl: React.FC<SortControlProps> = ({ value, onChange }) => 
   const currentOption = sortOptions.find(opt => opt.value === value);
 
   return (
-    <div className="px-3 pb-3">
+    <div className="px-3 pb-2">
       <div className="relative">
         <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
           <ArrowUpDown size={12} className="text-macSubtext" />
@@ -32,7 +32,7 @@ export const SortControl: React.FC<SortControlProps> = ({ value, onChange }) => 
         <select
           value={value}
           onChange={(e) => onChange(e.target.value as SortOption)}
-          className="w-full h-9 bg-macPanel/50 backdrop-blur-md border border-macBorder/40 rounded-xl pl-9 pr-9 text-xs font-semibold text-macText focus:outline-none focus:ring-2 focus:ring-macAccent/50 focus:border-macAccent transition-all duration-300 ease-mac appearance-none cursor-pointer hover:bg-macPanel/70"
+          className="w-full h-8 bg-macPanel/50 backdrop-blur-md border border-macBorder/40 rounded-lg pl-9 pr-9 text-xs font-semibold text-macText focus:outline-none focus:ring-2 focus:ring-macAccent/50 focus:border-macAccent transition-all duration-200 appearance-none cursor-pointer hover:bg-macPanel/70"
         >
           {sortOptions.map((option) => (
             <option key={option.value} value={option.value}>
@@ -50,7 +50,7 @@ export const SortControl: React.FC<SortControlProps> = ({ value, onChange }) => 
       </div>
 
       {/* Current selection indicator */}
-      <div className="mt-2 flex items-center gap-2 px-3">
+      <div className="mt-1.5 flex items-center gap-1.5 px-3">
         <div className="w-1 h-1 rounded-full bg-macAccent" />
         <span className="text-[10px] text-macSubtext font-medium">
           Sorted by {currentOption?.label.toLowerCase()}
