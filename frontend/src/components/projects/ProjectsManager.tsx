@@ -71,7 +71,7 @@ export const ProjectsManager: React.FC = () => {
   return (
     <div className="w-full p-6">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-8">
         <div>
           <div className="flex items-center gap-2">
             <Rocket size={16} className="text-macAccent" />
@@ -109,7 +109,7 @@ export const ProjectsManager: React.FC = () => {
       </div>
 
       {/* Projects list */}
-      <div className="space-y-4">
+      <div className="space-y-6">
         <AnimatePresence mode="popLayout">
           {projects.length === 0 ? (
             <motion.div

@@ -65,11 +65,11 @@ const SkillsEditor: React.FC<SkillsEditorProps> = ({ skills, onChange }) => {
 
   return (
     <div className="space-y-6 p-6">
-      <h2 className="text-lg font-bold text-macText mb-4">Skills</h2>
+      <h2 className="text-lg font-bold text-macText mb-6">Skills</h2>
 
       {/* Programming Languages */}
       <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6">
-        <div className="flex justify-between items-center mb-5">
+        <div className="flex justify-between items-center mb-6">
           <h3 className="text-sm font-semibold text-macText">Programming Languages</h3>
           <button
             onClick={handleAddLanguage}
@@ -129,7 +129,7 @@ const SkillsEditor: React.FC<SkillsEditorProps> = ({ skills, onChange }) => {
 
       {/* Frameworks */}
       <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6">
-        <h3 className="text-sm font-semibold text-macText mb-5">Frameworks</h3>
+        <h3 className="text-sm font-semibold text-macText mb-6">Frameworks</h3>
         <div className="space-y-5">
           <div>
             <label className="block text-xs font-medium text-macSubtext mb-2">
@@ -223,7 +223,7 @@ const SkillsEditor: React.FC<SkillsEditorProps> = ({ skills, onChange }) => {
 
       {/* Databases */}
       <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6">
-        <div className="flex justify-between items-center mb-5">
+        <div className="flex justify-between items-center mb-6">
           <h3 className="text-sm font-semibold text-macText">Databases</h3>
           <button
             onClick={handleAddDatabase}
@@ -273,7 +273,7 @@ const SkillsEditor: React.FC<SkillsEditorProps> = ({ skills, onChange }) => {
 
       {/* Cloud & DevOps */}
       <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6">
-        <h3 className="text-sm font-semibold text-macText mb-5">Cloud & DevOps</h3>
+        <h3 className="text-sm font-semibold text-macText mb-6">Cloud & DevOps</h3>
         <label className="block text-xs font-medium text-macSubtext mb-2">
           Cloud & DevOps Tools (comma-separated)
         </label>
@@ -297,7 +297,7 @@ const SkillsEditor: React.FC<SkillsEditorProps> = ({ skills, onChange }) => {
 
       {/* Tools */}
       <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6">
-        <h3 className="text-sm font-semibold text-macText mb-5">Tools</h3>
+        <h3 className="text-sm font-semibold text-macText mb-6">Tools</h3>
         <label className="block text-xs font-medium text-macSubtext mb-2">
           Development Tools (comma-separated)
         </label>
@@ -321,7 +321,7 @@ const SkillsEditor: React.FC<SkillsEditorProps> = ({ skills, onChange }) => {
 
       {/* Domain Expertise */}
       <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6">
-        <h3 className="text-sm font-semibold text-macText mb-5">Domain Expertise</h3>
+        <h3 className="text-sm font-semibold text-macText mb-6">Domain Expertise</h3>
         <label className="block text-xs font-medium text-macSubtext mb-2">
           Domain Areas (comma-separated)
         </label>

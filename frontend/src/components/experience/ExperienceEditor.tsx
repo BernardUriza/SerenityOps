@@ -88,7 +88,7 @@ export const ExperienceEditor: React.FC = () => {
   return (
     <div className="w-full p-6">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-lg font-bold text-macText mb-2">Experience</h1>
           <div className="flex items-center gap-3 text-xs text-macSubtext">
@@ -152,7 +152,7 @@ export const ExperienceEditor: React.FC = () => {
       </div>
 
       {/* Experience list */}
-      <div className="space-y-4">
+      <div className="space-y-6">
         <AnimatePresence mode="popLayout">
           {experiences.length === 0 ? (
             <motion.div

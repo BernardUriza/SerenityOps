@@ -54,14 +54,14 @@ const EducationList: React.FC<EducationListProps> = ({
   };
 
   return (
-    <div className="space-y-4 p-6">
-      <h2 className="text-xl font-semibold text-macText">
+    <div className="space-y-6 p-6">
+      <h2 className="text-xl font-semibold text-macText mb-6">
         Education & Languages
       </h2>
 
       {/* Education */}
-      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-4">
-        <div className="flex justify-between items-center mb-4">
+      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6">
+        <div className="flex justify-between items-center mb-6">
           <h3 className="text-base font-semibold text-macText">Education</h3>
           <button
             onClick={handleAddEducation}
@@ -174,8 +174,8 @@ const EducationList: React.FC<EducationListProps> = ({
       </div>
 
       {/* Languages */}
-      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-4">
-        <div className="flex justify-between items-center mb-4">
+      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6">
+        <div className="flex justify-between items-center mb-6">
           <h3 className="text-base font-semibold text-macText">Spoken Languages</h3>
           <button
             onClick={handleAddLanguage}
@@ -232,8 +232,8 @@ const EducationList: React.FC<EducationListProps> = ({
       </div>
 
       {/* Certifications */}
-      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-4">
-        <h3 className="text-base font-semibold text-macText mb-2">
+      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6">
+        <h3 className="text-base font-semibold text-macText mb-6">
           Certifications
         </h3>
         <p className="text-sm text-macSubtext">
