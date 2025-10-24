@@ -573,3 +573,174 @@ curl http://localhost:8000/api/version
 - ✅ Fewer stacking contexts (simpler paint tree)
 - ✅ Smoother animation (no overshoot recalculations)
 
+---
+
+### ChatSidebar Visibility Fix (October 2025)
+
+**Problem**: All buttons in ChatSidebar invisible in both expanded and collapsed states.
+
+**Root Cause** (multi-layered opacity blocking):
+
+1. **Container opacity**: Lines 122-129 and 166-181 in ChatSidebar.tsx had `motion.div` with `initial={{ opacity: 0 }}` without `<AnimatePresence>` wrapper
+   - Framer Motion never executed `animate={{ opacity: 1 }}` transition
+   - Content containers stuck at `opacity: 0`
+
+2. **Header opacity**: Lines 107-119 had `motion.div` wrapping `SidebarHeader` with `animate={{ opacity: isCollapsed ? 0 : 1 }}`
+   - In collapsed state, entire Header hidden including critical Toggle button
+   - Users unable to expand sidebar (UX critical failure)
+
+3. **Button duplication**: New Chat button appeared in both Header and CollapsedSidebarNav
+   - Visual confusion and redundant UI elements
+
+**Solution Applied** (4 commits):
+
+1. **ea3e491**: Remove opacity animations from content containers
+   - Replaced `motion.div` → `div` for both expanded and collapsed content wrappers
+   - Immediate visibility (no animation dependencies)
+
+2. **e5acf85**: Document Framer Motion conditional rendering rule
+   - Added permanent rule: NEVER use `initial={{ opacity: 0 }}` without `<AnimatePresence>`
+   - Priority: visibility stability over aesthetic transitions
+
+3. **eebd9fb**: Adapt Header for collapsed state
+   - Removed opacity wrapper from ChatSidebar (Header always rendered)
+   - Modified SidebarHeader to adapt layout based on `isCollapsed` prop:
+     - Collapsed: `justify-center`, buttons in vertical column, logo hidden
+     - Expanded: `justify-between`, buttons horizontal, logo + title shown
+   - Toggle button now ALWAYS visible (critical fix)
+
+4. **13e039a**: Remove duplicate New Chat button
+   - Header only shows Toggle button when collapsed
+   - CollapsedSidebarNav handles all other actions
+   - Clean separation of responsibilities
+
+**Adaptive Header Pattern** (reusable for other collapsible components):
+
+```tsx
+// Header container with conditional layout
+<div className={`fixed-height ${
+  isCollapsed ? 'justify-center px-narrow' : 'justify-between px-wide'
+}`}>
+  {/* Content only shown when expanded */}
+  {!isCollapsed && (
+    <div className="logo-and-title">...</div>
+  )}
+
+  {/* Actions always visible, layout adapts */}
+  <div className={`flex ${isCollapsed ? 'flex-col' : 'flex-row'}`}>
+    <ToggleButton />  {/* Always visible */}
+    {!isCollapsed && <OtherActions />}  {/* Conditional */}
+  </div>
+</div>
+```
+
+**Key Lessons**:
+- ✅ Critical interactive elements (toggle buttons) must NEVER be hidden by animations
+- ✅ Use conditional rendering (`{!isCollapsed && ...}`) instead of opacity animations
+- ✅ Collapsible headers should adapt content, not hide completely
+- ❌ Never wrap conditionally-rendered content in `motion.div` without `AnimatePresence`
+
+**Verification Tests**:
+- Toggle button visible and clickable in both collapsed (64px) and expanded (260px) states
+- All CollapsedSidebarNav buttons (New Chat, Search, Recent) render with `opacity: 1`
+- No duplicate buttons between Header and CollapsedSidebarNav
+- Smooth collapse/expand transition without content flickering
+
+**Files Modified**:
+- `frontend/src/components/chat/ChatSidebar.tsx`: Removed opacity wrappers
+- `frontend/src/components/chat/SidebarHeader.tsx`: Adaptive layout implementation
+- `claude.md`: Documented adaptive header pattern (this section)
+
+---
+
+### Collapsed Sidebar Vertical Layout Pattern (October 2025)
+
+**Problem**: Collapsed mode (64px width) looked "anticuada" with horizontal cramming of elements.
+
+**User Feedback**: "se ve raro y anticuada la distribución... podrias acomodar mejor el logo de la esquina con su boton expandible si lo pones debajo en vez de a un lado"
+
+**Solution Applied** (commit 0ffa119): Complete redesign to vertical stacking pattern
+
+**Vertical Layout Pattern** (for sidebars ≤80px width):
+
+```tsx
+// SidebarHeader in collapsed mode
+if (isCollapsed) {
+  return (
+    <div className="flex flex-col items-center gap-3 px-2 py-3">
+      {/* Logo Icon - Top */}
+      <div className="w-10 h-10 rounded-lg gradient-accent">
+        <Icon size={18} />
+      </div>
+
+      {/* Toggle Button - Below Logo */}
+      <button className="w-8 h-8 rounded-lg">
+        <ExpandIcon size={16} />
+      </button>
+    </div>
+  );
+}
+```
+
+**Design Principles for Collapsed Sidebars**:
+
+1. **Vertical Stacking**: Always stack elements vertically, never horizontal in <80px width
+2. **Visual Hierarchy**: Logo/Brand → Toggle → Primary Actions → Secondary Actions
+3. **Consistent Spacing**: Use gap-3 (12px) for major sections, gap-2 (8px) for related items
+4. **Icon Sizing**: Logo 18-20px, Actions 16px, utility icons 14px
+5. **Subtle Animations**: whileHover scale:1.05 (not 1.1), duration:200ms (not 300ms)
+6. **Compact Badges**: 16px × 16px max, show "9+" instead of "99+" for counts
+7. **Border Radius**: rounded-lg (8px) for consistency in narrow space
+8. **Early Return Pattern**: Separate rendering logic for collapsed vs expanded modes
+
+**Dimensions Guide** (collapsed mode, 64px width):
+
+| Element | Size | Icon | Spacing |
+|---------|------|------|---------|
+| Logo container | 40px × 40px | 18px | - |
+| Toggle button | 32px × 32px | 16px | gap-3 from logo |
+| Action buttons | 32px × 32px | 16px | gap-2 between |
+| Chat items | 40px × 40px | 16px | gap-2 between |
+| Count badges | 16px × 16px | 8px text | absolute position |
+| Dividers | - | 1px height | my-1.5 (6px) |
+
+**CollapsedSidebarNav Structure**:
+```tsx
+<div className="flex-1 flex flex-col items-center py-3 gap-2">
+  <ActionButton />           {/* Primary action */}
+  <Divider className="my-1.5" />
+  <ActionButton />           {/* Secondary action */}
+  <Divider className="my-1.5" />
+  <ScrollableList>           {/* Chat items */}
+    <ChatItem />
+  </ScrollableList>
+  <Divider className="my-1.5" />
+  <UtilityButtons />         {/* Bottom actions */}
+</div>
+```
+
+**Key Improvements**:
+- ✅ Logo always visible as visual anchor
+- ✅ Clear separation between logo and toggle (prevents cramming)
+- ✅ Follows modern sidebar patterns (Discord, Notion, Linear 2026)
+- ✅ Better touch targets despite compact size (32px+ all interactive elements)
+- ✅ Reduced motion (accessibility improvement)
+- ✅ Faster transitions (200ms instead of 300ms)
+
+**Performance Optimizations**:
+- Eliminated rotation animation wrapper (static icon instead)
+- Early return pattern reduces conditional rendering complexity
+- Simpler DOM structure (fewer nested divs)
+- Removed unnecessary motion.div wrappers
+
+**Anti-Patterns to Avoid**:
+- ❌ Horizontal layout in <80px width (cramped, unreadable)
+- ❌ Rotating icons in tight spaces (disorienting)
+- ❌ Large badges (>16px) in collapsed mode
+- ❌ Hover scale >1.05 in narrow sidebars (elements escape container)
+- ❌ Mixing horizontal and vertical layouts in same component state
+
+**Files Modified** (commit 0ffa119):
+- `frontend/src/components/chat/SidebarHeader.tsx`: Vertical layout for collapsed mode
+- `frontend/src/components/chat/CollapsedSidebarNav.tsx`: Spacing and animation refinements
+
