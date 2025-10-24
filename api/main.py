@@ -225,6 +225,7 @@ class Experience(BaseModel):
     description: str
     achievements: list[str]
     tech_stack: list[str]
+    logo: Optional[str] = None
 
 class Project(BaseModel):
     name: str
@@ -491,9 +492,19 @@ def serve_cv_file(filename: str):
     if not file_path.exists():
         raise HTTPException(status_code=404, detail="CV file not found")
 
+    # Determine media type based on extension
+    if filename.endswith(".pdf"):
+        media_type = "application/pdf"
+    elif filename.endswith(".html"):
+        media_type = "text/html"
+    elif filename.endswith(".md"):
+        media_type = "text/markdown"
+    else:
+        media_type = "application/octet-stream"
+
     return FileResponse(
         path=file_path,
-        media_type="text/html" if filename.endswith(".html") else "application/pdf"
+        media_type=media_type
     )
 
 @app.get("/api/cv/download/{filename}")
@@ -512,10 +523,20 @@ def download_cv(filename: str):
     if not file_path.exists():
         raise HTTPException(status_code=404, detail="CV file not found")
 
+    # Determine media type based on extension
+    if filename.endswith(".pdf"):
+        media_type = "application/pdf"
+    elif filename.endswith(".html"):
+        media_type = "text/html"
+    elif filename.endswith(".md"):
+        media_type = "text/markdown"
+    else:
+        media_type = "application/octet-stream"
+
     return FileResponse(
         path=file_path,
         filename=filename,
-        media_type="text/html" if filename.endswith(".html") else "application/pdf",
+        media_type=media_type,
         headers={"Content-Disposition": f"attachment; filename={filename}"}
     )
 
@@ -544,33 +565,43 @@ def delete_cv(filename: str):
 @app.get("/api/cv/list")
 def list_generated_cvs():
     """
-    List all generated CV files.
+    List all generated CV files from versions folder.
 
     Returns:
-        List of generated CV files with metadata
+        List of all CV files (PDF, HTML, MD) with metadata
     """
     try:
         if not CV_OUTPUT_DIR.exists():
             CV_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
             return {"count": 0, "files": []}
 
-        cv_files = sorted(CV_OUTPUT_DIR.glob("cv_*.html"), key=lambda p: p.stat().st_mtime, reverse=True)
+        # Get all CV files (pdf, html, md)
+        all_files = []
+        for pattern in ["cv_*.pdf", "cv_*.html", "cv_*.md"]:
+            all_files.extend(CV_OUTPUT_DIR.glob(pattern))
+
+        # Sort by modification time (most recent first)
+        cv_files = sorted(all_files, key=lambda p: p.stat().st_mtime, reverse=True)
 
         from datetime import datetime
 
+        files_data = []
+        for f in cv_files:
+            # Determine format from extension
+            format_type = f.suffix[1:]  # Remove the dot
+
+            files_data.append({
+                "filename": f.name,
+                "size_kb": round(f.stat().st_size / 1024, 1),
+                "created_at": datetime.fromtimestamp(f.stat().st_mtime).isoformat(),
+                "format": format_type,
+                "download_url": f"/api/cv/download/{f.name}",
+                "preview_url": f"/api/cv/file/{f.name}"
+            })
+
         return {
-            "count": len(cv_files),
-            "files": [
-                {
-                    "filename": f.name,
-                    "size_kb": round(f.stat().st_size / 1024, 1),
-                    "created_at": datetime.fromtimestamp(f.stat().st_mtime).isoformat(),
-                    "format": "html",
-                    "download_url": f"/api/cv/download/{f.name}",
-                    "preview_url": f"/api/cv/file/{f.name}"
-                }
-                for f in cv_files
-            ]
+            "count": len(files_data),
+            "files": files_data
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to list CVs: {str(e)}")
