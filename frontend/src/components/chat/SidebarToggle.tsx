@@ -20,7 +20,7 @@ export const SidebarToggle: React.FC<SidebarToggleProps> = ({
     <motion.button
       onClick={onToggle}
       className="w-8 h-8 rounded-lg flex items-center justify-center text-macSubtext hover:text-macAccent hover:bg-macAccent/10 transition-all duration-300 ease-mac focus:outline-none focus:ring-2 focus:ring-macAccent/50"
-      title={isCollapsed ? 'Expand sidebar (⌘B)' : 'Collapse sidebar (⌘B)'}
+      title={isCollapsed ? 'Expand sidebar (⌘\\)' : 'Collapse sidebar (⌘\\)'}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
     >

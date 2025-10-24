@@ -19,7 +19,7 @@ export const ChatManager: React.FC<ChatManagerProps> = ({ apiBaseUrl }) => {
   // Note: Keyboard shortcuts are now handled in ChatSidebar
   // ⌘N - New Chat
   // ⌘F - Focus Search
-  // ⌘B - Toggle Sidebar
+  // ⌘\ - Toggle Chat Sidebar (⌘B toggles main app sidebar)
   // ⌘K - Command Palette
 
   return (
@@ -88,11 +88,11 @@ export const ChatManager: React.FC<ChatManagerProps> = ({ apiBaseUrl }) => {
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-macSubtext">Toggle sidebar</span>
+                  <span className="text-macSubtext">Toggle chat sidebar</span>
                   <div className="flex items-center gap-1">
                     <kbd className="px-3 py-1.5 liquid-glass backdrop-blur-md rounded-mac shadow-sm font-semibold text-xs">⌘</kbd>
                     <span className="text-macSubtext">+</span>
-                    <kbd className="px-3 py-1.5 liquid-glass backdrop-blur-md rounded-mac shadow-sm font-semibold text-xs">B</kbd>
+                    <kbd className="px-3 py-1.5 liquid-glass backdrop-blur-md rounded-mac shadow-sm font-semibold text-xs">\</kbd>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">

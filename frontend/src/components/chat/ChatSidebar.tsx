@@ -64,8 +64,8 @@ export const ChatSidebar: React.FC = () => {
         e.preventDefault();
         document.querySelector<HTMLInputElement>('#chat-search')?.focus();
       }
-      // Cmd+B / Ctrl+B: Toggle sidebar
-      if ((e.metaKey || e.ctrlKey) && e.key === 'b') {
+      // Cmd+\ / Ctrl+\: Toggle chat sidebar (different from main sidebar ⌘B)
+      if ((e.metaKey || e.ctrlKey) && e.key === '\\') {
         e.preventDefault();
         toggleCollapse();
       }
