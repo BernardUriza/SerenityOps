@@ -15,6 +15,7 @@ import VersionBadge from './components/VersionBadge';
 import { useAppSidebarState, APP_SIDEBAR_WIDTH } from './hooks/useAppSidebarState';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { AppSidebarProfile } from './components/AppSidebarProfile';
+import { ThemeSwitcher } from './components/ThemeSwitcher';
 
 // API configuration
 const API_BASE_URL = 'http://localhost:8000';
@@ -376,8 +377,13 @@ function App() {
           ))}
         </nav>
 
+        {/* Theme Switcher - 2026 Trend: Mode Switching */}
+        <div className="px-3 pb-3 relative z-10 mt-auto">
+          <ThemeSwitcher isCollapsed={isCollapsed} />
+        </div>
+
         {/* User Profile - 2026 Trend: Account Management */}
-        <div className="p-3 relative z-10 mt-auto">
+        <div className="px-3 pb-3 relative z-10">
           <AppSidebarProfile isCollapsed={isCollapsed} />
         </div>
 

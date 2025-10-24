@@ -26,6 +26,88 @@ class OpportunitiesService {
   }
 
   // ============================================
+  // Data Mapping Helpers
+  // ============================================
+
+  private mapYamlToOpportunity(yamlData: any): Opportunity {
+    // Map YAML structure to TypeScript interface
+    return {
+      id: yamlData.id,
+      company: yamlData.company,
+      role: yamlData.role,
+      status: (yamlData.stage || yamlData.status || 'active') as any, // YAML uses "stage"
+      priority: (yamlData.priority || 'medium') as any,
+      created_at: yamlData.timeline?.discovered || yamlData.created_at || new Date().toISOString(),
+      updated_at: yamlData.timeline?.applied || yamlData.updated_at || new Date().toISOString(),
+      next_action: this.extractNextAction(yamlData),
+      next_action_date: yamlData.timeline?.first_interview || yamlData.next_action_date,
+      details: {
+        description: yamlData.details?.description || '',
+        location: yamlData.details?.location || '',
+        salary_range: yamlData.details?.salary_range,
+        tech_stack: yamlData.details?.tech_stack || [],
+        requirements: yamlData.details?.requirements || [],
+        benefits: yamlData.details?.benefits,
+        url: yamlData.details?.url,
+      },
+      fit_analysis: yamlData.fit_analysis ? {
+        skills_match_percentage: Math.round((yamlData.fit_analysis.technical_match || 0) * 100),
+        stack_overlap: yamlData.details?.tech_stack || [],
+        gaps: yamlData.fit_analysis.red_flags || [],
+        keywords_for_cv: [],
+        red_flags: yamlData.fit_analysis.red_flags || [],
+        green_flags: yamlData.fit_analysis.green_flags || [],
+        claude_insight: yamlData.fit_analysis.decline_reason || this.generateInsight(yamlData),
+      } : undefined,
+      timeline: yamlData.timeline,
+      interview_prep: yamlData.preparation_docs ? {
+        star_stories: yamlData.preparation_docs,
+        questions_prepared: [],
+        research_notes: yamlData.notes?.map((n: any) => n.content || n) || [],
+      } : undefined,
+      notes: yamlData.notes?.map((n: any) => typeof n === 'string' ? n : n.content) || [],
+      tags: this.extractTags(yamlData),
+    };
+  }
+
+  private extractNextAction(yamlData: any): string | undefined {
+    // Check for explicit next_action field
+    if (yamlData.next_action) return yamlData.next_action;
+
+    // Extract from most recent note
+    if (yamlData.notes && yamlData.notes.length > 0) {
+      const latestNote = yamlData.notes[yamlData.notes.length - 1];
+      const content = typeof latestNote === 'string' ? latestNote : latestNote.content;
+      if (content && content.includes('STRATEGY:')) {
+        return content.split('STRATEGY:')[1]?.split('.')[0]?.trim();
+      }
+    }
+
+    // Generate based on stage
+    if (yamlData.stage === 'interviewing' && yamlData.timeline?.first_interview) {
+      return `Interview on ${yamlData.timeline.first_interview}`;
+    }
+
+    return undefined;
+  }
+
+  private generateInsight(yamlData: any): string {
+    const match = yamlData.fit_analysis?.technical_match || 0;
+    if (match >= 0.8) return 'Strong technical match - prioritize this opportunity';
+    if (match >= 0.6) return 'Good fit with some skill gaps to address';
+    return 'Consider skill development before applying';
+  }
+
+  private extractTags(yamlData: any): string[] {
+    const tags: string[] = [];
+    if (yamlData.priority === 'high') tags.push('high-priority');
+    if (yamlData.details?.location?.includes('Remote')) tags.push('remote');
+    if (yamlData.stage === 'interviewing') tags.push('active-interview');
+    if (yamlData.outcome === 'declined') tags.push('declined');
+    return tags;
+  }
+
+  // ============================================
   // Core CRUD Operations
   // ============================================
 
@@ -36,7 +118,10 @@ class OpportunitiesService {
         throw new Error(`Failed to fetch opportunities: ${response.statusText}`);
       }
       const data = await response.json();
-      return data.pipeline || [];
+      const pipeline = data.pipeline || [];
+
+      // Map YAML structure to TypeScript interfaces
+      return pipeline.map((item: any) => this.mapYamlToOpportunity(item));
     } catch (error) {
       console.error('[OpportunitiesService] Error fetching opportunities:', error);
       throw error;

@@ -1,7 +1,7 @@
 // Opportunities Viewer - Type Definitions
 // macOS Aesthetic + Claude Actions Integration
 
-export type OpportunityStatus = 'active' | 'interview' | 'offer' | 'closed' | 'paused';
+export type OpportunityStatus = 'discovered' | 'applied' | 'interviewing' | 'offer' | 'closed' | 'active' | 'paused';
 export type OpportunityPriority = 'low' | 'medium' | 'high';
 export type ClaudeActionType =
   | 'analyze_job_description'
