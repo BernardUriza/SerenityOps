@@ -65,16 +65,18 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
           </motion.button>
         )}
 
-        {/* New Chat Button */}
-        <IconButton
-          icon={Plus}
-          size="md"
-          variant="accent"
-          tooltip="New Chat (⌘N)"
-          onClick={onNewChat}
-          loading={loading}
-          className="gradient-accent text-white shadow-2xl shadow-macAccent/40 hover:shadow-macAccent/60 hover:scale-110 transition-all duration-300 ring-2 ring-macAccent/30"
-        />
+        {/* New Chat Button - Only shown when expanded */}
+        {!isCollapsed && (
+          <IconButton
+            icon={Plus}
+            size="md"
+            variant="accent"
+            tooltip="New Chat (⌘N)"
+            onClick={onNewChat}
+            loading={loading}
+            className="gradient-accent text-white shadow-2xl shadow-macAccent/40 hover:shadow-macAccent/60 hover:scale-110 transition-all duration-300 ring-2 ring-macAccent/30"
+          />
+        )}
       </div>
     </div>
   );
