@@ -86,7 +86,7 @@ export const ExperienceEditor: React.FC = () => {
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full p-6">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div>

@@ -54,7 +54,7 @@ const EducationList: React.FC<EducationListProps> = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 p-6">
       <h2 className="text-xl font-semibold text-macText">
         Education & Languages
       </h2>

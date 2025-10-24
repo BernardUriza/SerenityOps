@@ -372,7 +372,7 @@ function App() {
               )}
 
               {activeTab === 'finances' && (
-                <div className="space-y-6">
+                <div className="space-y-6 p-6">
                   {/* Header */}
                   <div className="flex items-center gap-3 mb-6">
                     <div className="w-10 h-10 rounded-mac bg-macAccent/10 backdrop-blur-md flex items-center justify-center shadow-[0_2px_6px_rgba(10,132,255,0.15)]">
