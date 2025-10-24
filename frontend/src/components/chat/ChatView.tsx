@@ -42,6 +42,9 @@ export const ChatView: React.FC<ChatViewProps> = ({ conversationId, apiBaseUrl }
       if (response.ok) {
         const data = await response.json();
         setMessages(data.messages || []);
+      } else if (response.status !== 404) {
+        // Only log errors that are not "conversation not found"
+        console.error('Failed to load conversation:', response.status, response.statusText);
       }
     } catch (error) {
       console.error('Failed to load conversation:', error);

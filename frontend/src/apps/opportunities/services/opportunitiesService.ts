@@ -321,16 +321,12 @@ class OpportunitiesService {
   async fetchElevatorPitch(company: string): Promise<string> {
     try {
       const url = `${this.apiBase}/api/opportunities/pitch/${encodeURIComponent(company)}`;
-      console.log('[OpportunitiesService] Fetching pitch from:', url);
-
       const response = await fetch(url);
-      console.log('[OpportunitiesService] Response status:', response.status);
 
       if (!response.ok) {
         throw new Error(`Failed to fetch elevator pitch: ${response.statusText}`);
       }
       const data = await response.json();
-      console.log('[OpportunitiesService] Pitch data received:', data);
       return data.pitch || '';
     } catch (error) {
       console.error('[OpportunitiesService] Error fetching elevator pitch:', error);

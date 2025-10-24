@@ -2552,26 +2552,23 @@ async def get_elevator_pitch(company: str):
     Reads from interview/{company}/elevator_pitch.txt
     """
     try:
-        print(f"[Pitch] Looking for pitch for company: {company}")
         pitch_path = BASE_DIR / "interview" / company.lower().replace(' ', '_') / "elevator_pitch.txt"
-        print(f"[Pitch] Primary path: {pitch_path}")
-        print(f"[Pitch] Primary path exists: {pitch_path.exists()}")
 
         if not pitch_path.exists():
-            # Try alternative paths
-            print(f"[Pitch] Trying alternative paths in: {BASE_DIR / 'interview'}")
+            # Try alternative paths - check if any word from company name is in directory name
+            company_words = [word.lower() for word in company.split() if len(word) > 3]  # Skip short words like "Inc", "LLC"
+
             for interview_dir in (BASE_DIR / "interview").iterdir():
-                print(f"[Pitch] Checking directory: {interview_dir.name}")
-                if interview_dir.is_dir() and company.lower() in interview_dir.name.lower():
-                    potential_pitch = interview_dir / "elevator_pitch.txt"
-                    print(f"[Pitch] Found matching directory, checking: {potential_pitch}")
-                    if potential_pitch.exists():
-                        pitch_path = potential_pitch
-                        print(f"[Pitch] Found pitch at: {pitch_path}")
-                        break
+                if interview_dir.is_dir():
+                    dir_name_lower = interview_dir.name.lower()
+                    # Check if any company word is in the directory name
+                    if any(word in dir_name_lower for word in company_words):
+                        potential_pitch = interview_dir / "elevator_pitch.txt"
+                        if potential_pitch.exists():
+                            pitch_path = potential_pitch
+                            break
 
         if not pitch_path.exists():
-            print(f"[Pitch] No pitch found for {company}")
             return {
                 "company": company,
                 "pitch": "",
@@ -2581,7 +2578,6 @@ async def get_elevator_pitch(company: str):
         with open(pitch_path, 'r', encoding='utf-8') as f:
             pitch_content = f.read()
 
-        print(f"[Pitch] Successfully loaded pitch, length: {len(pitch_content)}")
         return {
             "company": company,
             "pitch": pitch_content,
