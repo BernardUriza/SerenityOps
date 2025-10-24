@@ -1,17 +1,60 @@
 /**
- * ChatSidebar - Compact sidebar with chat management
- * Header + Search + Sort + List + Footer stats
- * Compact Precision UI - 240px width
+ * ChatSidebar - Refactored with SOLID principles
+ * - Single Responsibility: Compose sidebar layout
+ * - Open/Closed: Extensible via child components
+ * - Dependency Inversion: Depends on abstractions (hooks, child components)
  */
 
-import React from 'react';
-import { Plus, MessageSquare, ArrowUpDown } from 'lucide-react';
+import React, { useMemo, useEffect } from 'react';
 import { ChatSearch } from './ChatSearch';
 import { ChatList } from './ChatList';
+import { SidebarHeader } from './SidebarHeader';
+import { SidebarFooter } from './SidebarFooter';
+import { SortControl } from './SortControl';
 import { useChatManager } from './hooks/useChatManager';
 
 export const ChatSidebar: React.FC = () => {
-  const { chats, filter, sortBy, createChat, setFilter, setSortBy } = useChatManager();
+  const {
+    chats,
+    filter,
+    sortBy,
+    isLoading,
+    isSaving,
+    loadChats,
+    createChat,
+    setFilter,
+    setSortBy
+  } = useChatManager();
+
+  // Load chats on mount
+  useEffect(() => {
+    loadChats();
+  }, [loadChats]);
+
+  // Memoized calculations (DRY)
+  const stats = useMemo(() => ({
+    totalMessages: chats.reduce((sum, chat) => sum + chat.message_count, 0),
+    archivedCount: chats.filter((c) => c.archived).length,
+  }), [chats]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      // Cmd+N / Ctrl+N: New Chat
+      if ((e.metaKey || e.ctrlKey) && e.key === 'n') {
+        e.preventDefault();
+        handleNewChat();
+      }
+      // Cmd+F / Ctrl+F: Focus search
+      if ((e.metaKey || e.ctrlKey) && e.key === 'f') {
+        e.preventDefault();
+        document.querySelector<HTMLInputElement>('#chat-search')?.focus();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, []);
 
   const handleNewChat = async () => {
     try {
@@ -21,57 +64,47 @@ export const ChatSidebar: React.FC = () => {
     }
   };
 
-  const totalMessages = chats.reduce((sum, chat) => sum + chat.message_count, 0);
-  const archivedCount = chats.filter((c) => c.archived).length;
-
   return (
-    <div className="w-chat-sidebar bg-macPanel/50 backdrop-blur-md border-r border-macBorder/40 flex flex-col h-full">
-      {/* Header - Compact */}
-      <div className="h-header px-2 border-b border-macBorder/40 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <MessageSquare size={14} className="text-macAccent" />
-          <h2 className="text-sm font-semibold text-macText">Chats</h2>
-        </div>
-        <button
-          onClick={handleNewChat}
-          className="h-6 w-6 bg-macAccent hover:bg-macAccent/80 rounded-mac flex items-center justify-center transition-all duration-300 ease-mac"
-          title="New Chat (Cmd+N)"
-        >
-          <Plus size={12} className="text-white" />
-        </button>
-      </div>
+    <div className="w-chat-sidebar liquid-glass border-r border-macBorder/30 flex flex-col h-full shadow-xl">
+      {/* Header Section */}
+      <SidebarHeader
+        chatCount={chats.length}
+        onNewChat={handleNewChat}
+        loading={isSaving}
+      />
 
-      {/* Search - Compact */}
-      <div className="p-2">
+      {/* Search Section */}
+      <div className="p-3">
         <ChatSearch value={filter} onChange={setFilter} />
       </div>
 
-      {/* Sort controls - Compact */}
-      <div className="px-2 pb-2 flex items-center gap-1">
-        <ArrowUpDown size={11} className="text-macSubtext flex-shrink-0" />
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value as any)}
-          className="flex-1 h-6 bg-macPanel/60 backdrop-blur-md border border-macBorder/40 rounded-mac px-1.5 text-xs text-macText focus:outline-none focus:ring-1 focus:ring-macAccent/40 focus:border-macAccent transition-all duration-300 ease-mac"
-        >
-          <option value="date-desc">Latest First</option>
-          <option value="date-asc">Oldest First</option>
-          <option value="name">Name (A-Z)</option>
-          <option value="messages">Most Messages</option>
-        </select>
+      {/* Sort Controls */}
+      <SortControl value={sortBy} onChange={setSortBy} />
+
+      {/* Chat List - Main Content */}
+      <div className="flex-1 overflow-hidden relative">
+        {isLoading ? (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="flex flex-col items-center gap-3">
+              <svg className="animate-spin h-8 w-8 text-macAccent" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+              </svg>
+              <p className="text-xs font-medium text-macSubtext">Loading conversations...</p>
+            </div>
+          </div>
+        ) : (
+          <ChatList />
+        )}
       </div>
 
-      {/* Chat List */}
-      <div className="flex-1 overflow-hidden">
-        <ChatList />
-      </div>
-
-      {/* Footer stats - Compact */}
-      <div className="h-7 px-2 border-t border-macBorder/40 bg-macPanel/70 backdrop-blur-md flex items-center justify-between text-xs text-macSubtext">
-        <span>{chats.length} chats</span>
-        <span>{totalMessages} msgs</span>
-        {archivedCount > 0 && <span>{archivedCount} archived</span>}
-      </div>
+      {/* Footer Stats */}
+      <SidebarFooter
+        chatCount={chats.length}
+        messageCount={stats.totalMessages}
+        archivedCount={stats.archivedCount}
+        isOnline={!isLoading}
+      />
     </div>
   );
 };
