@@ -6,7 +6,7 @@
  * - Keyboard shortcuts: ⌘N, ⌘F, ⌘B
  */
 
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChatSearch } from './ChatSearch';
 import { ChatList } from './ChatList';
@@ -14,12 +14,15 @@ import { SidebarHeader } from './SidebarHeader';
 import { SidebarFooter } from './SidebarFooter';
 import { SortControl } from './SortControl';
 import { SidebarToggle } from './SidebarToggle';
+import { CollapsedSidebarNav } from './CollapsedSidebarNav';
+import { SearchOverlay } from './SearchOverlay';
 import { useChatManager } from './hooks/useChatManager';
 import { useSidebarState, SIDEBAR_WIDTH } from '../../hooks/useSidebarState';
 
 export const ChatSidebar: React.FC = () => {
   const {
     chats,
+    activeChat,
     filter,
     sortBy,
     isLoading,
@@ -27,10 +30,12 @@ export const ChatSidebar: React.FC = () => {
     loadChats,
     createChat,
     setFilter,
-    setSortBy
+    setSortBy,
+    setActiveChat,
   } = useChatManager();
 
   const { isCollapsed, width, toggleCollapse } = useSidebarState();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   // Load chats on mount
   useEffect(() => {
@@ -148,20 +153,31 @@ export const ChatSidebar: React.FC = () => {
         </motion.div>
       )}
 
-      {/* Collapsed Mode - Icon-only view (Phase 2) */}
+      {/* Collapsed Mode - Icon-only navigation */}
       {isCollapsed && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.2, delay: 0.1 }}
-          className="flex-1 flex flex-col items-center pt-20 gap-4"
+          className="flex-1 flex flex-col"
         >
-          {/* Placeholder for collapsed icons - will be implemented in Phase 2 */}
-          <div className="text-macSubtext text-xs">
-            {/* Icons will go here */}
-          </div>
+          <CollapsedSidebarNav
+            chats={chats}
+            activeChat={activeChat}
+            onNewChat={handleNewChat}
+            onSelectChat={setActiveChat}
+            onToggleSearch={() => setIsSearchOpen(true)}
+          />
         </motion.div>
       )}
+
+      {/* Search Overlay for Collapsed Mode */}
+      <SearchOverlay
+        isOpen={isSearchOpen && isCollapsed}
+        onClose={() => setIsSearchOpen(false)}
+        filter={filter}
+        onFilterChange={setFilter}
+      />
     </motion.div>
   );
 };
