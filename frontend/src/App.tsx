@@ -280,7 +280,7 @@ function App() {
         initial={false}
         animate={{ width: isCollapsed ? APP_SIDEBAR_WIDTH.COLLAPSED : APP_SIDEBAR_WIDTH.EXPANDED }}
         transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
-        className="liquid-glass flex flex-col justify-between h-screen relative overflow-hidden z-10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] border-r-2 border-macAccent/30"
+        className="liquid-glass flex flex-col justify-between h-screen relative z-10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] border-r-2 border-macAccent/30"
       >
         {/* Enhanced ambient gradient overlay - MORE VISIBLE */}
         <div className="absolute inset-0 bg-gradient-to-b from-macAccent/20 via-purple-500/15 to-cyan-500/10 pointer-events-none animate-gradient-shift"></div>
@@ -291,7 +291,7 @@ function App() {
         <div className="particle absolute top-[80%] left-[40%] w-2.5 h-2.5 bg-cyan-500/40" style={{ animationDelay: '4s' }}></div>
 
         {/* TOP SECTION - Header + Navigation */}
-        <div className="flex flex-col flex-1 overflow-hidden">
+        <div className="flex flex-col flex-1">
           {/* Header - Logo and Toggle Button */}
           <div className="h-24 flex items-center justify-between relative z-10 border-b-2 border-macAccent/20 px-4 flex-shrink-0 gap-3">
             {/* Left: Logo */}
