@@ -6,7 +6,6 @@
  */
 
 import React, { useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Loader2, Save } from 'lucide-react';
 import { Icon } from '../../icons';
 import { useProjectStore } from '../../stores/projectStore';
@@ -64,7 +63,7 @@ export const ProjectsManager: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 size={16} className="animate-spin text-macAccent" />
+        <Loader2 size={16} className="text-macAccent" />
       </div>
     );
   }
@@ -83,7 +82,7 @@ export const ProjectsManager: React.FC = () => {
               <span>{projects.length} innovative projects</span>
               {isSaving && (
                 <span className="flex items-center gap-1.5 text-macAccent">
-                  <Loader2 size={14} className="animate-spin" />
+                  <Loader2 size={14} />
                   Saving...
                 </span>
               )}
@@ -100,74 +99,59 @@ export const ProjectsManager: React.FC = () => {
           </div>
         </div>
 
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+        <button
           onClick={handleAddProject}
-          className="flex items-center gap-2 px-6 py-3 gradient-accent text-white rounded-xl font-semibold text-sm hover:shadow-accent transition-all duration-300 ease-mac hover-lift group relative overflow-hidden"
+          className="flex items-center gap-2 px-6 py-3 gradient-accent text-white rounded-xl font-semibold text-sm hover:shadow-accent"
         >
-          <span className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 animate-shimmer"></span>
-          <Plus size={16} className="relative z-10 transition-transform duration-300 group-hover:rotate-90" />
-          <span className="relative z-10">Add Project</span>
-        </motion.button>
+          <Plus size={16} />
+          <span>Add Project</span>
+        </button>
       </div>
 
       {/* Projects list */}
       <div className="space-y-6 relative z-10">
-        <AnimatePresence mode="popLayout">
-          {projects.length === 0 ? (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="text-center py-20 liquid-glass rounded-2xl relative overflow-hidden"
-            >
-              <div className="gradient-orb absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-cyan-500/10"></div>
-              <div className="relative z-10">
-                <div className="w-20 h-20 mx-auto mb-6 gradient-accent-subtle rounded-2xl flex items-center justify-center animate-float">
-                  <Icon name="rocket" size={40} className="text-macAccent" />
-                </div>
-                <h3 className="text-lg font-semibold text-macText mb-2">No projects yet</h3>
-                <p className="text-macSubtext text-sm leading-relaxed max-w-md mx-auto mb-6">
-                  Showcase your technical achievements and innovative solutions
-                </p>
-                <button
-                  onClick={handleAddProject}
-                  className="inline-flex items-center gap-2 px-6 py-3 gradient-accent text-white rounded-xl font-semibold text-sm hover:shadow-accent transition-all duration-300 ease-mac hover-lift group relative overflow-hidden"
-                >
-                  <span className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 animate-shimmer"></span>
-                  <Plus size={16} className="relative z-10 transition-transform duration-300 group-hover:rotate-90" />
-                  <span className="relative z-10">Add Your First Project</span>
-                </button>
+        {projects.length === 0 ? (
+          <div className="text-center py-20 liquid-glass rounded-2xl relative overflow-hidden">
+            <div className="gradient-orb absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-cyan-500/10"></div>
+            <div className="relative z-10">
+              <div className="w-20 h-20 mx-auto mb-6 gradient-accent-subtle rounded-2xl flex items-center justify-center">
+                <Icon name="rocket" size={40} className="text-macAccent" />
               </div>
-            </motion.div>
-          ) : (
-            projects.map((project) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                onUpdate={(updates) => updateProject(project.id!, updates)}
-                onDelete={() => deleteProject(project.id!)}
-              />
-            ))
-          )}
-        </AnimatePresence>
+              <h3 className="text-lg font-semibold text-macText mb-2">No projects yet</h3>
+              <p className="text-macSubtext text-sm leading-relaxed max-w-md mx-auto mb-6">
+                Showcase your technical achievements and innovative solutions
+              </p>
+              <button
+                onClick={handleAddProject}
+                className="inline-flex items-center gap-2 px-6 py-3 gradient-accent text-white rounded-xl font-semibold text-sm hover:shadow-accent"
+              >
+                <Plus size={16} />
+                <span>Add Your First Project</span>
+              </button>
+            </div>
+          </div>
+        ) : (
+          projects.map((project) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              onUpdate={(updates) => updateProject(project.id!, updates)}
+              onDelete={() => deleteProject(project.id!)}
+            />
+          ))
+        )}
       </div>
 
       {/* Keyboard hint */}
       {projects.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mt-8 text-center text-sm text-macSubtext relative z-10"
-        >
+        <div className="mt-8 text-center text-sm text-macSubtext relative z-10">
           <span className="inline-flex items-center gap-2">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
             Auto-saved after 3 seconds of inactivity
           </span>
-        </motion.div>
+        </div>
       )}
     </div>
   );

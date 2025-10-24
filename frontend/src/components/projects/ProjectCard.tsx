@@ -6,7 +6,6 @@
  */
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 import { Trash2, ChevronDown, ChevronUp, ExternalLink, Github } from 'lucide-react';
 import type { Project } from '../../types/project';
 import { TechStackSelector } from './TechStackSelector';
@@ -34,13 +33,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   };
 
   return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      className="liquid-glass rounded-2xl border border-macBorder/30 p-6 mb-4 shadow-lg hover:border-cyan-500/30 transition-all duration-300 ease-mac hover-lift"
-    >
+    <div className="liquid-glass rounded-2xl border border-macBorder/30 p-6 mb-4 shadow-lg hover:border-cyan-500/30">
+
       {/* Header */}
       <div className="flex justify-between items-start mb-4">
         <div className="flex-1">
@@ -50,7 +44,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             onChange={(e) => onUpdate({ name: e.target.value })}
             onFocus={() => setEditingField('name')}
             onBlur={(e) => handleFieldBlur('name', e.target.value)}
-            className={`text-base font-bold bg-transparent outline-none w-full transition-all duration-300 ease-mac ${
+            className={`text-base font-bold bg-transparent outline-none w-full ${
               editingField === 'name'
                 ? 'text-macAccent ring-2 ring-cyan-500/50 rounded-xl px-4 py-2'
                 : 'text-macText hover:text-macAccent cursor-text'
@@ -64,7 +58,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             onChange={(e) => onUpdate({ tagline: e.target.value })}
             onFocus={() => setEditingField('tagline')}
             onBlur={(e) => handleFieldBlur('tagline', e.target.value)}
-            className={`text-sm font-medium block mt-2 bg-transparent outline-none w-full transition-all duration-300 ease-mac ${
+            className={`text-sm font-medium block mt-2 bg-transparent outline-none w-full ${
               editingField === 'tagline'
                 ? 'text-macAccent ring-2 ring-cyan-500/50 rounded-xl px-4 py-2'
                 : 'text-macSubtext hover:text-macText cursor-text'
@@ -79,7 +73,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                 href={project.github_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-macPanel/40 hover:bg-macAccent/10 border border-macBorder/30 hover:border-macAccent/30 rounded-lg text-macSubtext hover:text-macAccent transition-all duration-300 ease-mac text-xs font-medium"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-macPanel/40 hover:bg-macAccent/10 border border-macBorder/30 hover:border-macAccent/30 rounded-lg text-macSubtext hover:text-macAccent text-xs font-medium"
               >
                 <Github size={14} />
                 <span>GitHub</span>
@@ -90,7 +84,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                 href={project.live_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-success/10 hover:bg-success/20 border border-success/30 hover:border-success/50 rounded-lg text-success hover:text-success transition-all duration-300 ease-mac text-xs font-medium"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-success/10 hover:bg-success/20 border border-success/30 hover:border-success/50 rounded-lg text-success hover:text-success text-xs font-medium"
               >
                 <ExternalLink size={14} />
                 <span>Live Demo</span>
@@ -102,13 +96,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         <div className="flex items-center gap-2">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="p-2.5 text-macSubtext hover:text-macText bg-macPanel/40 hover:bg-macPanel/60 border border-macBorder/30 rounded-xl transition-all duration-300 ease-mac"
+            className="p-2.5 text-macSubtext hover:text-macText bg-macPanel/40 hover:bg-macPanel/60 border border-macBorder/30 rounded-xl"
           >
             {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           </button>
           <button
             onClick={onDelete}
-            className="p-2.5 text-macSubtext hover:text-error bg-macPanel/40 hover:bg-error/10 border border-macBorder/30 hover:border-error/30 rounded-xl transition-all duration-300 ease-mac"
+            className="p-2.5 text-macSubtext hover:text-error bg-macPanel/40 hover:bg-error/10 border border-macBorder/30 hover:border-error/30 rounded-xl"
           >
             <Trash2 size={16} />
           </button>
@@ -117,13 +111,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 
       {/* Expanded content */}
       {isExpanded && (
-        <motion.div
-          initial={{ height: 0, opacity: 0 }}
-          animate={{ height: 'auto', opacity: 1 }}
-          exit={{ height: 0, opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="space-y-5 pt-4 border-t border-macBorder/30"
-        >
+        <div className="space-y-5 pt-4 border-t border-macBorder/30">
+
           {/* Role */}
           <div>
             <label className="block text-sm font-semibold text-macText mb-2 flex items-center gap-2">
@@ -138,7 +127,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
               onChange={(e) => onUpdate({ role: e.target.value })}
               onFocus={() => setEditingField('role')}
               onBlur={(e) => handleFieldBlur('role', e.target.value)}
-              className={`w-full px-4 py-2.5 text-sm rounded-xl border transition-all duration-300 ease-mac ${
+              className={`w-full px-4 py-2.5 text-sm rounded-xl border ${
                 editingField === 'role'
                   ? 'bg-macPanel/50 text-macAccent ring-2 ring-cyan-500/50 border-cyan-500'
                   : 'bg-macPanel/30 text-macSubtext border-macBorder/40 hover:border-macBorder/60'
@@ -160,7 +149,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
               onChange={(e) => onUpdate({ description: e.target.value })}
               onFocus={() => setEditingField('description')}
               onBlur={(e) => handleFieldBlur('description', e.target.value)}
-              className={`w-full px-4 py-3 text-sm leading-relaxed resize-none rounded-xl border transition-all duration-300 ease-mac ${
+              className={`w-full px-4 py-3 text-sm leading-relaxed resize-none rounded-xl border ${
                 editingField === 'description'
                   ? 'bg-macPanel/50 text-macAccent ring-2 ring-cyan-500/50 border-cyan-500'
                   : 'bg-macPanel/30 text-macSubtext border-macBorder/40 hover:border-macBorder/60'
@@ -209,7 +198,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                 type="url"
                 value={project.github_url || ''}
                 onChange={(e) => onUpdate({ github_url: e.target.value })}
-                className="w-full bg-macPanel/30 backdrop-blur-md border border-macBorder/40 rounded-xl px-4 py-2.5 text-sm text-macSubtext hover:border-macBorder/60 outline-none focus:border-macAccent focus:ring-2 focus:ring-macAccent/50 transition-all duration-300 ease-mac"
+                className="w-full bg-macPanel/30 backdrop-blur-md border border-macBorder/40 rounded-xl px-4 py-2.5 text-sm text-macSubtext hover:border-macBorder/60 outline-none focus:border-macAccent focus:ring-2 focus:ring-macAccent/50"
                 placeholder="https://github.com/username/repo"
               />
             </div>
@@ -222,13 +211,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                 type="url"
                 value={project.live_url || ''}
                 onChange={(e) => onUpdate({ live_url: e.target.value })}
-                className="w-full bg-macPanel/30 backdrop-blur-md border border-macBorder/40 rounded-xl px-4 py-2.5 text-sm text-macSubtext hover:border-macBorder/60 outline-none focus:border-success focus:ring-2 focus:ring-success/50 transition-all duration-300 ease-mac"
+                className="w-full bg-macPanel/30 backdrop-blur-md border border-macBorder/40 rounded-xl px-4 py-2.5 text-sm text-macSubtext hover:border-macBorder/60 outline-none focus:border-success focus:ring-2 focus:ring-success/50"
                 placeholder="https://demo.example.com"
               />
             </div>
           </div>
-        </motion.div>
+        </div>
       )}
-    </motion.div>
+    </div>
   );
 };
