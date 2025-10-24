@@ -524,6 +524,12 @@ curl http://localhost:8000/api/version
    - ✅ Recommended: `cubic-bezier(0.25, 0.1, 0.25, 1)` (ease-in-out)
    - ❌ AVOID spring-like easing with overshoot (values >1.0 in control points)
    - Duration: 0.4s for sidebar width transitions
+   - **Framer Motion with Conditional Rendering**:
+     - ❌ NEVER use `initial={{ opacity: 0 }}` on conditionally rendered `motion.div` without `<AnimatePresence>`
+     - ✅ For immediate visibility: use plain `div` instead of `motion.div` for conditional content
+     - ✅ If animation is required: wrap in `<AnimatePresence mode="wait">` to enable proper mount/unmount transitions
+     - 🔍 Root cause (commit ea3e491): motion.div without AnimatePresence gets stuck at opacity: 0
+     - Priority: **Visibility stability over aesthetic transitions**
 
 5. **Accessibility Requirements**
    - ✅ All interactive elements: minimum 44px × 44px (WCAG 2.1 SC 2.5.5)
@@ -543,6 +549,7 @@ curl http://localhost:8000/api/version
 - [ ] No overlap between logo and toggle bounding boxes
 - [ ] Toggle clickable throughout entire animation (no clipping)
 - [ ] Tooltips appear above sidebar/header (not clipped)
+- [ ] **ChatSidebar buttons visible in both expanded/collapsed modes** (no opacity: 0 containers)
 - [ ] Action buttons have contrast ≥3:1
 - [ ] All interactive elements ≥44px touch target
 - [ ] Focus states visible on all buttons
