@@ -434,7 +434,8 @@ function App() {
             onClick={handleSave}
             disabled={saving}
             title="Save Changes (Ctrl+S)"
-            className={`w-full h-12 liquid-glass text-macText font-bold rounded-2xl transition-all duration-500 ease-mac disabled:opacity-40 flex items-center hover-lift group bounce-click ripple-effect hover:scale-105 hover:shadow-2xl border-2 border-macBorder/40 hover:border-macAccent/60 ${
+            aria-label="Save changes"
+            className={`w-full h-12 glass-strong text-macText font-bold rounded-2xl transition-all duration-500 ease-mac disabled:opacity-40 flex items-center hover-lift group bounce-click ripple-effect hover:scale-105 hover:shadow-2xl border-2 border-macAccent/50 hover:border-macAccent/80 ${
               isCollapsed ? 'justify-center px-2' : 'justify-center gap-3 px-4'
             }`}
           >
@@ -459,6 +460,7 @@ function App() {
             onClick={handleGenerateCV}
             disabled={generating}
             title="Generate CV"
+            aria-label="Generate CV"
             className={`w-full h-12 gradient-accent hover:shadow-[0_0_32px_rgba(10,132,255,0.6)] text-white font-black rounded-2xl transition-all duration-500 ease-mac disabled:opacity-40 flex items-center hover-lift group relative overflow-hidden bounce-click ripple-effect hover:scale-105 ring-2 ring-macAccent/40 hover:ring-4 hover:ring-macAccent/60 ${
               isCollapsed ? 'justify-center px-2' : 'justify-center gap-3 px-4'
             }`}
