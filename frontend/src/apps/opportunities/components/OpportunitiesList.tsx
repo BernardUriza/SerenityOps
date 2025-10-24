@@ -84,13 +84,17 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ({
                 <p className="text-xs text-macSubtext truncate">{opp.role}</p>
               </div>
               <div
-                className={`px-2 py-1 rounded-lg text-[10px] font-bold flex-shrink-0 ml-2 ${
-                  opp.status === 'active'
-                    ? 'bg-cyan-500/10 text-cyan-400'
-                    : opp.status === 'interview'
+                className={`px-2 py-1 rounded-lg text-[10px] font-bold flex-shrink-0 ml-2 uppercase ${
+                  opp.status === 'interviewing'
                     ? 'bg-indigo-500/10 text-indigo-400'
                     : opp.status === 'offer'
                     ? 'bg-green-500/10 text-success'
+                    : opp.status === 'closed'
+                    ? 'bg-gray-500/10 text-gray-400'
+                    : opp.status === 'applied'
+                    ? 'bg-cyan-500/10 text-cyan-400'
+                    : opp.status === 'discovered'
+                    ? 'bg-amber-500/10 text-amber-400'
                     : 'bg-macPanel/50 text-macSubtext'
                 }`}
               >
