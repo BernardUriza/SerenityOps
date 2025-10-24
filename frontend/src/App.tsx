@@ -290,67 +290,69 @@ function App() {
         <div className="particle absolute top-[60%] left-[70%] w-2 h-2 bg-purple-500/40" style={{ animationDelay: '2s' }}></div>
         <div className="particle absolute top-[80%] left-[40%] w-2.5 h-2.5 bg-cyan-500/40" style={{ animationDelay: '4s' }}></div>
 
-        {/* Toggle Button - Floating */}
-        <button
-          onClick={toggleCollapse}
-          className="absolute top-4 right-4 z-50 w-10 h-10 rounded-xl liquid-glass hover:bg-macAccent/20 flex items-center justify-center transition-all duration-300 group hover:scale-110 hover:shadow-xl border border-macBorder/40 hover:border-macAccent/60"
-          title={isCollapsed ? 'Expand sidebar (⌘B)' : 'Collapse sidebar (⌘B)'}
-        >
-          <motion.div
-            animate={{ rotate: isCollapsed ? 0 : 180 }}
-            transition={{ duration: 0.3 }}
-            className="text-macAccent"
-          >
-            {isCollapsed ? <PanelLeftOpen size={20} /> : <PanelLeftClose size={20} />}
-          </motion.div>
-        </button>
-
         {/* TOP SECTION - Header + Navigation */}
         <div className="flex flex-col flex-1 overflow-hidden">
-          {/* Header - Logo with DRAMATIC Glow */}
-          <div className="h-24 flex items-center justify-center relative z-10 border-b-2 border-macAccent/20 px-4 flex-shrink-0">
-          <AnimatePresence mode="wait">
-            {!isCollapsed && (
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
-                className="flex items-center gap-4 w-full"
-              >
-                <div className="relative group cursor-pointer">
+          {/* Header - Logo and Toggle Button */}
+          <div className="h-24 flex items-center justify-between relative z-10 border-b-2 border-macAccent/20 px-4 flex-shrink-0 gap-3">
+            {/* Left: Logo */}
+            <AnimatePresence mode="wait">
+              {!isCollapsed && (
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex items-center gap-4 flex-1 min-w-0"
+                >
+                  <div className="relative group cursor-pointer flex-shrink-0">
+                    <img
+                      src="/logo.svg"
+                      alt="SerenityOps"
+                      className="w-12 h-12 relative z-10 transition-all duration-500 group-hover:scale-125 animate-glow-pulse"
+                      style={{ filter: 'drop-shadow(0 0 16px rgba(10, 132, 255, 0.8))' }}
+                    />
+                    <div className="absolute inset-0 bg-macAccent/40 blur-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-500 animate-morph"></div>
+                  </div>
+                  <div className="min-w-0">
+                    <h1 className="text-xl font-black text-gradient tracking-tight">SerenityOps</h1>
+                    <p className="text-xs text-macSubtext font-semibold">Intelligence System</p>
+                  </div>
+                </motion.div>
+              )}
+              {isCollapsed && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.3 }}
+                  className="relative group cursor-pointer flex-shrink-0"
+                >
                   <img
                     src="/logo.svg"
                     alt="SerenityOps"
                     className="w-12 h-12 relative z-10 transition-all duration-500 group-hover:scale-125 animate-glow-pulse"
                     style={{ filter: 'drop-shadow(0 0 16px rgba(10, 132, 255, 0.8))' }}
                   />
-                  <div className="absolute inset-0 bg-macAccent/40 blur-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-500 animate-morph"></div>
-                </div>
-                <div>
-                  <h1 className="text-xl font-black text-gradient tracking-tight">SerenityOps</h1>
-                  <p className="text-xs text-macSubtext font-semibold">Intelligence System</p>
-                </div>
-              </motion.div>
-            )}
-            {isCollapsed && (
+                  <div className="absolute inset-0 bg-macAccent/40 blur-lg opacity-50 group-hover:opacity-70 transition-opacity duration-500"></div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Right: Toggle Button */}
+            <button
+              onClick={toggleCollapse}
+              className="w-11 h-11 rounded-xl liquid-glass hover:bg-macAccent/20 flex items-center justify-center transition-all duration-300 group hover:scale-105 hover:shadow-xl border border-macBorder/40 hover:border-macAccent/60 flex-shrink-0"
+              title={isCollapsed ? 'Expand sidebar (⌘B)' : 'Collapse sidebar (⌘B)'}
+              aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            >
               <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
+                animate={{ rotate: isCollapsed ? 0 : 180 }}
                 transition={{ duration: 0.3 }}
-                className="relative group cursor-pointer"
+                className="text-macAccent"
               >
-                <img
-                  src="/logo.svg"
-                  alt="SerenityOps"
-                  className="w-12 h-12 relative z-10 transition-all duration-500 group-hover:scale-125 animate-glow-pulse"
-                  style={{ filter: 'drop-shadow(0 0 16px rgba(10, 132, 255, 0.8))' }}
-                />
-                <div className="absolute inset-0 bg-macAccent/40 blur-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-500"></div>
+                {isCollapsed ? <PanelLeftOpen size={20} /> : <PanelLeftClose size={20} />}
               </motion.div>
-            )}
-          </AnimatePresence>
+            </button>
           </div>
 
           {/* Navigation - COLLAPSIBLE with LABELS - WITH PROPER GAP */}
