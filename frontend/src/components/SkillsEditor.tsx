@@ -64,11 +64,26 @@ const SkillsEditor: React.FC<SkillsEditorProps> = ({ skills, onChange }) => {
   };
 
   return (
-    <div className="space-y-6 p-6">
-      <h2 className="text-lg font-bold text-macText mb-6">Skills</h2>
+    <div className="animate-scale-in space-y-8 relative">
+      {/* Decorative gradient orbs */}
+      <div className="gradient-orb fixed top-[10%] right-[18%] w-[600px] h-[600px] bg-green-500/15 -z-10"></div>
+      <div className="gradient-orb fixed bottom-[12%] left-[10%] w-[500px] h-[500px] bg-blue-500/12 -z-10" style={{ animationDelay: '4s' }}></div>
+
+      {/* Header */}
+      <div className="flex items-center gap-4 relative z-10">
+        <div className="w-14 h-14 rounded-2xl gradient-accent-subtle flex items-center justify-center shadow-lg animate-glow-pulse">
+          <svg className="w-7 h-7 text-macAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+          </svg>
+        </div>
+        <div>
+          <h2 className="text-2xl font-bold text-gradient mb-1">Skills & Expertise</h2>
+          <p className="text-sm text-macSubtext">Your technical toolkit and domain knowledge</p>
+        </div>
+      </div>
 
       {/* Programming Languages */}
-      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6">
+      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6 relative z-10">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-sm font-semibold text-macText">Programming Languages</h3>
           <button
@@ -128,7 +143,7 @@ const SkillsEditor: React.FC<SkillsEditorProps> = ({ skills, onChange }) => {
       </div>
 
       {/* Frameworks */}
-      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6">
+      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6 relative z-10">
         <h3 className="text-sm font-semibold text-macText mb-6">Frameworks</h3>
         <div className="space-y-5">
           <div>
@@ -272,7 +287,7 @@ const SkillsEditor: React.FC<SkillsEditorProps> = ({ skills, onChange }) => {
       </div>
 
       {/* Cloud & DevOps */}
-      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6">
+      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6 relative z-10">
         <h3 className="text-sm font-semibold text-macText mb-6">Cloud & DevOps</h3>
         <label className="block text-xs font-medium text-macSubtext mb-2">
           Cloud & DevOps Tools (comma-separated)
@@ -296,7 +311,7 @@ const SkillsEditor: React.FC<SkillsEditorProps> = ({ skills, onChange }) => {
       </div>
 
       {/* Tools */}
-      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6">
+      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6 relative z-10">
         <h3 className="text-sm font-semibold text-macText mb-6">Tools</h3>
         <label className="block text-xs font-medium text-macSubtext mb-2">
           Development Tools (comma-separated)
@@ -320,7 +335,7 @@ const SkillsEditor: React.FC<SkillsEditorProps> = ({ skills, onChange }) => {
       </div>
 
       {/* Domain Expertise */}
-      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6">
+      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6 relative z-10">
         <h3 className="text-sm font-semibold text-macText mb-6">Domain Expertise</h3>
         <label className="block text-xs font-medium text-macSubtext mb-2">
           Domain Areas (comma-separated)

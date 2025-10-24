@@ -69,64 +69,84 @@ export const ProjectsManager: React.FC = () => {
   }
 
   return (
-    <div className="w-full p-6">
+    <div className="animate-scale-in space-y-8 relative">
+      {/* Decorative gradient orbs */}
+      <div className="gradient-orb fixed top-[8%] right-[12%] w-[600px] h-[600px] bg-cyan-500/15 -z-10"></div>
+      <div className="gradient-orb fixed bottom-[15%] left-[8%] w-[500px] h-[500px] bg-purple-500/12 -z-10" style={{ animationDelay: '3s' }}></div>
+
       {/* Header */}
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <div className="flex items-center gap-2">
-            <Rocket size={16} className="text-macAccent" />
-            <h1 className="text-lg font-bold text-macText">Projects</h1>
+      <div className="flex justify-between items-start relative z-10">
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 rounded-2xl gradient-accent-subtle flex items-center justify-center shadow-lg animate-glow-pulse">
+            <svg className="w-7 h-7 text-macAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
           </div>
-          <div className="flex items-center gap-3 text-xs text-macSubtext mt-2">
-            <span>{projects.length} projects</span>
-            {isSaving && (
-              <span className="flex items-center gap-1 text-macAccent">
-                <Loader2 size={12} className="animate-spin" />
-                Saving...
-              </span>
-            )}
-            {!isSaving && lastSaved && (
-              <span className="flex items-center gap-1 text-success">
-                <Save size={12} />
-                Saved {formatLastSaved()}
-              </span>
+          <div>
+            <h1 className="text-2xl font-bold text-gradient mb-1">Projects</h1>
+            <div className="flex items-center gap-3 text-sm text-macSubtext">
+              <span>{projects.length} innovative projects</span>
+              {isSaving && (
+                <span className="flex items-center gap-1.5 text-macAccent">
+                  <Loader2 size={14} className="animate-spin" />
+                  Saving...
+                </span>
+              )}
+              {!isSaving && lastSaved && (
+                <span className="flex items-center gap-1.5 text-success">
+                  <Save size={14} />
+                  Saved {formatLastSaved()}
+                </span>
+              )}
+            </div>
+            {error && (
+              <p className="text-sm text-error mt-1">Error: {error}</p>
             )}
           </div>
-          {error && (
-            <p className="text-xs text-error mt-1">Error: {error}</p>
-          )}
         </div>
 
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleAddProject}
-          className="flex items-center gap-2 px-4 py-2 bg-success text-white rounded-mac font-medium text-xs hover:bg-success-hover transition-all duration-300 ease-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)]"
+          className="flex items-center gap-2 px-6 py-3 gradient-accent text-white rounded-xl font-semibold text-sm hover:shadow-accent transition-all duration-300 ease-mac hover-lift group relative overflow-hidden"
         >
-          <Plus size={14} />
-          Add Project
+          <span className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 animate-shimmer"></span>
+          <Plus size={16} className="relative z-10 transition-transform duration-300 group-hover:rotate-90" />
+          <span className="relative z-10">Add Project</span>
         </motion.button>
       </div>
 
       {/* Projects list */}
-      <div className="space-y-6">
+      <div className="space-y-6 relative z-10">
         <AnimatePresence mode="popLayout">
           {projects.length === 0 ? (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="text-center py-12"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="text-center py-20 liquid-glass rounded-2xl relative overflow-hidden"
             >
-              <Rocket size={32} className="text-macSubtext mx-auto mb-4" />
-              <p className="text-macSubtext text-sm mb-4">No projects yet</p>
-              <button
-                onClick={handleAddProject}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-macAccent text-white rounded-mac font-medium text-xs hover:bg-macAccent/80 transition-all duration-300 ease-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)]"
-              >
-                <Plus size={14} />
-                Add Your First Project
-              </button>
+              <div className="gradient-orb absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-cyan-500/10"></div>
+              <div className="relative z-10">
+                <div className="w-20 h-20 mx-auto mb-6 gradient-accent-subtle rounded-2xl flex items-center justify-center animate-float">
+                  <svg className="w-10 h-10 text-macAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-macText mb-2">No projects yet</h3>
+                <p className="text-macSubtext text-sm leading-relaxed max-w-md mx-auto mb-6">
+                  Showcase your technical achievements and innovative solutions
+                </p>
+                <button
+                  onClick={handleAddProject}
+                  className="inline-flex items-center gap-2 px-6 py-3 gradient-accent text-white rounded-xl font-semibold text-sm hover:shadow-accent transition-all duration-300 ease-mac hover-lift group relative overflow-hidden"
+                >
+                  <span className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 animate-shimmer"></span>
+                  <Plus size={16} className="relative z-10 transition-transform duration-300 group-hover:rotate-90" />
+                  <span className="relative z-10">Add Your First Project</span>
+                </button>
+              </div>
             </motion.div>
           ) : (
             projects.map((project) => (
@@ -141,14 +161,19 @@ export const ProjectsManager: React.FC = () => {
         </AnimatePresence>
       </div>
 
-      {/* Helper text */}
+      {/* Keyboard hint */}
       {projects.length > 0 && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-6 text-center text-xs text-macSubtext"
+          className="mt-8 text-center text-sm text-macSubtext relative z-10"
         >
-          Projects auto-save after 3 seconds of inactivity
+          <span className="inline-flex items-center gap-2">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            Auto-saved after 3 seconds of inactivity
+          </span>
         </motion.div>
       )}
     </div>

@@ -54,13 +54,26 @@ const EducationList: React.FC<EducationListProps> = ({
   };
 
   return (
-    <div className="space-y-6 p-6">
-      <h2 className="text-xl font-semibold text-macText mb-6">
-        Education & Languages
-      </h2>
+    <div className="animate-scale-in space-y-8 relative">
+      {/* Decorative gradient orbs */}
+      <div className="gradient-orb fixed top-[12%] right-[20%] w-[600px] h-[600px] bg-indigo-500/15 -z-10"></div>
+      <div className="gradient-orb fixed bottom-[10%] left-[12%] w-[500px] h-[500px] bg-pink-500/12 -z-10" style={{ animationDelay: '5s' }}></div>
+
+      {/* Header */}
+      <div className="flex items-center gap-4 relative z-10">
+        <div className="w-14 h-14 rounded-2xl gradient-accent-subtle flex items-center justify-center shadow-lg animate-glow-pulse">
+          <svg className="w-7 h-7 text-macAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+        </div>
+        <div>
+          <h2 className="text-2xl font-bold text-gradient mb-1">Education & Languages</h2>
+          <p className="text-sm text-macSubtext">Academic background and spoken languages</p>
+        </div>
+      </div>
 
       {/* Education */}
-      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6">
+      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6 relative z-10">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-base font-semibold text-macText">Education</h3>
           <button
@@ -174,7 +187,7 @@ const EducationList: React.FC<EducationListProps> = ({
       </div>
 
       {/* Languages */}
-      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6">
+      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6 relative z-10">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-base font-semibold text-macText">Spoken Languages</h3>
           <button
@@ -232,7 +245,7 @@ const EducationList: React.FC<EducationListProps> = ({
       </div>
 
       {/* Certifications */}
-      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6">
+      <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] p-6 relative z-10">
         <h3 className="text-base font-semibold text-macText mb-6">
           Certifications
         </h3>
