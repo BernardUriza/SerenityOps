@@ -463,9 +463,18 @@ skills:
   - name: TypeScript
     proficiency: advanced
     years: 5
+  - name: Python
+    proficiency: intermediate
+    years: 3
+  - name: Java
+    proficiency: intermediate
+    years: 3
   - name: C++
     proficiency: intermediate
     years: 3
+  - name: SQL
+    proficiency: advanced
+    years: 10
   - name: PHP
     proficiency: intermediate
     years: 4
@@ -473,17 +482,33 @@ skills:
     backend:
     - .NET Core
     - .NET Framework
+    - ASP.NET Core
     - ASP.NET
+    - Entity Framework Core
     - Entity Framework
+    - Node.js
+    - Spring Boot
+    - Spring Security
+    - JPA/Hibernate
+    - FastAPI
+    - Express.js
     frontend:
+    - React.js
     - React
     - Angular
     - Next.js
     - Blazor
+    - Redux
+    - Three.js
+    - WebGL
+    - JSInterop
     mobile:
     - Ionic Framework
+    - React Native
     ui:
+    - Tailwind CSS
     - Bootstrap
+    - Material-UI
     - DevExpress
     - Responsive Design
   databases:
@@ -491,27 +516,110 @@ skills:
     proficiency: expert
   - name: MySQL
     proficiency: advanced
+  - name: PostgreSQL
+    proficiency: intermediate
   - name: MongoDB
+    proficiency: intermediate
+  - name: Redis
     proficiency: intermediate
   cloud_devops:
   - Azure
+  - Azure App Service
+  - Azure DevOps
   - AWS
+  - CI/CD
   - GitLab CI/CD
   - GitHub Actions
   - Docker
+  - Kubernetes
+  apis_integration:
+  - RESTful APIs
+  - GraphQL
+  - WebSocket
+  - WebRTC
+  - Socket.io
+  - ChatGPT API
+  - Anthropic Claude API
+  - LLM APIs
+  - OAuth 2.0
+  - JWT Authentication
+  ai_ml:
+  - AI Integration
+  - LLM Integration
+  - Natural Language Processing
+  - Prompt Engineering
+  - Machine Learning APIs
+  - Conversational AI
+  architecture_patterns:
+  - Microservices
+  - Event-driven Architecture
+  - Distributed Systems
+  - Domain-Driven Design
+  - CQRS
+  - Message Queuing
+  - Service-Oriented Architecture
+  real_time_tech:
+  - WebRTC
+  - WebSocket
+  - Socket.io
+  - Signal Processing
+  - Real-time Data Processing
+  - Low-latency Systems
+  security:
+  - End-to-end Encryption
+  - OAuth 2.0
+  - JWT
+  - SSL/TLS
+  - Security Best Practices
+  - OWASP Standards
+  data_visualization:
+  - Data Visualization
+  - Chart.js
+  - D3.js
+  - Reporting Systems
+  - Analytics Dashboards
+  embedded_hardware:
+  - Circuit Design
+  - Hardware Integration
+  - GPS Systems
+  - IoT Integration
+  - Embedded Systems
+  - Signal Adaptation
   tools:
   - Git
   - GitHub
   - GitLab
-  - REST APIs
+  - Bitbucket
   - Visual Studio
   - VS Code
+  - Rider
+  - Postman
+  - Swagger/OpenAPI
+  - Azure DevOps
+  - JIRA
+  - Confluence
+  testing:
+  - Unit Testing
+  - Integration Testing
+  - Jest
+  - Cypress
+  - xUnit
+  - NUnit
+  - Test-Driven Development
   domain_expertise:
+  - AI Integration & LLM Systems
+  - Real-time Communication Platforms
+  - Healthcare Systems & Patient Management
   - Finance (payment integrations, ISO 8583)
-  - Logistics Systems
+  - Logistics & Supply Chain Planning
   - Real Estate Technology
-  - Supply Chain Planning
-  - HR Systems
+  - Automotive Systems
+  - HR & Payroll Systems
+  - Enterprise Systems Integration
+  - Process Automation
+  - Embedded Systems & Hardware
+  - E-commerce Platforms
+  - SaaS Applications
 education:
 - institution: UTEL University
   degree: Bachelor's Degree in Computer Systems Engineering
