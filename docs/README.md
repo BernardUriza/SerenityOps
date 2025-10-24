@@ -28,6 +28,7 @@ Core project documentation, specifications, and philosophical foundations.
 | [serenityOps.md](./project/serenityOps.md) | Complete system specification (Spanish) | 2025-10-24 |
 | [ethics_contract.md](./project/ethics_contract.md) | Non-negotiable ethical boundaries | 2025-10-24 |
 | [claude.md](./project/claude.md) | Session log with historical decisions and rationale | Ongoing |
+| [TRELLO_ID_SYSTEM.md](./project/TRELLO_ID_SYSTEM.md) | Trello ID system for task tracking (34 cards) | 2025-10-24 |
 
 ### Key Concepts
 
@@ -166,7 +167,8 @@ docs/
 │   ├── README.md
 │   ├── serenityOps.md
 │   ├── ethics_contract.md
-│   └── claude.md
+│   ├── claude.md
+│   └── TRELLO_ID_SYSTEM.md
 │
 ├── 🚀 development/
 │   ├── QUICKSTART.md
