@@ -120,13 +120,7 @@ export const ChatSidebar: React.FC = () => {
 
       {/* Content - Hide when collapsed */}
       {!isCollapsed && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2, delay: 0.1 }}
-          className="flex-1 flex flex-col overflow-hidden"
-        >
+        <div className="flex-1 flex flex-col overflow-hidden">
           {/* Search Section */}
           <div className="p-3">
             <ChatSearch value={filter} onChange={setFilter} />
@@ -159,17 +153,12 @@ export const ChatSidebar: React.FC = () => {
             archivedCount={stats.archivedCount}
             isOnline={!isLoading}
           />
-        </motion.div>
+        </div>
       )}
 
       {/* Collapsed Mode - Icon-only navigation */}
       {isCollapsed && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.2, delay: 0.1 }}
-          className="flex-1 flex flex-col"
-        >
+        <div className="flex-1 flex flex-col">
           <CollapsedSidebarNav
             chats={chats}
             activeChat={activeChat}
@@ -177,7 +166,7 @@ export const ChatSidebar: React.FC = () => {
             onSelectChat={setActiveChat}
             onToggleSearch={() => setIsSearchOpen(true)}
           />
-        </motion.div>
+        </div>
       )}
 
       {/* Search Overlay for Collapsed Mode */}
