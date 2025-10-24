@@ -23,7 +23,7 @@ export function useNotificationCounts() {
 
   useEffect(() => {
     let isMounted = true;
-    let intervalId: NodeJS.Timeout;
+    let intervalId: number;
 
     async function fetchCounts() {
       try {

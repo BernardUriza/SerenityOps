@@ -17,6 +17,7 @@ import { useNotificationCounts } from './hooks/useNotificationCounts';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { AppSidebarProfile } from './components/AppSidebarProfile';
 import { ThemeSwitcher } from './components/ThemeSwitcher';
+import { NavIconWithBadge } from './components/NavIconWithBadge';
 
 // API configuration
 const API_BASE_URL = 'http://localhost:8000';
@@ -368,26 +369,14 @@ function App() {
                   : 'text-slate-400 hover:bg-macHover/80 hover:text-white hover:scale-[1.02] hover:shadow-2xl border-2 border-transparent hover:border-macAccent/40'
               }`}
             >
-              <div className={`transition-all duration-500 flex-shrink-0 relative ${activeTab === item.id ? 'scale-110 drop-shadow-[0_0_12px_rgba(255,255,255,0.8)]' : 'group-hover:scale-110'}`}>
-                <Icon name={item.icon} size={24} />
-
-                {/* Badge - Notification indicator */}
-                {'badge' in item && item.badge && item.badge > 0 && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className={`absolute -top-1 -right-1 min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-black rounded-full shadow-lg animate-pulse ${
-                      item.badgeType === 'success'
-                        ? 'bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-green-500/50'
-                        : item.badgeType === 'warning'
-                        ? 'bg-gradient-to-br from-orange-500 to-amber-600 text-white shadow-orange-500/50'
-                        : 'bg-gradient-to-br from-red-500 to-rose-600 text-white shadow-red-500/50'
-                    }`}
-                  >
-                    <span className="px-1">{item.badge > 99 ? '99+' : item.badge}</span>
-                  </motion.div>
-                )}
-              </div>
+              <NavIconWithBadge
+                iconName={item.icon}
+                size={24}
+                badge={'badge' in item ? item.badge : undefined}
+                badgeType={'badgeType' in item ? item.badgeType as 'default' | 'success' | 'warning' : 'default'}
+                isActive={activeTab === item.id}
+                isLogo={false}
+              />
 
               {/* Label - Only visible when expanded */}
               <AnimatePresence>
@@ -401,27 +390,6 @@ function App() {
                   >
                     {item.label}
                   </motion.span>
-                )}
-              </AnimatePresence>
-
-              {/* Badge when expanded - at the end */}
-              <AnimatePresence>
-                {!isCollapsed && 'badge' in item && item.badge && item.badge > 0 && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    exit={{ scale: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className={`ml-auto flex-shrink-0 min-w-[24px] h-[24px] flex items-center justify-center text-xs font-black rounded-full shadow-lg ${
-                      item.badgeType === 'success'
-                        ? 'bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-green-500/50'
-                        : item.badgeType === 'warning'
-                        ? 'bg-gradient-to-br from-orange-500 to-amber-600 text-white shadow-orange-500/50'
-                        : 'bg-gradient-to-br from-red-500 to-rose-600 text-white shadow-red-500/50'
-                    }`}
-                  >
-                    <span className="px-1.5">{item.badge > 99 ? '99+' : item.badge}</span>
-                  </motion.div>
                 )}
               </AnimatePresence>
 
