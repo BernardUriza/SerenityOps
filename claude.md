@@ -337,3 +337,92 @@ This is a personal project for Bernard Orozco. For questions or contributions:
 - Check existing docs (README.md, QUICKSTART.md)
 - Review session logs (claude.md) for context
 - Respect privacy: never expose personal data or API keys
+
+---
+
+## Session History & Changelog
+
+### 2025-10-24: Persistent Deployment Badge System
+
+**Objective**: Implement a real-time version tracking badge to eliminate cache ambiguity and provide instant deployment awareness.
+
+**Implementation**:
+
+#### Backend Changes
+- **Added `/api/version` endpoint** (`api/main.py:2669`)
+  - Returns frontend/backend versions, commit hashes, build dates
+  - Extracts git metadata: commit hash, author, message, timestamp
+  - Uses subprocess to query git directly (no caching)
+  - Graceful fallback to "unknown" if git unavailable
+
+#### Frontend Components
+1. **`frontend/src/hooks/useVersionInfo.ts`**
+   - Custom hook for version data fetching
+   - Auto-refresh every 15 seconds (configurable)
+   - Handles loading/error states
+   - Uses `setInterval` for continuous polling
+
+2. **`frontend/src/components/VersionBadge.tsx`**
+   - Fixed position: `bottom-2 right-3` (z-index: 9999)
+   - Semi-transparent design: `bg-white/40 backdrop-blur-md`
+   - Shows: `🪶 v{frontend.version} · ⚙️ {backend.version}`
+   - Click to expand detailed modal
+   - Hover effect: `bg-white/60`
+
+3. **`frontend/src/components/VersionDetailModal.tsx`**
+   - Expandable modal with build details
+   - Displays:
+     - Frontend build (version + commit)
+     - Backend build (version + commit)
+     - Last change (author, description, timestamp)
+     - Link to build history
+   - Formatted timestamps using `Date.toLocaleString()`
+   - Backdrop for easy dismissal
+
+#### Build Tracking
+- **`logs/builds/latest.md`** - Deployment changelog template
+  - Documents each deployment
+  - Includes change summary, commits, authors
+  - Manual update for now (future: CI/CD integration)
+
+**Design Decisions**:
+- **Polling vs WebSockets**: Chose 15-second polling for simplicity
+- **Git Integration**: Direct subprocess calls ensure fresh data
+- **Visibility**: Always visible but non-intrusive (11px font, 40% opacity)
+- **macOS Aesthetic**: Maintains Liquid Glass design system consistency
+- **z-index Management**: 9999 ensures badge stays above all content
+
+**Testing**:
+```bash
+# Verify endpoint
+curl http://localhost:8000/api/version
+
+# Expected response:
+{
+  "frontend": {"version": "1.3.27", "commit": "c9c893e"},
+  "backend": {"version": "0.9.18", "commit": "c9c893e"},
+  "last_change": {...}
+}
+```
+
+**Benefits**:
+- ✅ Instant deployment confirmation (no cache uncertainty)
+- ✅ Real-time version sync across frontend/backend
+- ✅ Persistent visibility (all tabs, all views)
+- ✅ Build metadata always accessible
+- ✅ Supports rapid iteration workflows
+
+**Future Enhancements**:
+- [ ] CI/CD integration for auto-updating `logs/builds/latest.md`
+- [ ] Version mismatch alerts (frontend vs backend)
+- [ ] Deployment notifications (new version available)
+- [ ] Build history viewer with full changelog
+- [ ] WebSocket upgrade for real-time updates (optional)
+
+**Files Modified**:
+- `api/main.py` - Added `/api/version` endpoint
+- `frontend/src/App.tsx` - Integrated VersionBadge component
+- `frontend/src/components/VersionBadge.tsx` - New
+- `frontend/src/components/VersionDetailModal.tsx` - New
+- `frontend/src/hooks/useVersionInfo.ts` - New
+- `logs/builds/latest.md` - New

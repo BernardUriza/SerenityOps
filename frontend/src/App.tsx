@@ -14,6 +14,7 @@ import { Icon } from './icons';
 import VersionBadge from './components/VersionBadge';
 import { useAppSidebarState, APP_SIDEBAR_WIDTH } from './hooks/useAppSidebarState';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { AppSidebarProfile } from './components/AppSidebarProfile';
 
 // API configuration
 const API_BASE_URL = 'http://localhost:8000';
@@ -375,8 +376,13 @@ function App() {
           ))}
         </nav>
 
+        {/* User Profile - 2026 Trend: Account Management */}
+        <div className="p-3 relative z-10 mt-auto">
+          <AppSidebarProfile isCollapsed={isCollapsed} />
+        </div>
+
         {/* Actions - COLLAPSIBLE with LABELS */}
-        <div className="p-3 space-y-3 relative z-10 mt-auto border-t-2 border-macAccent/20 bg-gradient-to-t from-macPanel/40 to-transparent">
+        <div className="p-3 space-y-3 relative z-10 border-t-2 border-macAccent/20 bg-gradient-to-t from-macPanel/40 to-transparent">
           <button
             onClick={handleSave}
             disabled={saving}
