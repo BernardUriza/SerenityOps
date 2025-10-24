@@ -280,7 +280,7 @@ function App() {
         initial={false}
         animate={{ width: isCollapsed ? APP_SIDEBAR_WIDTH.COLLAPSED : APP_SIDEBAR_WIDTH.EXPANDED }}
         transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
-        className="liquid-glass flex flex-col justify-between h-screen relative z-10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] border-r-2 border-macAccent/30"
+        className="liquid-glass flex flex-col justify-between h-screen relative z-sticky shadow-[0_8px_32px_rgba(0,0,0,0.3)] border-r-2 border-macAccent/30"
       >
         {/* Enhanced ambient gradient overlay - MORE VISIBLE */}
         <div className="absolute inset-0 bg-gradient-to-b from-macAccent/20 via-purple-500/15 to-cyan-500/10 pointer-events-none animate-gradient-shift"></div>
@@ -611,7 +611,7 @@ function App() {
 
       {/* Enhanced Notification Toast with Animations */}
       {notification && (
-        <div className="fixed bottom-6 right-6 z-50 animate-slide-up">
+        <div className="fixed bottom-6 right-6 z-modal animate-slide-up">
           <div className={`glass-strong rounded-mac p-4 max-w-sm border text-xs shadow-xl relative overflow-hidden group ${
             notification.type === 'success'
               ? 'border-success/40'
