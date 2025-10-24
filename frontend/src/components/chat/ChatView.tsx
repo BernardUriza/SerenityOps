@@ -103,29 +103,44 @@ export const ChatView: React.FC<ChatViewProps> = ({ conversationId, apiBaseUrl }
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-macBg h-full">
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-4">
+    <div className="flex-1 flex flex-col bg-macBg h-full relative">
+      {/* Messages Container */}
+      <div className="flex-1 overflow-y-auto px-6 py-8 space-y-6">
         {messages.length === 0 ? (
-          <div className="flex items-center justify-center h-full">
-            <div className="text-center max-w-sm">
-              <div className="text-4xl mb-3">🤖</div>
-              <h3 className="text-sm font-semibold text-macText mb-1">
-                Hi! I'm SerenityOps
+          <div className="flex items-center justify-center h-full relative">
+            {/* Decorative background */}
+            <div className="gradient-orb absolute top-[15%] right-[25%] w-[400px] h-[400px] bg-purple-500/8"></div>
+            <div className="particle absolute top-[30%] left-[20%]"></div>
+
+            <div className="text-center max-w-2xl px-8 relative z-10 animate-scale-in">
+              {/* Icon with gradient */}
+              <div className="w-24 h-24 mx-auto mb-6 gradient-accent-subtle rounded-3xl flex items-center justify-center shadow-xl animate-glow-pulse">
+                <svg className="w-12 h-12 text-macAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+              </div>
+
+              <h3 className="text-2xl font-bold text-gradient mb-3">
+                Hi! I'm SerenityOps AI
               </h3>
-              <p className="text-xs text-macSubtext mb-3">
-                Your career intelligence assistant. I have full context of your CV, projects, and
-                opportunities.
+              <p className="text-base text-macSubtext mb-8 leading-relaxed">
+                Your career intelligence assistant with full context of your CV, projects, and opportunities. Let's optimize your career journey together.
               </p>
-              <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac p-3 text-left shadow-[0_2px_6px_rgba(0,0,0,0.2)]">
-                <p className="text-xs text-macText font-medium mb-2">You can ask me to:</p>
-                <ul className="space-y-1 text-xs text-macSubtext">
-                  <li>• Track new projects and experiences</li>
-                  <li>• Suggest CV improvements</li>
-                  <li>• Analyze job opportunities</li>
-                  <li>• Extract information from text</li>
-                  <li>• Review your career progression</li>
-                </ul>
+
+              {/* Suggestions Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+                {[
+                  { icon: '📊', title: 'Track Projects', desc: 'Add new experiences and achievements' },
+                  { icon: '✨', title: 'CV Improvements', desc: 'Get personalized recommendations' },
+                  { icon: '🎯', title: 'Job Analysis', desc: 'Evaluate new opportunities' },
+                  { icon: '🔍', title: 'Extract Data', desc: 'Parse text and documents' }
+                ].map((item, i) => (
+                  <div key={i} className="liquid-glass rounded-xl p-4 text-left hover-lift transition-all duration-300 border border-macBorder/30">
+                    <div className="text-3xl mb-2">{item.icon}</div>
+                    <h4 className="text-sm font-semibold text-macText mb-1">{item.title}</h4>
+                    <p className="text-xs text-macSubtext">{item.desc}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -134,47 +149,61 @@ export const ChatView: React.FC<ChatViewProps> = ({ conversationId, apiBaseUrl }
             {messages.map((msg, idx) => (
               <div
                 key={idx}
-                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-slide-up`}
               >
                 <div
-                  className={`max-w-3xl rounded-[12px] p-2 backdrop-blur-md transition-all duration-300 ease-mac ${
+                  className={`max-w-4xl rounded-2xl px-5 py-4 backdrop-blur-md transition-all duration-300 ease-mac shadow-lg ${
                     msg.role === 'user'
-                      ? 'bg-macAccent text-white shadow-[inset_0_0_6px_rgba(10,132,255,0.1)]'
-                      : 'bg-macPanel/70 border border-macBorder/40 text-macText'
+                      ? 'gradient-accent text-white shadow-accent'
+                      : 'liquid-glass border border-macBorder/40 text-macText'
                   }`}
                 >
-                  <div className="flex items-start">
+                  <div className="flex items-start gap-3">
                     {msg.role === 'assistant' && (
-                      <span className="text-lg mr-2 flex-shrink-0">🤖</span>
+                      <div className="shrink-0 w-8 h-8 rounded-xl bg-macAccent/10 flex items-center justify-center">
+                        <svg className="w-4 h-4 text-macAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                      </div>
                     )}
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <ChatMessage content={msg.content} role={msg.role} apiBaseUrl={apiBaseUrl} />
                       <p
-                        className={`text-xs mt-2 ${
-                          msg.role === 'user' ? 'text-white/70' : 'text-macSubtext'
+                        className={`text-xs mt-3 ${
+                          msg.role === 'user' ? 'text-white/60' : 'text-macSubtext'
                         }`}
                       >
-                        {new Date(msg.timestamp).toLocaleTimeString()}
+                        {new Date(msg.timestamp).toLocaleTimeString([], {
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
                       </p>
                     </div>
-                    {msg.role === 'user' && <span className="text-lg ml-2 flex-shrink-0">👤</span>}
+                    {msg.role === 'user' && (
+                      <div className="shrink-0 w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center">
+                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
             ))}
             {sending && (
-              <div className="flex justify-start">
-                <div className="bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-[12px] p-2 max-w-3xl">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-1.5 h-1.5 bg-macAccent rounded-full animate-bounce"></div>
-                    <div
-                      className="w-1.5 h-1.5 bg-macAccent rounded-full animate-bounce"
-                      style={{ animationDelay: '0.1s' }}
-                    ></div>
-                    <div
-                      className="w-1.5 h-1.5 bg-macAccent rounded-full animate-bounce"
-                      style={{ animationDelay: '0.2s' }}
-                    ></div>
+              <div className="flex justify-start animate-slide-up">
+                <div className="liquid-glass border border-macBorder/40 rounded-2xl px-5 py-4 max-w-4xl shadow-lg">
+                  <div className="flex items-center gap-3">
+                    <div className="shrink-0 w-8 h-8 rounded-xl bg-macAccent/10 flex items-center justify-center">
+                      <svg className="w-4 h-4 text-macAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                      </svg>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-macAccent rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-macAccent rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                      <div className="w-2 h-2 bg-macAccent rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -184,47 +213,32 @@ export const ChatView: React.FC<ChatViewProps> = ({ conversationId, apiBaseUrl }
         )}
       </div>
 
-      {/* Input Area */}
-      <div className="p-2 border-t border-macBorder/40 bg-macPanel/70 backdrop-blur-md">
-        <div className="flex gap-2">
+      {/* Input Area - Enhanced */}
+      <div className="px-6 py-4 border-t border-macBorder/40 liquid-glass backdrop-blur-xl">
+        <div className="flex gap-3 items-end max-w-5xl mx-auto">
           <textarea
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Type your message... (Shift+Enter for new line)"
-            className="flex-1 px-3 py-2 bg-macPanel/60 border border-macBorder/40 rounded-mac text-macText text-xs placeholder-macSubtext focus:outline-none focus:ring-1 focus:ring-macAccent/40 focus:border-macAccent resize-none transition-all duration-300 ease-mac"
-            rows={2}
+            className="flex-1 px-4 py-3 liquid-glass border border-macBorder/40 rounded-xl text-macText text-sm placeholder-macSubtext focus:outline-none focus:ring-2 focus:ring-macAccent/50 focus:border-macAccent resize-none transition-all duration-300 ease-mac shadow-sm"
+            rows={3}
             disabled={sending}
           />
           <button
             onClick={handleSendMessage}
             disabled={sending || !inputMessage.trim()}
-            className="px-3 py-1.5 bg-macAccent hover:bg-macAccent/80 text-white text-xs font-semibold rounded-mac transition-all duration-300 ease-mac disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+            className="px-6 py-3 gradient-accent text-white text-sm font-semibold rounded-xl transition-all duration-300 ease-mac disabled:opacity-50 disabled:cursor-not-allowed hover-lift shadow-lg hover:shadow-accent group relative overflow-hidden"
           >
+            <span className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 animate-shimmer"></span>
             {sending ? (
-              <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
+              <svg className="animate-spin h-5 w-5 relative z-10" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
             ) : (
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                />
+              <svg className="w-5 h-5 relative z-10 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
               </svg>
             )}
           </button>
