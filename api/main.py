@@ -400,7 +400,7 @@ def get_notification_summary() -> Dict[str, int]:
 
     Returns real-time counts based on system data:
     - chat: recent conversations (last 7 days)
-    - cvs: recently generated CVs (last 24 hours)
+    - cvs: all available CV files (pdf, html, md)
     - opportunities: active opportunities (not closed)
     - projects: active projects without recent activity
     """
@@ -427,12 +427,11 @@ def get_notification_summary() -> Dict[str, int]:
                 except (IndexError, ValueError):
                     pass
 
-        # Count recently generated CVs (last 24 hours)
+        # Count all available CVs (pdf, html, md)
         cv_versions_dir = BASE_DIR / "curriculum" / "versions"
         if cv_versions_dir.exists():
-            cutoff_time = datetime.now() - timedelta(hours=24)
-            for cv_file in cv_versions_dir.glob("cv_*.pdf"):
-                if cv_file.stat().st_mtime > cutoff_time.timestamp():
+            for cv_file in cv_versions_dir.glob("cv_*"):
+                if cv_file.is_file():
                     counts["cvs"] += 1
 
         # Count active opportunities (not closed)
