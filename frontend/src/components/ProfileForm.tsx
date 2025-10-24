@@ -12,20 +12,11 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ personal, summary, onChange }
   const summaryPercentage = (summaryLength / summaryMaxLength) * 100;
 
   return (
-    <div className="animate-tilt-in space-y-10 relative p-6">
-      {/* Animated gradient orbs - Larger & More Dynamic */}
-      <div className="gradient-orb fixed top-[5%] right-[15%] w-[600px] h-[600px] bg-macAccent/15 -z-10"></div>
-      <div className="gradient-orb fixed bottom-[10%] left-[5%] w-[500px] h-[500px] bg-purple-500/12 -z-10" style={{ animationDelay: '4s' }}></div>
-
-      {/* Floating particles */}
-      <div className="particle fixed top-[15%] right-[25%]"></div>
-      <div className="particle fixed top-[65%] left-[15%]" style={{ animationDelay: '2s' }}></div>
-      <div className="particle fixed bottom-[25%] right-[35%]" style={{ animationDelay: '4s' }}></div>
-
-      {/* Header with gradient accent - No Border */}
+    <div className="space-y-8 relative p-6">
+      {/* Header with gradient accent */}
       <div className="relative z-10">
         <div className="flex items-center gap-4 mb-3">
-          <div className="w-14 h-14 rounded-2xl gradient-accent-subtle flex items-center justify-center shadow-lg animate-glow-pulse">
+          <div className="w-14 h-14 rounded-2xl gradient-accent-subtle flex items-center justify-center shadow-lg">
             <svg className="w-7 h-7 text-macAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
@@ -37,14 +28,14 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ personal, summary, onChange }
         </div>
       </div>
 
-      <div className="space-y-10 relative z-10">
+      <div className="space-y-8 relative z-10">
         {/* Identity Section */}
         <div className="liquid-glass rounded-2xl p-8 shadow-lg">
           <h3 className="text-sm font-semibold text-macText mb-6 flex items-center gap-2">
             <div className="w-1 h-4 bg-macAccent rounded-full"></div>
             Identity
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="group">
             <label className="block text-xs font-semibold text-macSubtext mb-3 uppercase tracking-wide">
               Full Name
@@ -59,7 +50,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ personal, summary, onChange }
                 type="text"
                 value={personal.full_name || ''}
                 onChange={(e) => onChange('full_name', e.target.value)}
-                className="w-full pl-11 pr-4 py-3.5 bg-macBg/60 backdrop-blur-sm text-macText rounded-xl focus:ring-2 focus:ring-macAccent/50 focus:bg-macBg/80 transition-all duration-300 ease-mac text-sm outline-none"
+                className="w-full pl-13 pr-4 py-3.5 bg-macBg/60 backdrop-blur-sm text-macText rounded-xl focus:ring-2 focus:ring-macAccent/50 focus:bg-macBg/80 transition-all duration-300 ease-mac text-sm outline-none"
                 placeholder="John Doe"
               />
             </div>
@@ -79,7 +70,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ personal, summary, onChange }
                 type="text"
                 value={personal.title || ''}
                 onChange={(e) => onChange('title', e.target.value)}
-                className="w-full pl-11 pr-4 py-3.5 bg-macBg/60 backdrop-blur-sm text-macText rounded-xl focus:ring-2 focus:ring-macAccent/50 focus:bg-macBg/80 transition-all duration-300 ease-mac text-sm outline-none"
+                className="w-full pl-13 pr-4 py-3.5 bg-macBg/60 backdrop-blur-sm text-macText rounded-xl focus:ring-2 focus:ring-macAccent/50 focus:bg-macBg/80 transition-all duration-300 ease-mac text-sm outline-none"
                 placeholder="Senior Software Engineer"
               />
             </div>
@@ -99,7 +90,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ personal, summary, onChange }
                 type="text"
                 value={personal.tagline || ''}
                 onChange={(e) => onChange('tagline', e.target.value)}
-                className="w-full pl-11 pr-4 py-3.5 bg-macBg/60 backdrop-blur-sm text-macText rounded-xl focus:ring-2 focus:ring-macAccent/50 focus:bg-macBg/80 transition-all duration-300 ease-mac text-sm outline-none"
+                className="w-full pl-13 pr-4 py-3.5 bg-macBg/60 backdrop-blur-sm text-macText rounded-xl focus:ring-2 focus:ring-macAccent/50 focus:bg-macBg/80 transition-all duration-300 ease-mac text-sm outline-none"
                 placeholder="Building elegant solutions to complex problems"
               />
             </div>
@@ -113,7 +104,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ personal, summary, onChange }
             <div className="w-1 h-4 bg-macAccent rounded-full"></div>
             Contact Details
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="group">
               <label className="block text-xs font-semibold text-macSubtext mb-3 uppercase tracking-wide">
                 Email
@@ -128,7 +119,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ personal, summary, onChange }
                   type="email"
                   value={personal.email || ''}
                   onChange={(e) => onChange('email', e.target.value)}
-                  className="w-full pl-11 pr-4 py-3.5 bg-macBg/60 backdrop-blur-sm text-macText rounded-xl focus:ring-2 focus:ring-macAccent/50 focus:bg-macBg/80 transition-all duration-300 ease-mac text-sm outline-none"
+                  className="w-full pl-13 pr-4 py-3.5 bg-macBg/60 backdrop-blur-sm text-macText rounded-xl focus:ring-2 focus:ring-macAccent/50 focus:bg-macBg/80 transition-all duration-300 ease-mac text-sm outline-none"
                   placeholder="john@example.com"
                 />
               </div>
@@ -148,7 +139,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ personal, summary, onChange }
                   type="tel"
                   value={personal.phone || ''}
                   onChange={(e) => onChange('phone', e.target.value)}
-                  className="w-full pl-11 pr-4 py-3.5 bg-macBg/60 backdrop-blur-sm text-macText rounded-xl focus:ring-2 focus:ring-macAccent/50 focus:bg-macBg/80 transition-all duration-300 ease-mac text-sm outline-none"
+                  className="w-full pl-13 pr-4 py-3.5 bg-macBg/60 backdrop-blur-sm text-macText rounded-xl focus:ring-2 focus:ring-macAccent/50 focus:bg-macBg/80 transition-all duration-300 ease-mac text-sm outline-none"
                   placeholder="+1 (555) 123-4567"
                 />
               </div>
@@ -169,7 +160,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ personal, summary, onChange }
                   type="text"
                   value={personal.location || ''}
                   onChange={(e) => onChange('location', e.target.value)}
-                  className="w-full pl-11 pr-4 py-3.5 bg-macBg/60 backdrop-blur-sm text-macText rounded-xl focus:ring-2 focus:ring-macAccent/50 focus:bg-macBg/80 transition-all duration-300 ease-mac text-sm outline-none"
+                  className="w-full pl-13 pr-4 py-3.5 bg-macBg/60 backdrop-blur-sm text-macText rounded-xl focus:ring-2 focus:ring-macAccent/50 focus:bg-macBg/80 transition-all duration-300 ease-mac text-sm outline-none"
                   placeholder="San Francisco, CA"
                 />
               </div>
@@ -189,7 +180,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ personal, summary, onChange }
                   type="url"
                   value={personal.website || ''}
                   onChange={(e) => onChange('website', e.target.value)}
-                  className="w-full pl-11 pr-4 py-3.5 bg-macBg/60 backdrop-blur-sm text-macText rounded-xl focus:ring-2 focus:ring-macAccent/50 focus:bg-macBg/80 transition-all duration-300 ease-mac text-sm outline-none"
+                  className="w-full pl-13 pr-4 py-3.5 bg-macBg/60 backdrop-blur-sm text-macText rounded-xl focus:ring-2 focus:ring-macAccent/50 focus:bg-macBg/80 transition-all duration-300 ease-mac text-sm outline-none"
                   placeholder="https://yourwebsite.com"
                 />
               </div>
@@ -203,7 +194,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ personal, summary, onChange }
             <div className="w-1 h-4 bg-macAccent rounded-full"></div>
             Professional Links
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="group">
               <label className="block text-xs font-semibold text-macSubtext mb-3 uppercase tracking-wide">
                 LinkedIn
@@ -218,7 +209,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ personal, summary, onChange }
                   type="url"
                   value={personal.linkedin || ''}
                   onChange={(e) => onChange('linkedin', e.target.value)}
-                  className="w-full pl-11 pr-4 py-3.5 bg-macBg/60 backdrop-blur-sm text-macText rounded-xl focus:ring-2 focus:ring-[#0A66C2]/50 focus:bg-macBg/80 transition-all duration-300 ease-mac text-sm outline-none"
+                  className="w-full pl-13 pr-4 py-3.5 bg-macBg/60 backdrop-blur-sm text-macText rounded-xl focus:ring-2 focus:ring-[#0A66C2]/50 focus:bg-macBg/80 transition-all duration-300 ease-mac text-sm outline-none"
                   placeholder="https://linkedin.com/in/username"
                 />
               </div>
@@ -238,7 +229,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ personal, summary, onChange }
                   type="url"
                   value={personal.github || ''}
                   onChange={(e) => onChange('github', e.target.value)}
-                  className="w-full pl-11 pr-4 py-3.5 bg-macBg/60 backdrop-blur-sm text-macText rounded-xl focus:ring-2 focus:ring-macAccent/50 focus:bg-macBg/80 transition-all duration-300 ease-mac text-sm outline-none"
+                  className="w-full pl-13 pr-4 py-3.5 bg-macBg/60 backdrop-blur-sm text-macText rounded-xl focus:ring-2 focus:ring-macAccent/50 focus:bg-macBg/80 transition-all duration-300 ease-mac text-sm outline-none"
                   placeholder="https://github.com/username"
                 />
               </div>

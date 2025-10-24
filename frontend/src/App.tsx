@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-
+import { motion, AnimatePresence } from 'framer-motion';
 import ProfileForm from './components/ProfileForm';
 import { ExperienceEditor } from './components/experience';
 import { ProjectsManager } from './components/projects';
@@ -8,8 +8,12 @@ import EducationList from './components/EducationList';
 import CVManager from './components/CVManager';
 import QuickImport from './components/QuickImport';
 import { ChatManager } from './components/chat';
-import OpportunityManager from './components/opportunities/OpportunityManager';
+import OpportunitiesViewer from './apps/opportunities';
 import { useCVJobStore, loadJobFromLocalStorage } from './stores/cvJobStore';
+import { Icon } from './icons';
+import VersionBadge from './components/VersionBadge';
+import { useAppSidebarState, APP_SIDEBAR_WIDTH } from './hooks/useAppSidebarState';
+import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 
 // API configuration
 const API_BASE_URL = 'http://localhost:8000';
@@ -24,6 +28,7 @@ function App() {
   const [activeTab, setActiveTab] = useState<TabType>('chat');
   const [notification, setNotification] = useState<{message: string, type: 'success' | 'error'} | null>(null);
   const { setJob } = useCVJobStore();
+  const { isCollapsed, toggleCollapse } = useAppSidebarState();
 
   // Load curriculum on mount
   useEffect(() => {
@@ -37,6 +42,18 @@ function App() {
       setJob(savedJob);
     }
   }, [setJob]);
+
+  // Keyboard shortcut: ⌘B / Ctrl+B to toggle sidebar
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'b') {
+        e.preventDefault();
+        toggleCollapse();
+      }
+    };
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [toggleCollapse]);
 
   const loadCurriculum = async () => {
     try {
@@ -206,16 +223,16 @@ function App() {
   }
 
   const navItems = [
-    { id: 'chat' as TabType, label: 'Chat', icon: '💬' },
-    { id: 'import' as TabType, label: 'Import', icon: '📥' },
-    { id: 'profile' as TabType, label: 'Profile', icon: '👤' },
-    { id: 'experience' as TabType, label: 'Experience', icon: '💼' },
-    { id: 'projects' as TabType, label: 'Projects', icon: '🚀' },
-    { id: 'skills' as TabType, label: 'Skills', icon: '⚡' },
-    { id: 'education' as TabType, label: 'Education', icon: '🎓' },
-    { id: 'cvs' as TabType, label: 'CVs', icon: '📄' },
-    { id: 'finances' as TabType, label: 'Finances', icon: '💰' },
-    { id: 'opportunities' as TabType, label: 'Opportunities', icon: '🎯' },
+    { id: 'chat' as TabType, label: 'Chat', icon: 'message-circle' },
+    { id: 'import' as TabType, label: 'Import', icon: 'download' },
+    { id: 'profile' as TabType, label: 'Profile', icon: 'user' },
+    { id: 'experience' as TabType, label: 'Experience', icon: 'briefcase' },
+    { id: 'projects' as TabType, label: 'Projects', icon: 'rocket' },
+    { id: 'skills' as TabType, label: 'Skills', icon: 'lightning' },
+    { id: 'education' as TabType, label: 'Education', icon: 'graduation-cap' },
+    { id: 'cvs' as TabType, label: 'CVs', icon: 'file' },
+    { id: 'finances' as TabType, label: 'Finances', icon: 'dollar-sign' },
+    { id: 'opportunities' as TabType, label: 'Opportunities', icon: 'target' },
   ];
 
   return (
@@ -227,87 +244,203 @@ function App() {
       <div className="gradient-orb fixed top-[-10%] right-[20%] w-[500px] h-[500px] bg-macAccent/30" style={{ animationDelay: '0s' }}></div>
       <div className="gradient-orb fixed bottom-[-15%] left-[10%] w-[400px] h-[400px] bg-purple-500/20" style={{ animationDelay: '4s' }}></div>
 
-      {/* macOS Sidebar - Liquid Glass */}
-      <div className="w-sidebar liquid-glass flex flex-col relative overflow-hidden z-10 shadow-xl">
-        {/* Enhanced ambient gradient overlay */}
-        <div className="absolute inset-0 bg-linear-to-b from-macAccent/8 via-transparent to-purple-500/5 pointer-events-none animate-gradient-shift"></div>
+      {/* macOS Sidebar - ULTRA VISUAL 2026 - COLLAPSIBLE */}
+      <motion.div
+        initial={false}
+        animate={{ width: isCollapsed ? APP_SIDEBAR_WIDTH.COLLAPSED : APP_SIDEBAR_WIDTH.EXPANDED }}
+        transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
+        className="liquid-glass flex flex-col relative overflow-hidden z-10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] border-r-2 border-macAccent/30"
+      >
+        {/* Enhanced ambient gradient overlay - MORE VISIBLE */}
+        <div className="absolute inset-0 bg-gradient-to-b from-macAccent/20 via-purple-500/15 to-cyan-500/10 pointer-events-none animate-gradient-shift"></div>
 
-        {/* Particles effect */}
-        <div className="particle absolute top-[20%] left-[30%]" style={{ animationDelay: '0s' }}></div>
-        <div className="particle absolute top-[60%] left-[70%]" style={{ animationDelay: '2s' }}></div>
-        <div className="particle absolute top-[80%] left-[40%]" style={{ animationDelay: '4s' }}></div>
+        {/* Particles effect - BIGGER */}
+        <div className="particle absolute top-[20%] left-[30%] w-3 h-3 bg-macAccent/40" style={{ animationDelay: '0s' }}></div>
+        <div className="particle absolute top-[60%] left-[70%] w-2 h-2 bg-purple-500/40" style={{ animationDelay: '2s' }}></div>
+        <div className="particle absolute top-[80%] left-[40%] w-2.5 h-2.5 bg-cyan-500/40" style={{ animationDelay: '4s' }}></div>
 
-        {/* Header - Liquid Glass with Glow */}
-        <div className="h-header flex items-center justify-center relative z-10 mb-4">
-          <div className="relative group cursor-pointer perspective-container">
-            <h1 className="text-sm font-bold text-gradient relative z-10 transition-all duration-300 group-hover:scale-110 animate-glow-pulse">SO</h1>
-            <div className="absolute inset-0 bg-macAccent/30 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-morph"></div>
-          </div>
+        {/* Toggle Button - Floating */}
+        <button
+          onClick={toggleCollapse}
+          className="absolute top-4 right-4 z-50 w-10 h-10 rounded-xl liquid-glass hover:bg-macAccent/20 flex items-center justify-center transition-all duration-300 group hover:scale-110 hover:shadow-xl border border-macBorder/40 hover:border-macAccent/60"
+          title={isCollapsed ? 'Expand sidebar (⌘B)' : 'Collapse sidebar (⌘B)'}
+        >
+          <motion.div
+            animate={{ rotate: isCollapsed ? 0 : 180 }}
+            transition={{ duration: 0.3 }}
+            className="text-macAccent"
+          >
+            {isCollapsed ? <PanelLeftOpen size={20} /> : <PanelLeftClose size={20} />}
+          </motion.div>
+        </button>
+
+        {/* Header - Logo with DRAMATIC Glow */}
+        <div className="h-24 flex items-center justify-center relative z-10 mb-4 border-b-2 border-macAccent/20 px-4">
+          <AnimatePresence mode="wait">
+            {!isCollapsed && (
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+                className="flex items-center gap-4 w-full"
+              >
+                <div className="relative group cursor-pointer">
+                  <img
+                    src="/logo.svg"
+                    alt="SerenityOps"
+                    className="w-12 h-12 relative z-10 transition-all duration-500 group-hover:scale-125 animate-glow-pulse"
+                    style={{ filter: 'drop-shadow(0 0 16px rgba(10, 132, 255, 0.8))' }}
+                  />
+                  <div className="absolute inset-0 bg-macAccent/40 blur-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-500 animate-morph"></div>
+                </div>
+                <div>
+                  <h1 className="text-xl font-black text-gradient tracking-tight">SerenityOps</h1>
+                  <p className="text-xs text-macSubtext font-semibold">Intelligence System</p>
+                </div>
+              </motion.div>
+            )}
+            {isCollapsed && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.3 }}
+                className="relative group cursor-pointer"
+              >
+                <img
+                  src="/logo.svg"
+                  alt="SerenityOps"
+                  className="w-12 h-12 relative z-10 transition-all duration-500 group-hover:scale-125 animate-glow-pulse"
+                  style={{ filter: 'drop-shadow(0 0 16px rgba(10, 132, 255, 0.8))' }}
+                />
+                <div className="absolute inset-0 bg-macAccent/40 blur-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
-        {/* Navigation - Icon Only with Enhanced Interactions */}
-        <nav className="flex-1 overflow-y-auto py-3 relative z-10">
+        {/* Navigation - COLLAPSIBLE with LABELS */}
+        <nav className="flex-1 overflow-y-auto py-2 px-3 relative z-10 space-y-2">
           {navItems.map((item, index) => (
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
               title={item.label}
               style={{ animationDelay: `${index * 50}ms` }}
-              className={`w-full h-sidebar-icon flex items-center justify-center transition-all duration-300 ease-mac relative group mb-1 animate-slide-in-left ${
+              className={`w-full h-14 flex items-center transition-all duration-500 ease-mac relative group animate-slide-in-left rounded-2xl ${
+                isCollapsed ? 'justify-center px-2' : 'justify-start px-4 gap-4'
+              } ${
                 activeTab === item.id
-                  ? 'bg-linear-to-r from-macAccent/25 via-macAccent/20 to-transparent border-l-2 border-macAccent text-macAccent shadow-[inset_0_0_12px_rgba(10,132,255,0.15)]'
-                  : 'text-slate-300 hover:bg-macHover/60 hover:text-macText hover:scale-105'
+                  ? 'bg-gradient-to-br from-macAccent/40 via-macAccent/30 to-macAccent/20 border-2 border-macAccent/60 text-white shadow-[0_0_24px_rgba(10,132,255,0.5)] scale-[1.03] ring-2 ring-macAccent/30'
+                  : 'text-slate-400 hover:bg-macHover/80 hover:text-white hover:scale-[1.02] hover:shadow-2xl border-2 border-transparent hover:border-macAccent/40'
               }`}
             >
-              <span className={`text-lg transition-transform duration-300 ${activeTab === item.id ? 'scale-110' : 'group-hover:scale-110'}`}>
-                {item.icon}
-              </span>
+              <div className={`transition-all duration-500 flex-shrink-0 ${activeTab === item.id ? 'scale-110 drop-shadow-[0_0_12px_rgba(255,255,255,0.8)]' : 'group-hover:scale-110'}`}>
+                <Icon name={item.icon} size={24} />
+              </div>
 
-              {/* Enhanced Tooltip with Slide Animation */}
-              <span className="absolute left-full ml-3 px-3 py-1.5 glass-panel rounded-md text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100 transition-all duration-200 pointer-events-none z-tooltip">
-                {item.label}
-              </span>
+              {/* Label - Only visible when expanded */}
+              <AnimatePresence>
+                {!isCollapsed && (
+                  <motion.span
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    transition={{ duration: 0.2, delay: 0.1 }}
+                    className={`text-sm font-bold truncate ${activeTab === item.id ? 'text-white' : 'text-macText group-hover:text-white'}`}
+                  >
+                    {item.label}
+                  </motion.span>
+                )}
+              </AnimatePresence>
 
-              {/* Active indicator glow */}
+              {/* Tooltip - Only visible when collapsed */}
+              {isCollapsed && (
+                <span className="absolute left-full ml-4 px-4 py-2.5 liquid-glass-accent rounded-xl text-sm font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100 transition-all duration-300 pointer-events-none z-tooltip shadow-2xl shadow-macAccent/40 border-2 border-macAccent/30">
+                  {item.label}
+                </span>
+              )}
+
+              {/* Active indicator glow - MEGA VISIBLE */}
               {activeTab === item.id && (
-                <div className="absolute left-0 w-0.5 h-full bg-macAccent shadow-[0_0_10px_rgba(10,132,255,0.5)]"></div>
+                <div className="absolute left-0 w-1.5 h-10 bg-gradient-to-b from-white via-macAccent to-cyan-500 rounded-r-full shadow-[0_0_20px_rgba(10,132,255,0.8)] animate-pulse"></div>
+              )}
+
+              {/* Shine effect on active */}
+              {activeTab === item.id && (
+                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50 rounded-2xl"></div>
               )}
             </button>
           ))}
         </nav>
 
-        {/* Actions - Liquid Glass with Physics */}
-        <div className="p-3 space-y-2 relative z-10 mt-auto">
+        {/* Actions - COLLAPSIBLE with LABELS */}
+        <div className="p-3 space-y-3 relative z-10 mt-auto border-t-2 border-macAccent/20 bg-gradient-to-t from-macPanel/40 to-transparent">
           <button
             onClick={handleSave}
             disabled={saving}
             title="Save Changes (Ctrl+S)"
-            className="w-full h-8 liquid-glass text-macText text-xs font-medium rounded-mac transition-all duration-300 ease-mac disabled:opacity-40 flex items-center justify-center hover-lift group bounce-click ripple-effect"
+            className={`w-full h-12 liquid-glass text-macText font-bold rounded-2xl transition-all duration-500 ease-mac disabled:opacity-40 flex items-center hover-lift group bounce-click ripple-effect hover:scale-105 hover:shadow-2xl border-2 border-macBorder/40 hover:border-macAccent/60 ${
+              isCollapsed ? 'justify-center px-2' : 'justify-center gap-3 px-4'
+            }`}
           >
-            <svg className="w-4 h-4 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+            <svg className="w-6 h-6 transition-transform duration-500 group-hover:scale-125 group-hover:rotate-12 drop-shadow-[0_0_8px_rgba(10,132,255,0.5)] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
             </svg>
+            <AnimatePresence>
+              {!isCollapsed && (
+                <motion.span
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="text-sm"
+                >
+                  Save
+                </motion.span>
+              )}
+            </AnimatePresence>
           </button>
           <button
             onClick={handleGenerateCV}
             disabled={generating}
             title="Generate CV"
-            className="w-full h-8 liquid-glass-accent hover:shadow-accent text-white text-xs font-semibold rounded-mac transition-all duration-300 ease-mac disabled:opacity-40 flex items-center justify-center hover-lift group relative overflow-hidden bounce-click ripple-effect"
+            className={`w-full h-12 gradient-accent hover:shadow-[0_0_32px_rgba(10,132,255,0.6)] text-white font-black rounded-2xl transition-all duration-500 ease-mac disabled:opacity-40 flex items-center hover-lift group relative overflow-hidden bounce-click ripple-effect hover:scale-105 ring-2 ring-macAccent/40 hover:ring-4 hover:ring-macAccent/60 ${
+              isCollapsed ? 'justify-center px-2' : 'justify-center gap-3 px-4'
+            }`}
           >
-            <span className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 animate-shimmer"></span>
-            <svg className="w-4 h-4 relative z-10 transition-transform duration-300 group-hover:rotate-180 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 animate-shimmer"></span>
+            <svg className="w-6 h-6 relative z-10 transition-transform duration-500 group-hover:rotate-180 group-hover:scale-125 drop-shadow-[0_0_12px_rgba(255,255,255,0.8)] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
+            <AnimatePresence>
+              {!isCollapsed && (
+                <motion.span
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="text-sm"
+                >
+                  Generate CV
+                </motion.span>
+              )}
+            </AnimatePresence>
           </button>
         </div>
-      </div>
+      </motion.div>
 
       {/* Main Content - Perfectly Centered & Spacious */}
       <div className="flex-1 overflow-y-auto relative">
-        {/* Chat gets full height, others get centered container */}
+        {/* Chat and Opportunities get full height, others get centered container */}
         {activeTab === 'chat' ? (
           <div className="h-full">
             <ChatManager apiBaseUrl={API_BASE_URL} />
+          </div>
+        ) : activeTab === 'opportunities' ? (
+          <div className="h-full">
+            <OpportunitiesViewer apiBaseUrl={API_BASE_URL} />
           </div>
         ) : (
           <div className="min-h-full flex items-start justify-center px-8 py-12">
@@ -402,22 +535,20 @@ function App() {
                   {/* Preview Features */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {[
-                      { icon: '📊', title: 'Income Tracking', desc: 'Monitor salary and revenue streams' },
-                      { icon: '💳', title: 'Expense Management', desc: 'Track and categorize spending' },
-                      { icon: '🎯', title: 'Financial Goals', desc: 'Set and achieve money targets' }
+                      { icon: 'chart-bar', title: 'Income Tracking', desc: 'Monitor salary and revenue streams' },
+                      { icon: 'credit-card', title: 'Expense Management', desc: 'Track and categorize spending' },
+                      { icon: 'target', title: 'Financial Goals', desc: 'Set and achieve money targets' }
                     ].map((feature, i) => (
                       <div key={i} className="bg-macPanel/50 backdrop-blur-md border border-macBorder/30 rounded-mac p-4 shadow-[0_2px_6px_rgba(0,0,0,0.1)]">
-                        <div className="text-2xl mb-2">{feature.icon}</div>
+                        <div className="mb-2">
+                          <Icon name={feature.icon} size={32} />
+                        </div>
                         <h4 className="text-xs font-semibold text-macText mb-1">{feature.title}</h4>
                         <p className="text-xs text-macSubtext">{feature.desc}</p>
                       </div>
                     ))}
                   </div>
                 </div>
-              )}
-
-              {activeTab === 'opportunities' && (
-                <OpportunityManager apiBaseUrl={API_BASE_URL} />
               )}
             </div>
           </div>
@@ -479,6 +610,9 @@ function App() {
           </div>
         </div>
       )}
+
+      {/* Version Badge - Persistent deployment info */}
+      <VersionBadge />
     </div>
   );
 }

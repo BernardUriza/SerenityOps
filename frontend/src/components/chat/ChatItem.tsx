@@ -101,19 +101,19 @@ export const ChatItem: React.FC<ChatItemProps> = ({
       onClick={onSelect}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
-      className={`group relative mx-2 mb-1.5 rounded-xl cursor-pointer transition-all duration-300 ease-mac ${
+      className={`group relative mx-3 mb-3 rounded-2xl cursor-pointer transition-all duration-300 ease-mac ${
         isActive
-          ? 'bg-gradient-to-r from-macAccent/10 to-macAccent/5 backdrop-blur-md shadow-lg border border-macAccent/30 scale-[1.01]'
-          : 'hover:bg-macPanel/40 border border-transparent hover:border-macBorder/30 hover:scale-[1.005]'
+          ? 'bg-gradient-to-r from-macAccent/20 via-macAccent/10 to-transparent backdrop-blur-md shadow-2xl shadow-macAccent/20 border-2 border-macAccent/50 scale-[1.02] ring-2 ring-macAccent/30'
+          : 'hover:bg-macPanel/60 border-2 border-transparent hover:border-macAccent/20 hover:scale-[1.01] hover:shadow-xl'
       } ${chat.archived ? 'opacity-60' : ''}`}
       title={`${chat.name} - ${chat.message_count} messages - Updated ${formattedDate}`}
     >
-      <div className="flex items-center px-3 py-2.5">
+      <div className="flex items-center px-5 py-4">
         {/* Active indicator - Enhanced */}
         {isActive && (
           <motion.div
             layoutId="active-indicator"
-            className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-gradient-to-b from-macAccent to-macAccent/60 rounded-r-full shadow-lg shadow-macAccent/50"
+            className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-10 bg-gradient-to-b from-macAccent via-macAccent to-macAccent/60 rounded-r-full shadow-2xl shadow-macAccent/70 blur-[0.5px]"
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           />
         )}
@@ -132,11 +132,11 @@ export const ChatItem: React.FC<ChatItemProps> = ({
             disabled={actionLoading === 'rename'}
           />
         ) : (
-          <div className="flex-1 flex items-center min-w-0 gap-2">
+          <div className="flex-1 flex items-center min-w-0 gap-3">
             {/* Chat name */}
             <span
-              className={`text-xs font-semibold truncate transition-colors duration-300 ${
-                isActive ? 'text-macAccent' : 'text-macText'
+              className={`text-sm font-bold truncate transition-colors duration-300 ${
+                isActive ? 'text-macAccent drop-shadow-[0_0_8px_rgba(10,132,255,0.5)]' : 'text-macText'
               }`}
             >
               {chat.name}
@@ -144,13 +144,13 @@ export const ChatItem: React.FC<ChatItemProps> = ({
 
             {/* Archived badge */}
             {chat.archived && (
-              <span className="px-1.5 py-0.5 bg-warning/10 text-warning text-[9px] font-bold rounded uppercase">
+              <span className="px-2 py-1 bg-warning/20 text-warning text-[10px] font-bold rounded-lg uppercase shadow-lg">
                 Archived
               </span>
             )}
 
             {/* Message count badge */}
-            <span className="ml-auto text-[10px] font-bold text-macSubtext/70 bg-macPanel/40 px-2 py-0.5 rounded-lg flex-shrink-0 border border-macBorder/20">
+            <span className="ml-auto text-xs font-bold text-macSubtext bg-macPanel/60 px-3 py-1.5 rounded-xl flex-shrink-0 border-2 border-macBorder/30 shadow-md">
               {chat.message_count}
             </span>
           </div>

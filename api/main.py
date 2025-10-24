@@ -10,6 +10,7 @@ from typing import Dict, Any, Optional, List
 import os
 import json
 from datetime import datetime
+import subprocess
 
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -605,24 +606,6 @@ def list_generated_cvs():
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to list CVs: {str(e)}")
-
-@app.get("/api/opportunities")
-def get_opportunities():
-    """
-    Load opportunities data from YAML.
-
-    Returns:
-        Dictionary with opportunities pipeline
-    """
-    try:
-        if not OPPORTUNITIES_PATH.exists():
-            return {"opportunities": []}
-
-        with open(OPPORTUNITIES_PATH, 'r', encoding='utf-8') as f:
-            data = yaml.safe_load(f)
-        return data
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to load opportunities: {str(e)}")
 
 @app.get("/api/finances")
 def get_finances():
@@ -2080,6 +2063,663 @@ def delete_opportunity(opportunity_id: str):
             status_code=500,
             detail=f"Error deleting opportunity: {str(e)}"
         )
+
+
+# ========================
+# Opportunities Claude Actions
+# ========================
+
+class AnalyzeJobDescriptionRequest(BaseModel):
+    job_description: str
+    your_skills: List[str]
+
+class ImprovePitchRequest(BaseModel):
+    current_pitch: str
+    job_description: Optional[str] = None
+
+class MockInterviewRequest(BaseModel):
+    interview_type: str  # technical | behavioral | mixed
+    difficulty: str  # easy | medium | hard
+    focus_areas: List[str] = []
+
+class CompareOpportunitiesRequest(BaseModel):
+    opportunity_a_id: str
+    opportunity_b_id: str
+
+class CareerStrategyRequest(BaseModel):
+    current_opportunities: List[str]
+    career_goals: str
+    constraints: List[str] = []
+    time_horizon: str  # 3_months | 6_months | 1_year
+
+
+@app.post("/api/opportunities/analyze")
+async def analyze_job_description(request: AnalyzeJobDescriptionRequest):
+    """
+    Analyze job description using Claude AI
+
+    Returns fit analysis with skills match, gaps, keywords, and Claude insight
+    """
+    if not claude_client:
+        raise HTTPException(
+            status_code=503,
+            detail="Claude API not configured. Set ANTHROPIC_API_KEY in .env"
+        )
+
+    try:
+        prompt = f"""Analyze this job description against the candidate's skills.
+
+JOB DESCRIPTION:
+{request.job_description}
+
+CANDIDATE SKILLS:
+{', '.join(request.your_skills)}
+
+Return ONLY valid JSON with this exact structure:
+{{
+  "fit_analysis": {{
+    "skills_match_percentage": 0-100,
+    "stack_overlap": ["skill1", "skill2"],
+    "gaps": ["missing_skill1", "missing_skill2"],
+    "keywords_for_cv": ["keyword1", "keyword2"],
+    "red_flags": ["concern1", "concern2"],
+    "green_flags": ["positive1", "positive2"],
+    "claude_insight": "Brief strategic recommendation"
+  }}
+}}
+
+Rules:
+1. Be realistic about skills_match_percentage (0-100)
+2. stack_overlap should list technologies/skills the candidate has that match
+3. gaps should list required skills the candidate doesn't have
+4. keywords_for_cv should be ATS-friendly terms from the JD
+5. red_flags and green_flags should be brief (1-2 words each)
+6. claude_insight should be 1-2 sentences of strategic advice"""
+
+        response = claude_client.messages.create(
+            model="claude-sonnet-4-20250514",
+            max_tokens=2000,
+            messages=[{"role": "user", "content": prompt}]
+        )
+
+        content = response.content[0].text.strip()
+        if content.startswith("```"):
+            content = content.split("```")[1]
+            if content.startswith("json"):
+                content = content[4:]
+
+        result = json.loads(content.strip())
+        return result
+
+    except json.JSONDecodeError as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to parse Claude response: {str(e)}"
+        )
+    except Exception as e:
+        import traceback
+        raise HTTPException(
+            status_code=500,
+            detail=f"Analysis failed: {str(e)}\n{traceback.format_exc()}"
+        )
+
+
+@app.post("/api/opportunities/{opportunity_id}/pitch/improve")
+async def improve_pitch(opportunity_id: str, request: ImprovePitchRequest):
+    """
+    Improve elevator pitch using Claude AI
+
+    Returns improved pitch with reasoning
+    """
+    if not claude_client:
+        raise HTTPException(
+            status_code=503,
+            detail="Claude API not configured. Set ANTHROPIC_API_KEY in .env"
+        )
+
+    try:
+        # Load opportunity for context
+        with open(OPPORTUNITIES_PATH, 'r', encoding='utf-8') as f:
+            opportunities_data = yaml.safe_load(f)
+
+        opportunity = None
+        for opp in opportunities_data.get('pipeline', []):
+            if opp.get('id') == opportunity_id:
+                opportunity = opp
+                break
+
+        if not opportunity:
+            raise HTTPException(status_code=404, detail="Opportunity not found")
+
+        job_context = request.job_description or opportunity.get('details', {}).get('description', '')
+
+        prompt = f"""Improve this elevator pitch for a job opportunity.
+
+CURRENT PITCH:
+{request.current_pitch}
+
+JOB CONTEXT:
+Company: {opportunity.get('company')}
+Role: {opportunity.get('role')}
+Tech Stack: {', '.join(opportunity.get('details', {}).get('tech_stack', []))}
+{f'Job Description: {job_context}' if job_context else ''}
+
+Return ONLY valid JSON:
+{{
+  "improved_pitch": "The improved elevator pitch (90 seconds version)",
+  "key_improvements": ["improvement1", "improvement2"],
+  "reasoning": "Why these changes strengthen the pitch"
+}}
+
+Guidelines:
+1. Keep it under 200 words (90 seconds speaking time)
+2. Emphasize quantifiable achievements
+3. Align with the role and tech stack
+4. Make it conversational but professional
+5. Include hook, value proposition, and call to action"""
+
+        response = claude_client.messages.create(
+            model="claude-sonnet-4-20250514",
+            max_tokens=1500,
+            messages=[{"role": "user", "content": prompt}]
+        )
+
+        content = response.content[0].text.strip()
+        if content.startswith("```"):
+            content = content.split("```")[1]
+            if content.startswith("json"):
+                content = content[4:]
+
+        result = json.loads(content.strip())
+        return result
+
+    except json.JSONDecodeError as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to parse Claude response: {str(e)}"
+        )
+    except Exception as e:
+        import traceback
+        raise HTTPException(
+            status_code=500,
+            detail=f"Pitch improvement failed: {str(e)}\n{traceback.format_exc()}"
+        )
+
+
+@app.post("/api/opportunities/{opportunity_id}/mock-interview")
+async def generate_mock_interview(opportunity_id: str, request: MockInterviewRequest):
+    """
+    Generate mock interview questions using Claude AI
+
+    Returns tailored interview questions based on opportunity and difficulty
+    """
+    if not claude_client:
+        raise HTTPException(
+            status_code=503,
+            detail="Claude API not configured. Set ANTHROPIC_API_KEY in .env"
+        )
+
+    try:
+        # Load opportunity for context
+        with open(OPPORTUNITIES_PATH, 'r', encoding='utf-8') as f:
+            opportunities_data = yaml.safe_load(f)
+
+        opportunity = None
+        for opp in opportunities_data.get('pipeline', []):
+            if opp.get('id') == opportunity_id:
+                opportunity = opp
+                break
+
+        if not opportunity:
+            raise HTTPException(status_code=404, detail="Opportunity not found")
+
+        focus_areas_str = ', '.join(request.focus_areas) if request.focus_areas else 'general skills'
+
+        prompt = f"""Generate mock interview questions for this opportunity.
+
+OPPORTUNITY:
+Company: {opportunity.get('company')}
+Role: {opportunity.get('role')}
+Tech Stack: {', '.join(opportunity.get('details', {}).get('tech_stack', []))}
+
+INTERVIEW CONFIG:
+Type: {request.interview_type}
+Difficulty: {request.difficulty}
+Focus Areas: {focus_areas_str}
+
+Return ONLY valid JSON:
+{{
+  "questions": [
+    {{
+      "question": "The interview question",
+      "type": "technical|behavioral",
+      "difficulty": "easy|medium|hard",
+      "hints": ["hint1", "hint2"],
+      "evaluation_criteria": ["criteria1", "criteria2"]
+    }}
+  ],
+  "preparation_tips": ["tip1", "tip2"],
+  "estimated_time": "30-45 minutes"
+}}
+
+Guidelines:
+1. Generate 5-7 questions appropriate for {request.difficulty} difficulty
+2. Mix question types based on interview_type
+3. Include STAR-method prompts for behavioral questions
+4. Technical questions should match the tech stack
+5. Focus on areas where candidate needs improvement: {focus_areas_str}"""
+
+        response = claude_client.messages.create(
+            model="claude-sonnet-4-20250514",
+            max_tokens=3000,
+            messages=[{"role": "user", "content": prompt}]
+        )
+
+        content = response.content[0].text.strip()
+        if content.startswith("```"):
+            content = content.split("```")[1]
+            if content.startswith("json"):
+                content = content[4:]
+
+        result = json.loads(content.strip())
+        return result
+
+    except json.JSONDecodeError as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to parse Claude response: {str(e)}"
+        )
+    except Exception as e:
+        import traceback
+        raise HTTPException(
+            status_code=500,
+            detail=f"Mock interview generation failed: {str(e)}\n{traceback.format_exc()}"
+        )
+
+
+@app.post("/api/opportunities/compare")
+async def compare_opportunities(request: CompareOpportunitiesRequest):
+    """
+    Compare two opportunities using Claude AI
+
+    Returns side-by-side comparison with fit scores and recommendation
+    """
+    if not claude_client:
+        raise HTTPException(
+            status_code=503,
+            detail="Claude API not configured. Set ANTHROPIC_API_KEY in .env"
+        )
+
+    try:
+        # Load opportunities
+        with open(OPPORTUNITIES_PATH, 'r', encoding='utf-8') as f:
+            opportunities_data = yaml.safe_load(f)
+
+        opp_a = None
+        opp_b = None
+        for opp in opportunities_data.get('pipeline', []):
+            if opp.get('id') == request.opportunity_a_id:
+                opp_a = opp
+            if opp.get('id') == request.opportunity_b_id:
+                opp_b = opp
+
+        if not opp_a or not opp_b:
+            raise HTTPException(status_code=404, detail="One or both opportunities not found")
+
+        prompt = f"""Compare these two job opportunities and provide strategic analysis.
+
+OPPORTUNITY A:
+Company: {opp_a.get('company')}
+Role: {opp_a.get('role')}
+Tech Stack: {', '.join(opp_a.get('details', {}).get('tech_stack', []))}
+Salary: {opp_a.get('details', {}).get('salary_range', 'Not specified')}
+Location: {opp_a.get('details', {}).get('location', 'Not specified')}
+
+OPPORTUNITY B:
+Company: {opp_b.get('company')}
+Role: {opp_b.get('role')}
+Tech Stack: {', '.join(opp_b.get('details', {}).get('tech_stack', []))}
+Salary: {opp_b.get('details', {}).get('salary_range', 'Not specified')}
+Location: {opp_b.get('details', {}).get('location', 'Not specified')}
+
+Return ONLY valid JSON:
+{{
+  "opportunity_a": {{
+    "company": "{opp_a.get('company')}",
+    "role": "{opp_a.get('role')}"
+  }},
+  "opportunity_b": {{
+    "company": "{opp_b.get('company')}",
+    "role": "{opp_b.get('role')}"
+  }},
+  "fit_comparison": {{
+    "a_score": 0-100,
+    "b_score": 0-100,
+    "comparison_factors": [
+      {{"factor": "Technical Growth", "a_rating": 0-10, "b_rating": 0-10}},
+      {{"factor": "Compensation", "a_rating": 0-10, "b_rating": 0-10}},
+      {{"factor": "Work-Life Balance", "a_rating": 0-10, "b_rating": 0-10}},
+      {{"factor": "Career Trajectory", "a_rating": 0-10, "b_rating": 0-10}}
+    ]
+  }},
+  "claude_recommendation": "Strategic recommendation (2-3 sentences)"
+}}"""
+
+        response = claude_client.messages.create(
+            model="claude-sonnet-4-20250514",
+            max_tokens=2000,
+            messages=[{"role": "user", "content": prompt}]
+        )
+
+        content = response.content[0].text.strip()
+        if content.startswith("```"):
+            content = content.split("```")[1]
+            if content.startswith("json"):
+                content = content[4:]
+
+        result = json.loads(content.strip())
+        return result
+
+    except json.JSONDecodeError as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to parse Claude response: {str(e)}"
+        )
+    except Exception as e:
+        import traceback
+        raise HTTPException(
+            status_code=500,
+            detail=f"Comparison failed: {str(e)}\n{traceback.format_exc()}"
+        )
+
+
+@app.post("/api/opportunities/career-strategy")
+async def generate_career_strategy(request: CareerStrategyRequest):
+    """
+    Generate career strategy using Claude AI
+
+    Returns personalized action plan based on current opportunities and goals
+    """
+    if not claude_client:
+        raise HTTPException(
+            status_code=503,
+            detail="Claude API not configured. Set ANTHROPIC_API_KEY in .env"
+        )
+
+    try:
+        # Load opportunities and curriculum for context
+        with open(OPPORTUNITIES_PATH, 'r', encoding='utf-8') as f:
+            opportunities_data = yaml.safe_load(f)
+
+        with open(CURRICULUM_PATH, 'r', encoding='utf-8') as f:
+            curriculum = yaml.safe_load(f)
+
+        # Get selected opportunities
+        selected_opps = []
+        for opp_id in request.current_opportunities:
+            for opp in opportunities_data.get('pipeline', []):
+                if opp.get('id') == opp_id:
+                    selected_opps.append(opp)
+
+        opps_summary = '\n'.join([
+            f"- {opp.get('company')}: {opp.get('role')} (Stage: {opp.get('stage')})"
+            for opp in selected_opps
+        ])
+
+        current_role = curriculum.get('experience', [{}])[0].get('role', 'Unknown') if curriculum.get('experience') else 'Unknown'
+        skills = ', '.join([lang.get('name', '') for lang in curriculum.get('skills', {}).get('languages', [])])
+
+        prompt = f"""Generate a personalized career strategy based on current opportunities and goals.
+
+CURRENT PROFILE:
+Role: {current_role}
+Skills: {skills}
+
+ACTIVE OPPORTUNITIES:
+{opps_summary}
+
+CAREER GOALS: {request.career_goals}
+CONSTRAINTS: {', '.join(request.constraints) if request.constraints else 'None'}
+TIME HORIZON: {request.time_horizon}
+
+Return ONLY valid JSON:
+{{
+  "recommended_actions": [
+    {{
+      "action": "Specific action to take",
+      "priority": "high|medium|low",
+      "timeline": "When to execute",
+      "rationale": "Why this action matters"
+    }}
+  ],
+  "skill_development_plan": [
+    {{
+      "skill": "Skill to develop",
+      "resources": ["resource1", "resource2"],
+      "time_estimate": "Estimated time to proficiency"
+    }}
+  ],
+  "opportunity_prioritization": [
+    {{
+      "company": "Company name",
+      "priority_rank": 1-5,
+      "reasoning": "Why this priority"
+    }}
+  ],
+  "claude_insight": "Strategic insight (2-3 sentences)"
+}}
+
+Guidelines:
+1. Be specific and actionable
+2. Consider time_horizon for timeline recommendations
+3. Address any constraints mentioned
+4. Prioritize opportunities based on career_goals alignment
+5. Recommend 3-5 skills that would accelerate career goals"""
+
+        response = claude_client.messages.create(
+            model="claude-sonnet-4-20250514",
+            max_tokens=3000,
+            messages=[{"role": "user", "content": prompt}]
+        )
+
+        content = response.content[0].text.strip()
+        if content.startswith("```"):
+            content = content.split("```")[1]
+            if content.startswith("json"):
+                content = content[4:]
+
+        result = json.loads(content.strip())
+        return result
+
+    except json.JSONDecodeError as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to parse Claude response: {str(e)}"
+        )
+    except Exception as e:
+        import traceback
+        raise HTTPException(
+            status_code=500,
+            detail=f"Strategy generation failed: {str(e)}\n{traceback.format_exc()}"
+        )
+
+
+@app.get("/api/opportunities/pitch/{company}")
+async def get_elevator_pitch(company: str):
+    """
+    Get elevator pitch for a specific company
+
+    Reads from interview/{company}/elevator_pitch.txt
+    """
+    try:
+        pitch_path = BASE_DIR / "interview" / company.lower().replace(' ', '_') / "elevator_pitch.txt"
+
+        if not pitch_path.exists():
+            # Try alternative paths
+            for interview_dir in (BASE_DIR / "interview").iterdir():
+                if interview_dir.is_dir() and company.lower() in interview_dir.name.lower():
+                    potential_pitch = interview_dir / "elevator_pitch.txt"
+                    if potential_pitch.exists():
+                        pitch_path = potential_pitch
+                        break
+
+        if not pitch_path.exists():
+            return {
+                "company": company,
+                "pitch": "",
+                "message": "No elevator pitch found for this company"
+            }
+
+        with open(pitch_path, 'r', encoding='utf-8') as f:
+            pitch_content = f.read()
+
+        return {
+            "company": company,
+            "pitch": pitch_content,
+            "path": str(pitch_path)
+        }
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to load pitch: {str(e)}"
+        )
+
+
+@app.get("/api/opportunities/{opportunity_id}/feedback")
+async def get_feedback_history(opportunity_id: str):
+    """
+    Get feedback history for an opportunity
+
+    Reads from logs/interviews/ directory
+    """
+    try:
+        # Load opportunity to get company name
+        with open(OPPORTUNITIES_PATH, 'r', encoding='utf-8') as f:
+            opportunities_data = yaml.safe_load(f)
+
+        opportunity = None
+        for opp in opportunities_data.get('pipeline', []):
+            if opp.get('id') == opportunity_id:
+                opportunity = opp
+                break
+
+        if not opportunity:
+            raise HTTPException(status_code=404, detail="Opportunity not found")
+
+        company = opportunity.get('company', '')
+        feedback_entries = []
+
+        # Search in logs/interviews/ directory
+        interviews_dir = BASE_DIR / "logs" / "interviews"
+        if interviews_dir.exists():
+            for feedback_file in interviews_dir.glob("*.md"):
+                if company.lower() in feedback_file.stem.lower():
+                    with open(feedback_file, 'r', encoding='utf-8') as f:
+                        content = f.read()
+
+                    # Parse markdown file for feedback
+                    # This is a simple implementation - could be enhanced with better parsing
+                    feedback_entries.append({
+                        "company": company,
+                        "date": feedback_file.stem.split('_')[-1] if '_' in feedback_file.stem else "Unknown",
+                        "type": "technical",  # Could parse from content
+                        "topic": feedback_file.stem,
+                        "feedback": content[:500] + "..." if len(content) > 500 else content,
+                        "rating": None,
+                        "learnings": [],
+                        "action_items": []
+                    })
+
+        return {
+            "opportunity_id": opportunity_id,
+            "company": company,
+            "feedback": feedback_entries
+        }
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to load feedback: {str(e)}"
+        )
+
+
+# ========================
+# Version Tracking Endpoint
+# ========================
+
+@app.get("/api/version")
+def get_version():
+    """
+    Get version information for frontend and backend
+
+    Returns version, commit hash, build date, and last change info
+    """
+    try:
+        # Get current git commit hash
+        try:
+            commit_hash = subprocess.check_output(
+                ["git", "rev-parse", "--short", "HEAD"],
+                cwd=BASE_DIR,
+                stderr=subprocess.DEVNULL
+            ).decode().strip()
+        except Exception:
+            commit_hash = "unknown"
+
+        # Get last commit message and author
+        try:
+            last_commit_msg = subprocess.check_output(
+                ["git", "log", "-1", "--pretty=%B"],
+                cwd=BASE_DIR,
+                stderr=subprocess.DEVNULL
+            ).decode().strip()
+        except Exception:
+            last_commit_msg = "No commit message available"
+
+        try:
+            last_commit_author = subprocess.check_output(
+                ["git", "log", "-1", "--pretty=%an"],
+                cwd=BASE_DIR,
+                stderr=subprocess.DEVNULL
+            ).decode().strip()
+        except Exception:
+            last_commit_author = "Unknown"
+
+        try:
+            last_commit_date = subprocess.check_output(
+                ["git", "log", "-1", "--pretty=%ai"],
+                cwd=BASE_DIR,
+                stderr=subprocess.DEVNULL
+            ).decode().strip()
+        except Exception:
+            last_commit_date = datetime.now().isoformat() + "Z"
+
+        # Build timestamp (current server start time)
+        build_date = datetime.now().isoformat() + "Z"
+
+        return {
+            "frontend": {
+                "version": "1.3.27",
+                "commit": commit_hash,
+                "build_date": build_date
+            },
+            "backend": {
+                "version": "0.9.18",
+                "commit": commit_hash,
+                "build_date": build_date
+            },
+            "last_change": {
+                "author": last_commit_author,
+                "description": last_commit_msg,
+                "timestamp": last_commit_date
+            }
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to retrieve version info: {str(e)}"
+        )
+
 
 # ========================
 # Main Entry Point

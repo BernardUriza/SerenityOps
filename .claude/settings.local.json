@@ -35,7 +35,14 @@
       "Bash(ProjectCard.tsx TechBadge.tsx TechStackSelector.tsx AchievementsEditor.tsx)",
       "Bash(ActionExecutor.tsx CVJobProgress.tsx CVManager.tsx EducationList.tsx ExperienceList.tsx ProfileForm.tsx QuickImport.tsx SkillsEditor.tsx)",
       "Bash(find:*)",
-      "Bash({} ;)"
+      "Bash({} ;)",
+      "Bash(pkill:*)",
+      "Bash(tree:*)",
+      "Read(//tmp/**)",
+      "WebFetch(domain:www.somosclear.com)",
+      "Bash(git symbolic-ref:*)",
+      "Bash(git fsck:*)",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []

@@ -7,7 +7,8 @@
 
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Loader2, Save, Rocket } from 'lucide-react';
+import { Plus, Loader2, Save } from 'lucide-react';
+import { Icon } from '../../icons';
 import { useProjectStore } from '../../stores/projectStore';
 import { useAutoSave } from '../../hooks/useAutoSave';
 import { ProjectCard } from './ProjectCard';
@@ -69,18 +70,12 @@ export const ProjectsManager: React.FC = () => {
   }
 
   return (
-    <div className="animate-scale-in space-y-8 relative">
-      {/* Decorative gradient orbs */}
-      <div className="gradient-orb fixed top-[8%] right-[12%] w-[600px] h-[600px] bg-cyan-500/15 -z-10"></div>
-      <div className="gradient-orb fixed bottom-[15%] left-[8%] w-[500px] h-[500px] bg-purple-500/12 -z-10" style={{ animationDelay: '3s' }}></div>
-
+    <div className="space-y-8 relative p-6">
       {/* Header */}
       <div className="flex justify-between items-start relative z-10">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl gradient-accent-subtle flex items-center justify-center shadow-lg animate-glow-pulse">
-            <svg className="w-7 h-7 text-macAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
+          <div className="w-14 h-14 rounded-2xl gradient-accent-subtle flex items-center justify-center shadow-lg">
+            <Icon name="rocket" size={28} className="text-macAccent" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-gradient mb-1">Projects</h1>
@@ -130,9 +125,7 @@ export const ProjectsManager: React.FC = () => {
               <div className="gradient-orb absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-cyan-500/10"></div>
               <div className="relative z-10">
                 <div className="w-20 h-20 mx-auto mb-6 gradient-accent-subtle rounded-2xl flex items-center justify-center animate-float">
-                  <svg className="w-10 h-10 text-macAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
+                  <Icon name="rocket" size={40} className="text-macAccent" />
                 </div>
                 <h3 className="text-lg font-semibold text-macText mb-2">No projects yet</h3>
                 <p className="text-macSubtext text-sm leading-relaxed max-w-md mx-auto mb-6">

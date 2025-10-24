@@ -6,6 +6,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ChatMessage from '../ChatMessage';
 import type { Message } from '../../types/chat';
+import { Icon } from '../../icons';
 
 interface ChatViewProps {
   conversationId: string | null;
@@ -113,11 +114,15 @@ export const ChatView: React.FC<ChatViewProps> = ({ conversationId, apiBaseUrl }
             <div className="particle absolute top-[30%] left-[20%]"></div>
 
             <div className="text-center max-w-2xl px-8 relative z-10 animate-scale-in">
-              {/* Icon with gradient */}
-              <div className="w-24 h-24 mx-auto mb-6 gradient-accent-subtle rounded-3xl flex items-center justify-center shadow-xl animate-glow-pulse">
-                <svg className="w-12 h-12 text-macAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                </svg>
+              {/* Logo with gradient background */}
+              <div className="w-28 h-28 mx-auto mb-6 gradient-accent-subtle rounded-3xl flex items-center justify-center shadow-xl animate-glow-pulse relative">
+                <img
+                  src="/logo.svg"
+                  alt="SerenityOps AI"
+                  className="w-16 h-16"
+                  style={{ filter: 'drop-shadow(0 0 12px rgba(10, 132, 255, 0.5))' }}
+                />
+                <div className="absolute inset-0 bg-macAccent/20 blur-xl rounded-3xl animate-pulse"></div>
               </div>
 
               <h3 className="text-2xl font-bold text-gradient mb-3">
@@ -130,13 +135,15 @@ export const ChatView: React.FC<ChatViewProps> = ({ conversationId, apiBaseUrl }
               {/* Suggestions Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
                 {[
-                  { icon: '📊', title: 'Track Projects', desc: 'Add new experiences and achievements' },
-                  { icon: '✨', title: 'CV Improvements', desc: 'Get personalized recommendations' },
-                  { icon: '🎯', title: 'Job Analysis', desc: 'Evaluate new opportunities' },
-                  { icon: '🔍', title: 'Extract Data', desc: 'Parse text and documents' }
+                  { icon: 'chart-bar', title: 'Track Projects', desc: 'Add new experiences and achievements' },
+                  { icon: 'sparkles', title: 'CV Improvements', desc: 'Get personalized recommendations' },
+                  { icon: 'target', title: 'Job Analysis', desc: 'Evaluate new opportunities' },
+                  { icon: 'search', title: 'Extract Data', desc: 'Parse text and documents' }
                 ].map((item, i) => (
                   <div key={i} className="liquid-glass rounded-xl p-4 text-left hover-lift transition-all duration-300 border border-macBorder/30">
-                    <div className="text-3xl mb-2">{item.icon}</div>
+                    <div className="mb-3">
+                      <Icon name={item.icon} size={32} />
+                    </div>
                     <h4 className="text-sm font-semibold text-macText mb-1">{item.title}</h4>
                     <p className="text-xs text-macSubtext">{item.desc}</p>
                   </div>

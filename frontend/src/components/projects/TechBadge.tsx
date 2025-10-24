@@ -9,6 +9,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
+import { Icon } from '../../icons';
 
 interface TechBadgeProps {
   tech: string;
@@ -42,10 +43,10 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
           const data = await response.json();
           setIconData(data);
         } else {
-          // Fallback data if API fails
+          // Fallback data if API fails - use null to trigger Icon fallback
           setIconData({
             name: tech,
-            emoji: '🔧',
+            emoji: undefined,
             color: '#808080',
           });
         }
@@ -53,7 +54,7 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
         console.error(`Failed to fetch icon for ${tech}:`, error);
         setIconData({
           name: tech,
-          emoji: '🔧',
+          emoji: undefined,
           color: '#808080',
         });
       } finally {
@@ -96,7 +97,7 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
         borderColor: iconData?.color ? `${iconData.color}40` : undefined,
       }}
     >
-      {/* PRIORITY: Show SVG logo if available, otherwise show emoji */}
+      {/* PRIORITY: Show SVG logo if available, otherwise show emoji, finally fallback to custom icon */}
       {iconData?.svg_url ? (
         <img
           src={iconData.svg_url}
@@ -104,20 +105,22 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
           className={`${iconSizes[size]}`}
           style={{ filter: 'brightness(0.9)' }}
           onError={(e) => {
-            // Fallback to emoji if SVG fails to load
+            // Fallback to emoji or icon if SVG fails to load
             const target = e.target as HTMLImageElement;
             target.style.display = 'none';
-            const emojiSpan = target.nextElementSibling as HTMLSpanElement;
-            if (emojiSpan) emojiSpan.style.display = 'inline';
+            const fallbackElement = target.nextElementSibling;
+            if (fallbackElement) (fallbackElement as HTMLElement).style.display = 'inline-block';
           }}
         />
       ) : iconData?.emoji ? (
         <span className={`${size === 'sm' ? 'text-xs' : size === 'md' ? 'text-xs' : 'text-xs'}`}>
           {iconData.emoji}
         </span>
-      ) : null}
+      ) : (
+        <Icon name="wrench" size={12} className="flex-shrink-0" />
+      )}
 
-      {/* Hidden emoji fallback */}
+      {/* Hidden fallback for SVG error */}
       {iconData?.svg_url && iconData?.emoji && (
         <span
           className={`${size === 'sm' ? 'text-xs' : size === 'md' ? 'text-xs' : 'text-xs'}`}
@@ -125,6 +128,11 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
         >
           {iconData.emoji}
         </span>
+      )}
+      {iconData?.svg_url && !iconData?.emoji && (
+        <div style={{ display: 'none' }}>
+          <Icon name="wrench" size={12} className="flex-shrink-0" />
+        </div>
       )}
 
       <span className="text-macText">{tech}</span>

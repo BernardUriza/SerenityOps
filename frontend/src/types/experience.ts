@@ -15,6 +15,7 @@ export interface Experience {
   achievements: string[];
   tech_stack: string[];
   company_logo?: string;
+  logo?: string;
 }
 
 export interface TechIcon {

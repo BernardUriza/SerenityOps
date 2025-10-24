@@ -7,7 +7,6 @@
  */
 
 import React, { useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Eye, Edit3, Save, Loader2 } from 'lucide-react';
 import { useExperienceStore } from '../../stores/experienceStore';
 import { useAutoSave } from '../../hooks/useAutoSave';
@@ -86,29 +85,40 @@ export const ExperienceEditor: React.FC = () => {
   }
 
   return (
-    <div className="w-full p-6">
+    <div className="relative">
+      {/* Decorative gradient orbs - animations disabled */}
+      <div className="fixed top-[8%] right-[12%] w-[600px] h-[600px] bg-purple-500/15 -z-10 blur-[100px]"></div>
+      <div className="fixed bottom-[15%] left-[8%] w-[500px] h-[500px] bg-cyan-500/12 -z-10 blur-[100px]"></div>
+
       {/* Header */}
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-lg font-bold text-macText mb-2">Experience</h1>
-          <div className="flex items-center gap-3 text-xs text-macSubtext">
-            <span>{experiences.length} positions</span>
-            {isSaving && (
-              <span className="flex items-center gap-1 text-macAccent">
-                <Loader2 size={12} className="animate-spin" />
-                Saving...
-              </span>
-            )}
-            {!isSaving && lastSaved && (
-              <span className="flex items-center gap-1 text-success">
-                <Save size={12} />
-                Saved {formatLastSaved()}
-              </span>
+      <div className="flex justify-between items-start relative z-10 mb-8">
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 rounded-2xl gradient-accent-subtle flex items-center justify-center shadow-lg">
+            <svg className="w-7 h-7 text-macAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-gradient mb-1">Experience</h1>
+            <div className="flex items-center gap-3 text-sm text-macSubtext">
+              <span>{experiences.length} professional positions</span>
+              {isSaving && (
+                <span className="flex items-center gap-1.5 text-macAccent">
+                  <Loader2 size={14} className="animate-spin" />
+                  Saving...
+                </span>
+              )}
+              {!isSaving && lastSaved && (
+                <span className="flex items-center gap-1.5 text-success">
+                  <Save size={14} />
+                  Saved {formatLastSaved()}
+                </span>
+              )}
+            </div>
+            {error && (
+              <p className="text-sm text-error mt-1">Error: {error}</p>
             )}
           </div>
-          {error && (
-            <p className="text-xs text-error mt-1">Error: {error}</p>
-          )}
         </div>
 
         <div className="flex items-center gap-3">
@@ -116,21 +126,21 @@ export const ExperienceEditor: React.FC = () => {
           <button
             onClick={() => setEditMode(editMode === 'edit' ? 'presentation' : 'edit')}
             className={`
-              flex items-center gap-2 px-4 py-2 rounded-mac font-medium text-xs transition-all duration-300 ease-mac backdrop-blur-md
+              flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all duration-300 ease-mac backdrop-blur-md hover-lift bounce-click ripple-effect
               ${editMode === 'edit'
-                ? 'bg-macAccent text-white hover:bg-macAccent shadow-[inset_0_0_6px_rgba(10,132,255,0.1)]'
-                : 'bg-macPanel/70 text-macSubtext hover:bg-macHover/60'
+                ? 'liquid-glass-accent text-white shadow-accent'
+                : 'liquid-glass text-macText hover:liquid-glass-accent'
               }
             `}
           >
             {editMode === 'edit' ? (
               <>
-                <Eye size={14} />
+                <Eye size={16} />
                 Preview
               </>
             ) : (
               <>
-                <Edit3 size={14} />
+                <Edit3 size={16} />
                 Edit
               </>
             )}
@@ -138,64 +148,65 @@ export const ExperienceEditor: React.FC = () => {
 
           {/* Add button (only in edit mode) */}
           {editMode === 'edit' && (
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+            <button
               onClick={handleAddExperience}
-              className="flex items-center gap-2 px-4 py-2 bg-success text-white rounded-mac font-medium text-xs hover:bg-success-hover transition-all duration-300 ease-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] backdrop-blur-md"
+              className="flex items-center gap-2 px-6 py-3 gradient-accent text-white rounded-xl font-semibold text-sm hover:shadow-accent transition-all duration-300 ease-mac"
             >
-              <Plus size={14} />
-              Add Experience
-            </motion.button>
+              <Plus size={16} />
+              <span>Add Experience</span>
+            </button>
           )}
         </div>
       </div>
 
       {/* Experience list */}
-      <div className="space-y-6">
-        <AnimatePresence mode="popLayout">
-          {experiences.length === 0 ? (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="text-center py-12"
-            >
-              <p className="text-macSubtext text-sm mb-4">No experiences yet</p>
+      <div className="relative z-10" style={{ marginTop: '2rem' }}>
+        {experiences.length === 0 ? (
+          <div className="text-center py-20 liquid-glass rounded-2xl relative overflow-hidden">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-macAccent/10 blur-[100px]"></div>
+            <div className="relative z-10">
+              <div className="w-20 h-20 mx-auto mb-6 gradient-accent-subtle rounded-2xl flex items-center justify-center">
+                <svg className="w-10 h-10 text-macAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-macText mb-2">No experiences yet</h3>
+              <p className="text-macSubtext text-sm leading-relaxed max-w-md mx-auto mb-6">
+                Click the button below to add your first professional experience
+              </p>
               <button
                 onClick={handleAddExperience}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-macAccent text-white rounded-mac font-medium text-xs hover:bg-macAccent transition-all duration-300 ease-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)] backdrop-blur-md"
+                className="inline-flex items-center gap-2 px-6 py-3 gradient-accent text-white rounded-xl font-semibold text-sm hover:shadow-accent transition-all duration-300 ease-mac"
               >
-                <Plus size={14} />
-                Add Your First Experience
+                <Plus size={16} />
+                <span>Add Your First Experience</span>
               </button>
-            </motion.div>
-          ) : (
-            experiences.map((exp) => (
-              <ExperienceCard
-                key={exp.id}
-                experience={exp}
-                onUpdate={(updates) => updateExperience(exp.id!, updates)}
-                onDelete={() => deleteExperience(exp.id!)}
-                editMode={editMode}
-              />
-            ))
-          )}
-        </AnimatePresence>
+            </div>
+          </div>
+        ) : (
+          experiences.map((exp) => (
+            <ExperienceCard
+              key={exp.id}
+              experience={exp}
+              onUpdate={(updates) => updateExperience(exp.id!, updates)}
+              onDelete={() => deleteExperience(exp.id!)}
+              editMode={editMode}
+            />
+          ))
+        )}
       </div>
 
       {/* Keyboard hint */}
       {editMode === 'edit' && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mt-6 text-center text-xs text-macSubtext"
+        <div
+          className="text-center text-sm text-macSubtext relative z-10"
+          style={{ marginTop: '2rem' }}
         >
-          <kbd className="px-2 py-1 bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)]">Ctrl</kbd>
+          <kbd className="px-3 py-1.5 liquid-glass backdrop-blur-md rounded-mac shadow-md font-semibold">Ctrl</kbd>
           {' + '}
-          <kbd className="px-2 py-1 bg-macPanel/70 backdrop-blur-md border border-macBorder/40 rounded-mac shadow-[0_2px_6px_rgba(0,0,0,0.2)]">E</kbd>
+          <kbd className="px-3 py-1.5 liquid-glass backdrop-blur-md rounded-mac shadow-md font-semibold">E</kbd>
           {' to toggle preview mode'}
-        </motion.div>
+        </div>
       )}
     </div>
   );

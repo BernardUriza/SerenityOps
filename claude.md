@@ -1,307 +1,339 @@
-# Claude Code Session Log - SerenityOps
+# CLAUDE.md
 
-**Purpose**: Track all interactions, decisions, and evolution of the SerenityOps system.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
----
+## Project Overview
 
-## Session 1: Foundation & MVP Implementation
-**Date**: 2025-10-16
-**Duration**: ~2 hours
-**Model**: Claude Sonnet 4.5 (claude-sonnet-4-5-20250929)
+**SerenityOps** is a personal intelligence system for structured career and financial management. It's a full-stack application combining Python backend (FastAPI), React frontend (TypeScript + Vite), and YAML-based data persistence. The system assists with CV generation, opportunity tracking, financial projections, and AI-assisted career management through Claude API.
 
-### Initial Request
-Bernard presented the complete SerenityOps specification (serenityOps.md) and requested:
-1. Read full specification
-2. Propose directory structure
-3. Create foundational files (ethics_contract.md, axioms.yaml, structure templates)
-4. Implement cv_builder.py skeleton
-5. Create README.md
-6. Generate semantic commit
+**Core Philosophy**: "Serenity as Strategy" - transforming uncertainty into structured action through calm, traceable processes where AI suggests but humans decide.
 
-### Phase 1: Architecture (Initial Commit)
-**Commit**: `61cd67b - feat: initialize SerenityOps foundational architecture`
+## Architecture
 
-**Created**:
-- `ethics_contract.md` - Ethical boundaries and operational principles
-- `foundations/axioms.yaml` - Philosophical foundation (6 core axioms)
-- `curriculum/curriculum.yaml` - Structured CV data schema
-- `finances/structure.yaml` - Financial tracking template
-- `opportunities/structure.yaml` - Job search CRM template
-- `scripts/cv_builder.py` - Skeleton with comprehensive docstrings
-- `README.md` - Complete system documentation
-- Directory structure: foundations/, finances/, opportunities/, curriculum/, rituals/, logs/, scripts/
-
-**Status**: Architecture complete, but NO EXECUTION. All Python functions were `pass` stubs.
-
----
-
-### Phase 2: ClaudeInsult Intervention
-
-**ClaudeInsult's Critique** (paraphrased):
-> "You delivered architecture without execution. YAML files don't parse. cv_builder.py has only docstrings. No validation. No proof it runs. 'Completado' means Bernard can clone, install, run, and get OUTPUT in <5 minutes. You failed that standard."
-
-**Valid Points**:
-1. All YAML files had multi-document separators (`---`) causing parse errors
-2. cv_builder.py was 100% docstrings, 0% implementation
-3. No requirements.txt with actual dependencies
-4. No validation script
-5. No evidence of execution
-6. No QUICKSTART for 5-minute test
-
-**Response**: Full audit and repair.
-
----
-
-### Phase 3: Functional MVP (Fix Commit)
-**Commit**: `469a63b - fix: implement functional MVP with validated execution`
-
-**What Was Fixed**:
-
-1. **YAML Syntax**
-   - Removed multi-document separators from all YAML files
-   - Validated parsing: `python -c "import yaml; yaml.safe_load(...)"`
-   - All files now parse without errors
-
-2. **cv_builder.py Implementation**
-   - Implemented `load_curriculum()` - reads and parses YAML
-   - Implemented `select_sections()` - chooses sections by variant
-   - Implemented `render_markdown()` - generates formatted Markdown (MVP, no Jinja2 yet)
-   - Implemented `save_output()` - writes to file with directory creation
-   - Implemented `generate_cv()` - end-to-end orchestrator
-   - Fixed Windows encoding issues (removed emoji from output)
-
-3. **Validation System**
-   - Created `scripts/validate.py`
-   - Checks: directory structure, required files, YAML syntax, Python syntax, execution tests
-   - Runs 8 automated checks
-   - Output: `[VALIDATION PASSED] System integrity verified.`
-
-4. **Dependencies**
-   - Created `requirements.txt` with real deps: PyYAML, Jinja2, WeasyPrint, pandas, matplotlib, gitpython
-   - Documented system dependencies for WeasyPrint
-
-5. **Documentation**
-   - Created `QUICKSTART.md` with verified 5-minute workflow
-   - Updated README.md roadmap with Phase 1 complete
-
-**Execution Evidence**:
-```bash
-$ python scripts/validate.py
-[PASS] Directory Structure
-[PASS] Required Files
-[PASS] YAML: foundations/axioms.yaml
-[PASS] YAML: finances/structure.yaml
-[PASS] YAML: opportunities/structure.yaml
-[PASS] YAML: curriculum/curriculum.yaml
-[PASS] Python: scripts/cv_builder.py
-[PASS] CV Builder Execution
-Results: 8 passed, 0 failed
-[VALIDATION PASSED]
-
-$ python scripts/cv_builder.py
-[OK] CV generated successfully: curriculum\versions\cv_technical_2025-10-16.md
-```
-
-**Generated File**: `curriculum/versions/cv_technical_2025-10-16.md` (1.8KB, real Markdown CV)
-
----
-
-### Phase 4: ClaudeInsult Round 2 - The Import Gap
-
-**ClaudeInsult's Critique**:
-> "You built a system for a hypothetical user. Bernard HAS an existing CV at `C:\Users\Bernard.Orozco\Downloads\C# Full Stack Developer .svg`. You never asked to import it. Bad product engineering."
-
-**Valid Points**:
-1. Bernard has an existing CV (SVG format, 4.2MB)
-2. The correct first step: "Do you have a CV? Let me import it."
-3. Instead, created empty curriculum.yaml and expected manual data entry
-4. Migration from existing > rebuilding from scratch
-
-**Response**: Attempted import
-
-**Technical Challenge Discovered**:
-- SVG file is 4.2MB
-- Analysis shows: 11,818 `<g>` tags, 3,625 `<path>` tags, ZERO `<text>` tags
-- **Conclusion**: Text was converted to vector paths during export (Figma/Inkscape)
-- Parsing requires OCR (pytesseract + pillow), which is heavy for MVP
-
-**Created**: `scripts/import_cv_from_svg.py` (attempted text extraction, failed due to vectorized text)
-
-**Current Blocker**: Need Bernard's CV in parseable format (PDF with text, DOCX, or direct input)
-
----
-
-## Decisions Made
-
-### Architecture Decisions
-1. **Single-document YAML** (not multi-document) for simplicity
-2. **Markdown-first** for CV generation (PDF deferred to Phase 2)
-3. **No external APIs yet** (Claude API integration Phase 2)
-4. **Hardcoded templates** in cv_builder.py (Jinja2 templates Phase 2)
-5. **Human-readable everything** (YAML, Markdown, clear structure)
-
-### Technical Decisions
-1. **Python 3.11+** as base language
-2. **PyYAML** for data structures
-3. **Git** as source of truth
-4. **scripts/** for all executable tools
-5. **curriculum/versions/** for timestamped CV outputs
-
-### Philosophical Alignment
-All implementations respect `foundations/axioms.yaml`:
-- Serenity as Strategy: Calm, traceable processes
-- Integrity over Velocity: Every action explainable
-- Human-AI Symbiosis: AI suggests, human decides
-- Well-Being over Metrics: No burnout automation
-
----
-
-## What Works Now (MVP)
-
-✅ **Core Functionality**
-- Load curriculum.yaml and parse without errors
-- Generate Markdown CV with proper formatting
-- Select sections based on variant (technical/executive/ethical)
-- Save versioned outputs with timestamps
-- System integrity validation (8 automated checks)
-
-✅ **Files That Execute**
-- `scripts/cv_builder.py` - Full end-to-end CV generation
-- `scripts/validate.py` - Automated health checks
-
-✅ **Files That Parse**
-- `foundations/axioms.yaml` - Core principles
-- `curriculum/curriculum.yaml` - CV data schema
-- `finances/structure.yaml` - Financial tracking
-- `opportunities/structure.yaml` - Job pipeline
-
-✅ **Documentation**
-- `README.md` - Comprehensive system docs
-- `QUICKSTART.md` - 5-minute setup guide
-- `ethics_contract.md` - Governance framework
-
----
-
-## What's Pending (Explicitly Documented)
-
-**Phase 2 - Automation**
-- [ ] Jinja2 templates for cv_builder.py (replace hardcoded rendering)
-- [ ] PDF generation (WeasyPrint implementation)
-- [ ] CV tailoring to opportunities (match tech_stack)
-- [ ] `scripts/metrics.py` - Financial calculations
-- [ ] `scripts/reason.py` - Periodic reasoning skeleton
-- [ ] `.gitignore` for secrets
-
-**Phase 3 - Intelligence**
-- [ ] Semantic job matching (opportunity ↔ skills)
-- [ ] Sentiment analysis of logs
-- [ ] Predictive financial modeling
-- [ ] Dashboard for visualizations
-
-**Phase 4 - Integration**
-- [ ] Claude API for AI-assisted features
-- [ ] Calendar sync for interviews
-- [ ] Email integration for opportunities
-- [ ] Cloud deployment (AWS Lambda / GCP Cloud Run)
-
-**Phase 5 - Meta**
-- [ ] Anonymize and open-source framework
-- [ ] Publish case study
-
----
-
-## Open Questions / Blockers
-
-1. **CV Import**: Awaiting Bernard's CV in parseable format (SVG has vectorized text)
-   - Options: PDF with text, DOCX, or direct input
-   - Once provided, will populate curriculum.yaml with real data
-
-2. **Template Design**: Should CV templates prioritize:
-   - ATS compatibility (plain text heavy)?
-   - Visual design (when PDF generation implemented)?
-   - Multiple variants for different audiences?
-
-3. **Financial Data Privacy**: How to handle real financial data in git?
-   - Git-ignored env files?
-   - Encrypted at rest?
-   - Anonymization script for sharing?
-
----
-
-## Lessons Learned
-
-### From ClaudeInsult Feedback
-
-1. **"Completado" Standard**: Functional execution, not architectural promises
-   - Code must run, not just compile
-   - Output must be real, not theoretical
-   - User can verify in <5 minutes
-
-2. **User-Centered Design**: Start with existing data, not empty schemas
-   - "Do you have X?" before "Here's my structure for X"
-   - Migration > Manual reconstruction
-   - Real data from day 1
-
-3. **Validation is Non-Negotiable**: Self-test before claiming success
-   - Automated integrity checks
-   - Proof of execution in commits
-   - Evidence > declarations
-
-### Technical Insights
-
-1. **SVG Complexity**: Not all SVGs have parseable text (vectorization common in design tools)
-2. **YAML Multi-Document Gotcha**: `yaml.safe_load()` fails on multi-doc, need `yaml.safe_load_all()`
-3. **Windows Encoding**: Avoid unicode symbols in CLI output (use ASCII alternatives)
-
----
-
-## Next Session Priorities
-
-1. **Import Bernard's CV** (awaiting parseable format)
-2. **Implement Jinja2 templates** for cleaner cv_builder.py
-3. **Create scripts/metrics.py** with basic financial calculations
-4. **Add .gitignore** for secrets and temp files
-5. **Start scripts/reason.py** skeleton
-
----
-
-## Git Commit History
-
-```
-469a63b fix: implement functional MVP with validated execution
-61cd67b feat: initialize SerenityOps foundational architecture
-69155e2 Initial commit
-```
-
----
-
-## Files Created This Session
-
+### Monorepo Structure (Turborepo + pnpm)
 ```
 SerenityOps/
-├── ethics_contract.md
-├── README.md
-├── QUICKSTART.md
-├── requirements.txt
-├── claude.md (this file)
-├── foundations/
-│   └── axioms.yaml
-├── finances/
-│   └── structure.yaml
-├── opportunities/
-│   └── structure.yaml
-├── curriculum/
-│   ├── curriculum.yaml
-│   └── versions/
-│       └── cv_technical_2025-10-16.md
-└── scripts/
-    ├── cv_builder.py
-    ├── validate.py
-    └── import_cv_from_svg.py
+├── frontend/          # React + TypeScript + Vite + Tailwind v4
+├── api/               # FastAPI Python backend
+├── scripts/           # Python CLI tools (cv_builder.py, validate.py)
+├── curriculum/        # CV data (curriculum.yaml) + generated versions
+├── opportunities/     # Job tracking data (structure.yaml)
+├── finances/          # Financial tracking (structure.yaml)
+├── foundations/       # Core principles (axioms.yaml)
+├── logs/             # Conversation logs and session history
+└── rituals/          # Reflection protocols (weekly/monthly/quarterly)
 ```
 
----
+### Technology Stack
+- **Frontend**: React 19, TypeScript, Vite 7, Tailwind CSS v4, Zustand, react-hook-form
+- **Backend**: FastAPI (Python 3.11+), Anthropic Claude API, PyYAML
+- **Package Management**: pnpm workspaces + Turborepo
+- **Data Layer**: YAML files (single source of truth)
+- **PDF Generation**: Node.js service (api/services/pdf_generator/)
 
-**Session Status**: MVP functional, awaiting real CV data for population.
+### Key Design Patterns
+1. **YAML as Database**: All structured data lives in human-readable YAML files (curriculum.yaml, opportunities/structure.yaml, finances/structure.yaml)
+2. **AI-Human Symbiosis**: Claude API generates CVs and assists with career decisions, but humans remain final decision-makers
+3. **Event Sourcing**: All modifications tracked via Git with semantic commits
+4. **Background Jobs**: Long-running tasks (CV generation, PDF creation) use job service with status tracking
 
-**Next Action**: Bernard to provide CV in parseable format, then populate curriculum.yaml and regenerate CV with real data.
+## Common Development Commands
+
+### Full Stack Development
+```bash
+# Start both frontend and backend in parallel (recommended)
+pnpm start:serenity
+
+# Or start individually:
+# Terminal 1 - Backend
+cd api && python3 -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
+# Terminal 2 - Frontend
+cd frontend && npm run dev
+```
+
+### Backend Only
+```bash
+cd api
+
+# Start development server (with hot reload)
+python3 -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
+# Start production server
+python3 -m uvicorn main:app --host 0.0.0.0 --port 8000
+
+# Alternative: use server.py wrapper
+python3 server.py
+
+# Install Python dependencies
+python3 -m pip install -r ../requirements.txt
+
+# Run tests
+python3 -m pytest
+
+# Clean Python cache
+find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+```
+
+**Backend runs on**: `http://localhost:8000`
+**API docs**: `http://localhost:8000/docs` (OpenAPI/Swagger)
+
+### Frontend Only
+```bash
+cd frontend
+
+# Start dev server with hot reload
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+
+# Run linter
+npm run lint
+```
+
+**Frontend runs on**: `http://localhost:5173` (Vite default)
+
+### CLI Tools (Python Scripts)
+```bash
+# Generate CV from curriculum.yaml
+python3 scripts/cv_builder.py --format html
+python3 scripts/cv_builder.py --format pdf
+
+# Validate system integrity (8 automated checks)
+python3 scripts/validate.py
+```
+
+### Monorepo Commands (from root)
+```bash
+# Run dev in all workspaces (frontend + api)
+pnpm start:serenity
+
+# Build all workspaces
+pnpm build
+
+# Run linters across all workspaces
+pnpm lint
+
+# Clean build artifacts
+pnpm clean
+
+# Run tests in all workspaces
+pnpm test
+```
+
+## Critical Files and Their Purpose
+
+### Data Layer (YAML)
+- **`curriculum/curriculum.yaml`**: Single source of truth for CV data (personal info, experience, projects, skills, education). Modified via frontend or directly.
+- **`opportunities/structure.yaml`**: Job pipeline tracking (discovered → applied → interviewing → offer)
+- **`finances/structure.yaml`**: Income, debt, savings, financial goals
+- **`foundations/axioms.yaml`**: Core philosophical principles guiding the system
+
+### Backend (Python/FastAPI)
+- **`api/main.py`**: FastAPI application entry point, defines all REST endpoints
+- **`api/server.py`**: Alternative entry point with debugging info
+- **`api/services/cv_job_service.py`**: Background job tracking for CV generation
+- **`api/services/audit_logger.py`**: Action logging and traceability
+- **`api/services/pdf_service.py`**: Interfaces with Node.js PDF generator
+- **`api/services/pdf_generator/generate_pdf.js`**: Node.js script for HTML→PDF conversion
+
+### Frontend (React/TypeScript)
+- **`frontend/src/App.tsx`**: Main application component, tab navigation, state management
+- **`frontend/src/components/CVManager.tsx`**: CV generation interface
+- **`frontend/src/components/chat/ChatManager.tsx`**: AI chat interface for career decisions
+- **`frontend/src/components/opportunities/OpportunityManager.tsx`**: Job tracking UI
+- **`frontend/src/stores/cvJobStore.ts`**: Zustand store for CV job status
+
+### Scripts (CLI Tools)
+- **`scripts/cv_builder.py`**: Generates CVs from curriculum.yaml (Markdown/HTML/PDF)
+- **`scripts/validate.py`**: System integrity checker (directory structure, YAML syntax, execution tests)
+
+### Configuration
+- **`turbo.json`**: Turborepo pipeline configuration
+- **`pnpm-workspace.yaml`**: Defines monorepo workspaces
+- **`.env`**: Environment variables (ANTHROPIC_API_KEY, API_PORT) - **NEVER commit this**
+- **`.env.example`**: Template for environment variables (safe to commit)
+
+## Development Workflow
+
+### Making Changes to CV Data
+1. **Via Frontend** (recommended): Navigate to Profile/Experience/Projects tabs, edit forms, click "Save Changes"
+2. **Via YAML**: Edit `curriculum/curriculum.yaml` directly, reload frontend to see changes
+3. **Generate CV**: Click "Generate CV" button or run `python3 scripts/cv_builder.py`
+
+### Adding New API Endpoints
+1. Add route handler in `api/main.py` (group related endpoints together)
+2. Define Pydantic models for request/response validation
+3. Document endpoint with docstrings (appears in `/docs`)
+4. Test via FastAPI Swagger UI at `http://localhost:8000/docs`
+
+### Adding New Frontend Components
+1. Create component in `frontend/src/components/` (use TypeScript)
+2. Follow existing patterns: use Tailwind v4 for styling, Zustand for state
+3. Import and use in `App.tsx` or parent component
+4. Ensure proper error handling and loading states
+
+### Testing CV Generation
+```bash
+# Method 1: Frontend UI
+# 1. Start servers: pnpm start:serenity
+# 2. Navigate to "CVs" tab
+# 3. Click "Generate CV" button
+# 4. Monitor progress bar and job status
+
+# Method 2: CLI
+python3 scripts/cv_builder.py --format html
+# Output: curriculum/versions/cv_YYYYMMDD_HHMMSS.html
+
+# Method 3: Direct API
+curl -X POST http://localhost:8000/api/curriculum/generate
+```
+
+## Environment Setup
+
+### Required Environment Variables
+Create `.env` file in project root (copy from `.env.example`):
+
+```bash
+# Anthropic API (REQUIRED for CV generation)
+ANTHROPIC_API_KEY=sk-ant-api03-...
+
+# API Configuration
+API_PORT=8000
+API_HOST=0.0.0.0
+
+# Frontend Configuration
+VITE_API_BASE_URL=http://localhost:8000
+```
+
+**CRITICAL**: Never commit `.env` to Git. It's already in `.gitignore`.
+
+### Getting Anthropic API Key
+1. Visit https://console.anthropic.com/settings/keys
+2. Create new API key
+3. Add to `.env` file
+
+### System Dependencies
+- **Python 3.11+**: Required for backend and scripts
+- **Node.js 20+**: Required for frontend and PDF generation
+- **pnpm 9+**: Package manager (install: `npm install -g pnpm`)
+- **Cairo/Pango** (for WeasyPrint PDF generation):
+  - macOS: `brew install cairo pango gdk-pixbuf libffi`
+  - Ubuntu: `apt-get install libcairo2 libpango-1.0-0 libgdk-pixbuf2.0-0`
+
+## Key Behavioral Notes
+
+### Git Workflow
+- **Semantic commits required**: Use conventional commits format (`feat:`, `fix:`, `refactor:`, `docs:`)
+- **Every CV generation creates a versioned file**: `curriculum/versions/cv_YYYYMMDD_HHMMSS.html`
+- **Audit trail**: All data modifications logged in `logs/audit/`
+- **Conversations tracked**: AI chat sessions stored in `logs/conversations/`
+
+### Error Handling Patterns
+- **Frontend**: Display user-friendly notifications via `showNotification(message, type)`
+- **Backend**: Raise HTTPException with appropriate status codes (400, 404, 500)
+- **Background Jobs**: Update job status to 'failed' with error message, don't crash
+
+### Claude API Usage
+- **Model**: claude-sonnet-4-5-20250929 (primary) or claude-3-5-sonnet-20241022 (fallback)
+- **Purpose**: CV generation, career advice, opportunity analysis
+- **Rate Limits**: Be mindful of API costs, cache responses when possible
+- **Prompt Engineering**: Use system prompts from `api/main.py:generate_cv_html()`
+
+### YAML Guidelines
+- **Single-document YAML only**: No multi-document separators (`---`) except at start
+- **Human-readable**: Use descriptive keys, add comments for clarity
+- **Validation**: Run `python3 scripts/validate.py` after manual edits
+- **Encoding**: UTF-8 with no BOM
+
+### Tailwind CSS v4 (Frontend)
+- **Configuration**: Uses `@tailwindcss/vite` plugin, config in `frontend/src/index.css`
+- **Design System**: "Compact Precision" - inspired by macOS Human Interface Guidelines
+- **Colors**: Neutral grays with purple accent (`text-purple-600`)
+- **Spacing**: Tight spacing (p-3, gap-2, space-y-1.5) for information density
+- **Typography**: System fonts, clear hierarchy, readable sizes
+
+## Common Pitfalls
+
+### Backend Not Starting
+1. **Check if port 8000 is in use**: `lsof -ti:8000 | xargs kill -9`
+2. **Verify Python dependencies**: `cd api && pip install -r ../requirements.txt`
+3. **Check .env file exists**: Should contain `ANTHROPIC_API_KEY`
+4. **Look for import errors**: Run `python3 api/main.py` directly to see traceback
+
+### Frontend Not Connecting to Backend
+1. **CORS errors**: Backend must be running on `http://localhost:8000`
+2. **Check VITE_API_BASE_URL**: Should match backend URL
+3. **Verify backend is healthy**: Visit `http://localhost:8000/docs`
+4. **Hard refresh frontend**: Cmd+Shift+R (macOS) or Ctrl+Shift+R (Windows)
+
+### CV Generation Failing
+1. **Check Anthropic API key**: Must be valid and have credits
+2. **Review curriculum.yaml syntax**: Run `python3 scripts/validate.py`
+3. **Check job status**: Visit `/api/jobs/{job_id}` to see error details
+4. **Review logs**: Check `logs/audit/` for detailed error messages
+
+### PDF Generation Not Working
+1. **Verify Node.js installed**: `node --version` (should be 20+)
+2. **Check pdf_generator dependencies**: `cd api/services/pdf_generator && npm install`
+3. **Test HTML generation first**: Use `--format html` flag
+4. **Review pdf_service.py logs**: Backend will show subprocess errors
+
+## Philosophical Alignment
+
+When making changes, respect the core axioms in `foundations/axioms.yaml`:
+
+1. **Serenity as Strategy**: Favor calm, traceable processes over speed
+2. **Integrity over Velocity**: Every action must be explainable and auditable
+3. **Human-AI Symbiosis**: AI suggests, human decides - never automate critical decisions
+4. **Conversation as Interface**: Natural language → structured data
+5. **Iterative Learning**: Each cycle generates meta-knowledge
+6. **Well-Being over Metrics**: Optimization serves the person, not vice versa
+
+**In practice**:
+- Add audit logging for important actions
+- Provide clear explanations in UI
+- Never auto-commit changes without user confirmation
+- Maintain traceability (who, what, when, why)
+- Graceful degradation (system should work even if AI APIs are down)
+
+## Testing and Validation
+
+### System Integrity Check
+```bash
+python3 scripts/validate.py
+# Runs 8 checks:
+# - Directory structure
+# - Required files
+# - YAML syntax (axioms, curriculum, opportunities, finances)
+# - Python syntax (cv_builder.py)
+# - CV builder execution
+```
+
+### Manual Testing Checklist
+- [ ] Backend starts without errors (`pnpm start:serenity`)
+- [ ] Frontend loads and displays curriculum data
+- [ ] Can edit profile and save changes
+- [ ] CV generation completes successfully
+- [ ] Chat interface responds to messages
+- [ ] Opportunities can be created/edited
+- [ ] Validation script passes all checks
+
+## Additional Resources
+
+- **Main Documentation**: `README.md` - Comprehensive system overview
+- **Quick Start Guide**: `QUICKSTART.md` - 5-minute setup walkthrough
+- **Session Log**: `claude.md` - Historical decisions and rationale
+- **Original Spec**: `serenityOps.md` - Full system specification (Spanish)
+- **Ethics Contract**: `ethics_contract.md` - Non-negotiable boundaries
+
+## Support
+
+This is a personal project for Bernard Orozco. For questions or contributions:
+- Check existing docs (README.md, QUICKSTART.md)
+- Review session logs (claude.md) for context
+- Respect privacy: never expose personal data or API keys

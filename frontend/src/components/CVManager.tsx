@@ -122,7 +122,7 @@ const CVManager: React.FC<CVManagerProps> = ({ apiBaseUrl }) => {
 
   if (loading) {
     return (
-      <div className="liquid-glass rounded-mac shadow-xl p-8 animate-scale-in">
+      <div className="liquid-glass rounded-mac shadow-xl p-8">
         <div className="flex items-center gap-3 mb-6">
           <div className="skeleton skeleton-avatar"></div>
           <div className="flex-1">
@@ -156,14 +156,12 @@ const CVManager: React.FC<CVManagerProps> = ({ apiBaseUrl }) => {
   }
 
   return (
-    <div className="animate-scale-in space-y-8 p-6">
-      {/* Decorative header section */}
+    <div className="space-y-8 p-6">
+      {/* Header section */}
       <div className="relative">
-        <div className="gradient-orb absolute -top-20 -right-20 w-72 h-72 bg-macAccent/15"></div>
-
         <div className="flex items-center justify-between relative z-10">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl gradient-accent-subtle flex items-center justify-center shadow-lg animate-glow-pulse">
+            <div className="w-14 h-14 rounded-2xl gradient-accent-subtle flex items-center justify-center shadow-lg">
               <svg className="w-7 h-7 text-macAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
@@ -177,11 +175,10 @@ const CVManager: React.FC<CVManagerProps> = ({ apiBaseUrl }) => {
             <button
               onClick={handleGenerate}
               disabled={generating}
-              className="px-6 py-3 gradient-accent hover:shadow-accent text-white font-semibold rounded-xl transition-all duration-300 ease-mac disabled:opacity-50 disabled:cursor-not-allowed text-sm hover-lift group relative overflow-hidden"
+              className="px-6 py-3 gradient-accent hover:shadow-accent text-white font-semibold rounded-xl transition-all duration-200 ease-mac disabled:opacity-50 disabled:cursor-not-allowed text-sm"
             >
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 animate-shimmer"></span>
-              <span className="relative z-10 flex items-center gap-2">
-                <svg className="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <span className="flex items-center gap-2">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
                 {generating ? 'Starting...' : 'Generate CV'}
@@ -189,10 +186,10 @@ const CVManager: React.FC<CVManagerProps> = ({ apiBaseUrl }) => {
             </button>
             <button
               onClick={loadCVs}
-              className="px-6 py-3 liquid-glass text-macAccent hover:text-blue-300 font-medium rounded-xl transition-all duration-300 ease-mac text-sm hover-lift group bounce-click"
+              className="px-6 py-3 liquid-glass text-macAccent font-medium rounded-xl transition-all duration-200 ease-mac text-sm hover:shadow-md"
             >
               <span className="flex items-center gap-2">
-                <svg className="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
                 Refresh
@@ -214,9 +211,8 @@ const CVManager: React.FC<CVManagerProps> = ({ apiBaseUrl }) => {
 
       {cvs.length === 0 ? (
         <div className="text-center py-20 liquid-glass rounded-2xl relative overflow-hidden">
-          <div className="gradient-orb absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-macAccent/10"></div>
           <div className="relative z-10">
-            <div className="w-20 h-20 mx-auto mb-6 gradient-accent-subtle rounded-2xl flex items-center justify-center animate-float">
+            <div className="w-20 h-20 mx-auto mb-6 gradient-accent-subtle rounded-2xl flex items-center justify-center">
               <svg className="w-10 h-10 text-macAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
@@ -228,16 +224,15 @@ const CVManager: React.FC<CVManagerProps> = ({ apiBaseUrl }) => {
           </div>
         </div>
       ) : (
-        <div className="space-y-6 perspective-container">
+        <div className="space-y-6">
           {cvs.map((cv, index) => (
             <div
               key={cv.filename}
-              className={`rounded-2xl p-6 transition-all duration-400 ease-mac group card-3d bento-card relative ${
+              className={`rounded-2xl p-6 transition-all duration-200 ease-mac ${
                 index === 0
                   ? 'liquid-glass-accent shadow-accent ring-2 ring-blue-400/30'
-                  : 'liquid-glass hover:liquid-glass-accent shadow-lg hover:shadow-xl'
+                  : 'liquid-glass hover:shadow-xl'
               }`}
-              style={{ animationDelay: `${index * 100}ms` }}
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
@@ -247,7 +242,7 @@ const CVManager: React.FC<CVManagerProps> = ({ apiBaseUrl }) => {
                     </h3>
                     {index === 0 && (
                       <span className="px-3 py-1 gradient-accent text-white text-xs font-semibold rounded-full shadow-accent flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
+                        <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
                         Latest
                       </span>
                     )}
@@ -274,9 +269,9 @@ const CVManager: React.FC<CVManagerProps> = ({ apiBaseUrl }) => {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handlePreview(cv.filename)}
-                    className="px-4 py-3 liquid-glass-accent text-white font-semibold rounded-mac transition-all duration-300 ease-mac flex items-center gap-2 shadow-accent text-sm interactive-element bounce-click ripple-effect"
+                    className="px-4 py-3 liquid-glass-accent text-white font-semibold rounded-mac transition-all duration-200 ease-mac flex items-center gap-2 shadow-accent text-sm hover:shadow-lg"
                   >
-                    <svg className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                     </svg>
@@ -285,9 +280,9 @@ const CVManager: React.FC<CVManagerProps> = ({ apiBaseUrl }) => {
 
                   <button
                     onClick={() => handleDownload(cv.filename)}
-                    className="px-4 py-3 liquid-glass text-macText font-medium rounded-mac transition-all duration-300 ease-mac flex items-center gap-2 text-sm interactive-element bounce-click"
+                    className="px-4 py-3 liquid-glass text-macText font-medium rounded-mac transition-all duration-200 ease-mac flex items-center gap-2 text-sm hover:shadow-md"
                   >
-                    <svg className="w-4 h-4 transition-transform duration-300 group-hover:translateY-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                     </svg>
                     Download
@@ -296,9 +291,9 @@ const CVManager: React.FC<CVManagerProps> = ({ apiBaseUrl }) => {
                   <button
                     onClick={() => handleDelete(cv.filename)}
                     disabled={deleting === cv.filename}
-                    className="px-4 py-3 liquid-glass border border-red-500/40 hover:bg-red-500/20 text-red-400 hover:text-red-300 font-medium rounded-mac transition-all duration-300 ease-mac flex items-center gap-2 disabled:opacity-50 text-sm interactive-element bounce-click"
+                    className="px-4 py-3 liquid-glass border border-red-500/40 hover:bg-red-500/20 text-red-400 hover:text-red-300 font-medium rounded-mac transition-all duration-200 ease-mac flex items-center gap-2 disabled:opacity-50 text-sm"
                   >
-                    <svg className="w-4 h-4 transition-transform duration-300 group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
                     {deleting === cv.filename ? 'Deleting...' : 'Delete'}

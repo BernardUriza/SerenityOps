@@ -80,7 +80,7 @@ const ActionExecutor: React.FC<ActionExecutorProps> = ({ action, apiBaseUrl }) =
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
           <div className="flex-1">
-            <p className="text-emerald-300 font-semibold">✅ Action Completed: {action.type}</p>
+            <p className="text-emerald-300 font-semibold">Action Completed: {action.type}</p>
             <p className="text-success text-sm mt-1">{result.message}</p>
 
             {result.result && (
@@ -124,7 +124,7 @@ const ActionExecutor: React.FC<ActionExecutorProps> = ({ action, apiBaseUrl }) =
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         <div className="flex-1">
-          <p className="text-red-300 font-semibold">⚠️ Action Failed: {action.type}</p>
+          <p className="text-red-300 font-semibold">Action Failed: {action.type}</p>
           <p className="text-error text-sm mt-1">{result.message}</p>
 
           {result.traceback && (

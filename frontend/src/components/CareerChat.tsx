@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ChatMessage from './ChatMessage';
+import { Icon } from '../icons';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -252,8 +253,8 @@ const CareerChat: React.FC<CareerChatProps> = ({ apiBaseUrl }) => {
       <div className="flex-1 flex flex-col bg-macBg">
         {/* Header */}
         <div className="p-6 border-b border-macBorder/40 bg-macPanel/50 backdrop-blur-md">
-          <h2 className="text-2xl font-bold text-macText flex items-center">
-            <span className="text-2xl mr-3">💬</span>
+          <h2 className="text-2xl font-bold text-macText flex items-center gap-3">
+            <Icon name="message-circle" size={28} />
             Career Chat
           </h2>
           <p className="text-macSubtext mt-1">
@@ -266,7 +267,15 @@ const CareerChat: React.FC<CareerChatProps> = ({ apiBaseUrl }) => {
           {messages.length === 0 ? (
             <div className="flex items-center justify-center h-full">
               <div className="text-center max-w-md">
-                <div className="text-6xl mb-4">🤖</div>
+                <div className="w-28 h-28 mx-auto mb-4 gradient-accent-subtle rounded-3xl flex items-center justify-center shadow-xl animate-glow-pulse relative">
+                  <img
+                    src="/logo.svg"
+                    alt="SerenityOps"
+                    className="w-16 h-16"
+                    style={{ filter: 'drop-shadow(0 0 12px rgba(10, 132, 255, 0.5))' }}
+                  />
+                  <div className="absolute inset-0 bg-macAccent/20 blur-xl rounded-3xl animate-pulse"></div>
+                </div>
                 <h3 className="text-xl font-semibold text-macText mb-2">
                   Hi! I'm SerenityOps
                 </h3>
@@ -301,7 +310,9 @@ const CareerChat: React.FC<CareerChatProps> = ({ apiBaseUrl }) => {
                   >
                     <div className="flex items-start">
                       {msg.role === 'assistant' && (
-                        <span className="text-2xl mr-3 flex-shrink-0">🤖</span>
+                        <div className="mr-3 flex-shrink-0 w-8 h-8 rounded-xl bg-macAccent/10 flex items-center justify-center">
+                          <Icon name="brain" size={20} />
+                        </div>
                       )}
                       <div className="flex-1">
                         <ChatMessage content={msg.content} role={msg.role} apiBaseUrl={apiBaseUrl} />
@@ -312,7 +323,9 @@ const CareerChat: React.FC<CareerChatProps> = ({ apiBaseUrl }) => {
                         </p>
                       </div>
                       {msg.role === 'user' && (
-                        <span className="text-2xl ml-3 flex-shrink-0">👤</span>
+                        <div className="ml-3 flex-shrink-0">
+                          <Icon name="user" size={24} />
+                        </div>
                       )}
                     </div>
                   </div>

@@ -24,6 +24,12 @@ export function useAutoSave(delay: number = 3000) {
       return;
     }
 
+    // PROTECTION: Skip if experiences is empty (prevents saving empty state on initial load)
+    if (!experiences || experiences.length === 0) {
+      console.log('Auto-save skipped: experiences array is empty');
+      return;
+    }
+
     // Trigger save after debounce
     const save = async () => {
       try {

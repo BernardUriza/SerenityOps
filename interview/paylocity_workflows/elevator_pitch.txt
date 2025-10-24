@@ -1,0 +1,100 @@
+ELEVATOR PITCH - Paylocity Workflows (60-90 segundos)
+=======================================================
+
+VERSIÓN COMPLETA (90s)
+----------------------
+
+"Gracias por la oportunidad. Soy Bernard Uriza, Full Stack Developer con 10+ años especializándome en .NET Core y React para sistemas enterprise. He trabajado en supply chain planning (PlanetTogether), real estate AI (JLL), y automotive management (ClearMechanic) — todos dominios con workflows complejos y alto volumen de datos.
+
+Tres logros recientes que me hacen buen fit para Workflows en Paylocity:
+
+1. Optimicé endpoint crítico de 3.5 segundos a 420 milisegundos (88% mejora) usando AsNoTracking, proyección EF Core y Redis cache — relevante para consultas de estado de workflows a escala.
+
+2. Reduje render time en grid de 500+ elementos de 500ms a 50ms con virtualization y memoization — aplicable a dashboards de aprobaciones multi-step.
+
+3. Mentoricé equipo y reduje onboarding de 4-6 semanas a menos de 2 semanas configurando CI/CD, documentación técnica y code reviews — mentalidad de developer experience e impact beyond code.
+
+Mi interés en Workflows: Es un problema fascinante que combina orquestación distribuida, lógica de negocio compleja y alto impacto (miles de empresas dependen de aprobaciones confiables). Stack es exactamente donde tengo más experiencia (.NET + React) y valoro la oportunidad de contribuir desde día 1 mientras aprendo el dominio HCM.
+
+¿Empezamos? ¿Hay algo específico de mi experiencia que le gustaría explorar primero?"
+
+
+VERSIÓN COMPACTA (60s)
+-----------------------
+
+"Bernard Uriza, 10+ años en .NET y React para sistemas enterprise. Supply chain planning en PlanetTogether, AI en JLL, automotive management en ClearMechanic.
+
+Tres highlights:
+- Optimicé endpoint de 3.5s a 420ms (88% mejora) con AsNoTracking + Redis cache
+- Reduje render time de grid de 500+ filas de 500ms a 50ms con virtualization
+- Mentoricé equipo: onboarding de 4-6 semanas a <2 semanas con CI/CD y documentación
+
+Busco Workflows porque combina orquestación distribuida con alto impacto en miles de empresas. Stack alineado (.NET + React) y puedo contribuir desde día 1.
+
+¿Por dónde empezamos?"
+
+
+VERSIÓN ULTRA-COMPACTA (30s si manager dice "cuéntame brevemente")
+-------------------------------------------------------------------
+
+"10+ años en .NET y React para sistemas enterprise — supply chain, real estate AI, automotive. Especializado en performance optimization (88% mejora en latencia), React avanzado (virtualization, memoization) y mentoría de equipos. Busco aplicar expertise en workflows enterprise donde orquestación confiable es crítica."
+
+
+VARIACIONES SEGÚN CONTEXTO
+---------------------------
+
+Si manager menciona "buscamos alguien con experiencia en performance":
+→ Enfatizar historia #2 (Backend optimization) en el pitch
+
+Si manager menciona "colaboración cross-functional":
+→ Enfatizar historia #1 (Conflicto Producto) y #5 (Mentoría)
+
+Si manager menciona "React avanzado":
+→ Enfatizar historia #3 (React Performance) y mencionar trío de memoization
+
+
+CONEXIÓN CON WORKFLOWS (bullets para expandir si preguntan)
+------------------------------------------------------------
+
+- Orquestación multi-step = Similar a gestión de estado de órdenes en supply chain (PlanetTogether)
+- Aprobaciones con timeouts = Similar a retry logic en AI workflows (JLL ChatGPT integration)
+- Audit trail de workflows = Similar a event logging en automotive service platform (ClearMechanic)
+- Idempotencia en retries = Pattern usado en Redis cache invalidation y API calls
+- Performance a escala = AsNoTracking + proyección + cache para queries frecuentes
+
+
+CIERRE (siempre preguntar algo)
+--------------------------------
+
+"¿Empezamos? ¿Hay algo específico de mi experiencia que le gustaría explorar primero?"
+
+Esto demuestra:
+- Interés genuino
+- Control suave de la conversación
+- Apertura a adaptar el pitch a sus intereses
+
+
+NOTAS DE PRÁCTICA
+-----------------
+
+✓ Practicar en voz alta 3-5 veces antes de entrevista
+✓ Grabar y escuchar (¿sueno confiado pero humilde?)
+✓ Timing: 60-90s (no más de 2 minutos)
+✓ Memorizar números clave (88%, 500ms→50ms, 4-6 sem→<2 sem)
+✓ Sonreír al mencionar resultados (energía positiva)
+✓ Pausar 1-2s después de números importantes (dejar que se absorban)
+
+
+CHECKLIST PRE-ENTREVISTA
+-------------------------
+
+[ ] Practiqué pitch 3+ veces en voz alta
+[ ] Memoricé números clave
+[ ] Preparé transición natural a primera historia STAR
+[ ] Tengo pregunta de cierre lista ("¿Empezamos?")
+[ ] Revisé cómo conectar pitch con workflows
+
+
+---
+
+Próximo paso: Practicar en voz alta con cronómetro. Target: 75-85 segundos.

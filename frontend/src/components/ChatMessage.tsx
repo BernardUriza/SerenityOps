@@ -30,7 +30,7 @@ const ChatMessage: React.FC<ChatMessageProps> = React.memo(({ content, role, api
       // If JSON parsing fails, show error message
       return (
         <div className="my-2 p-2 bg-error/10 border border-error rounded-mac backdrop-blur-md shadow-[0_2px_6px_rgba(0,0,0,0.2)]">
-          <p className="text-error font-semibold text-xs">⚠️ Invalid ACTION format</p>
+          <p className="text-error font-semibold text-xs">Invalid ACTION format</p>
           <p className="text-error text-xs mt-1">Failed to parse ACTION block</p>
           <pre className="mt-2 p-2 bg-macBg rounded-mac border border-macBorder/40 text-xs text-error overflow-x-auto">
             {content}
