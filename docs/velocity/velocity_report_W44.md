@@ -109,9 +109,17 @@ Con velocity 0.60, las 15h planificadas se traducen en ~9h efectivas, mejorando 
 - **Status:** 1/3 tarjetas completadas (33% progress)
 - **Progreso:** On track, excellent accuracy
 
-**Día 2 (27-oct, domingo):**
-- [ ] SO-UI-FEAT-008 en progreso
-- [ ] Target: completar Command Palette (5h → 3h efectivas)
+**Día 2 (27-oct, domingo - CONTINUED EXECUTION):**
+- ✅ **SO-UI-FEAT-008 COMPLETADO**: Command Palette (cmd+k) (3h)
+  - Global keyboard shortcut (cmd+k / ctrl+k)
+  - Fuzzy search across 14 commands
+  - 5 categorized action groups
+  - Full keyboard navigation (arrows, enter, esc)
+  - Recent commands tracking
+  - Smooth animations and macOS-like UX
+- 🔄 **Horas invertidas:** ~6h total / 6h efectivas target (100% accuracy)
+- **Status:** 2/3 tarjetas completadas (67% progress)
+- **Progreso:** Excellent momentum, on track for sprint completion
 
 **Día 3-4 (28-29 oct):**
 - [ ] SO-UI-FEAT-008 en progreso
