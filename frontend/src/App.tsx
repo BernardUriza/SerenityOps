@@ -20,11 +20,12 @@ import { ThemeSwitcher } from './components/ThemeSwitcher';
 import { NavIconWithBadge } from './components/NavIconWithBadge';
 import { CommandPalette } from './components/ui/CommandPalette';
 import { InterviewCalendarDashboard, PipelineFunnelDashboard } from './components/dashboards';
+import { CoverLetterGenerator } from './components/ai';
 
 // API configuration
 const API_BASE_URL = 'http://localhost:8000';
 
-type TabType = 'chat' | 'import' | 'profile' | 'experience' | 'projects' | 'skills' | 'education' | 'finances' | 'opportunities' | 'cvs' | 'calendar' | 'pipeline';
+type TabType = 'chat' | 'import' | 'profile' | 'experience' | 'projects' | 'skills' | 'education' | 'finances' | 'opportunities' | 'cvs' | 'calendar' | 'pipeline' | 'cover-letter';
 
 function App() {
   const [curriculum, setCurriculum] = useState<any>(null);
@@ -267,6 +268,7 @@ function App() {
     },
     { id: 'calendar' as TabType, label: 'Calendar', icon: 'calendar' },
     { id: 'pipeline' as TabType, label: 'Pipeline', icon: 'trending-up' },
+    { id: 'cover-letter' as TabType, label: 'Cover Letter', icon: 'mail' },
   ];
 
   return (
@@ -508,6 +510,10 @@ function App() {
         ) : activeTab === 'pipeline' ? (
           <div className="h-full p-8">
             <PipelineFunnelDashboard apiBaseUrl={API_BASE_URL} />
+          </div>
+        ) : activeTab === 'cover-letter' ? (
+          <div className="h-full p-8">
+            <CoverLetterGenerator apiBaseUrl={API_BASE_URL} />
           </div>
         ) : (
           <div className="min-h-full flex items-start justify-center px-8 py-12">
