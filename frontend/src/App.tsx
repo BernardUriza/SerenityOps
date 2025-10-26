@@ -18,11 +18,13 @@ import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { AppSidebarProfile } from './components/AppSidebarProfile';
 import { ThemeSwitcher } from './components/ThemeSwitcher';
 import { NavIconWithBadge } from './components/NavIconWithBadge';
+import { CommandPalette } from './components/ui/CommandPalette';
+import { InterviewCalendarDashboard, PipelineFunnelDashboard } from './components/dashboards';
 
 // API configuration
 const API_BASE_URL = 'http://localhost:8000';
 
-type TabType = 'chat' | 'import' | 'profile' | 'experience' | 'projects' | 'skills' | 'education' | 'finances' | 'opportunities' | 'cvs';
+type TabType = 'chat' | 'import' | 'profile' | 'experience' | 'projects' | 'skills' | 'education' | 'finances' | 'opportunities' | 'cvs' | 'calendar' | 'pipeline';
 
 function App() {
   const [curriculum, setCurriculum] = useState<any>(null);
@@ -263,6 +265,8 @@ function App() {
       badge: notificationCounts.opportunities,
       badgeType: 'warning' as const // orange for active opportunities
     },
+    { id: 'calendar' as TabType, label: 'Calendar', icon: 'calendar' },
+    { id: 'pipeline' as TabType, label: 'Pipeline', icon: 'trending-up' },
   ];
 
   return (
@@ -488,7 +492,7 @@ function App() {
 
       {/* Main Content - Perfectly Centered & Spacious */}
       <div className="flex-1 overflow-y-auto relative">
-        {/* Chat and Opportunities get full height, others get centered container */}
+        {/* Chat, Opportunities, Calendar, and Pipeline get full height, others get centered container */}
         {activeTab === 'chat' ? (
           <div className="h-full">
             <ChatManager apiBaseUrl={API_BASE_URL} />
@@ -496,6 +500,14 @@ function App() {
         ) : activeTab === 'opportunities' ? (
           <div className="h-full">
             <OpportunitiesViewer apiBaseUrl={API_BASE_URL} />
+          </div>
+        ) : activeTab === 'calendar' ? (
+          <div className="h-full p-8">
+            <InterviewCalendarDashboard apiBaseUrl={API_BASE_URL} />
+          </div>
+        ) : activeTab === 'pipeline' ? (
+          <div className="h-full p-8">
+            <PipelineFunnelDashboard apiBaseUrl={API_BASE_URL} />
           </div>
         ) : (
           <div className="min-h-full flex items-start justify-center px-8 py-12">
@@ -668,6 +680,24 @@ function App() {
 
       {/* Version Badge - Persistent deployment info */}
       <VersionBadge />
+
+      {/* Command Palette - Global (cmd+k) */}
+      <CommandPalette onNavigate={(path) => {
+        // Map paths to tabs
+        const pathToTab: Record<string, TabType> = {
+          '/dashboard': 'chat',
+          '/opportunities': 'opportunities',
+          '/cv': 'cvs',
+          '/chat': 'chat',
+          '/calendar': 'calendar',
+          '/pipeline': 'pipeline',
+          '/settings': 'profile'
+        };
+        const tab = pathToTab[path];
+        if (tab) {
+          setActiveTab(tab);
+        }
+      }} />
       </div>
     </IconProvider>
   );
