@@ -38,7 +38,7 @@ export const ChatView: React.FC<ChatViewProps> = ({ conversationId, apiBaseUrl }
 
   const loadConversation = async (convId: string) => {
     try {
-      const response = await fetch(`${apiBaseUrl}/chat/conversation/${convId}`);
+      const response = await fetch(`${apiBaseUrl}/api/chat/conversation/${convId}`);
       if (response.ok) {
         const data = await response.json();
         setMessages(data.messages || []);
@@ -67,7 +67,7 @@ export const ChatView: React.FC<ChatViewProps> = ({ conversationId, apiBaseUrl }
 
     try {
       setSending(true);
-      const response = await fetch(`${apiBaseUrl}/chat/message`, {
+      const response = await fetch(`${apiBaseUrl}/api/chat/message`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
