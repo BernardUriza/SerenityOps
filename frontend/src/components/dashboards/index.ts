@@ -1,0 +1,1 @@
+export { PipelineFunnelDashboard } from './PipelineFunnelDashboard';
