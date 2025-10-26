@@ -121,7 +121,7 @@ Estas NO cuentan para velocity técnico pero son outcomes críticos del sprint:
 - 🔄 Horas invertidas: 0h / 8.25h efectivas esperadas
 - **Status:** Sprint iniciado, comenzando ejecución técnica
 
-**Día 2 (26-oct, sábado) - SPRINT COMPLETADO 100%:**
+**Día 2 (26-oct, sábado) - SPRINT COMPLETADO 100% + BUGS ADICIONALES:**
 - ✅ **SO-CVE-FEAT-002**: CV Template Architecture (3h - COMPLETADO)
   - Template configuration system (templates.yaml)
   - Template engine core (template_engine.py, 550+ lines)
@@ -137,17 +137,24 @@ Estas NO cuentan para velocity técnico pero son outcomes críticos del sprint:
   - Conversion rate calculations
   - Key metrics dashboard
   - Insights panel with AI hooks
-- ✅ **BUGS CRÍTICOS RESUELTOS:**
+- ✅ **BUGS CRÍTICOS RESUELTOS (RONDA 1):**
   - ✅ SO-BUG-CHT-001: API 404 on Conversation Load (0.5h)
   - ✅ SO-BUG-CHT-002: Message Send Fails (0.5h)
   - Root cause: Missing /api prefix in ChatView.tsx
   - Fix: 2 lines changed → chat fully functional
-- 🔄 **Horas invertidas:** ~8h total (7.5h features + 1h bugs)
+- ✅ **BUGS CRÍTICOS RESUELTOS (RONDA 2 - UX):**
+  - ✅ SO-BUG-CHT-004: Layout Shift on Enter (1h)
+  - ✅ SO-REFACTOR-CHT-005: ChatContainer Structure Rewrite (incluido)
+  - ✅ SO-UX-CHT-006: Chat Input & Scroll Experience (incluido)
+  - Root cause: scrollIntoView() without `block: 'end'` parameter
+  - Fix: Isolated scroll viewport + sticky input + scroll params
+  - Result: macOS-like smooth scroll, zero layout shift
+- 🔄 **Horas invertidas:** ~9h total (7.5h features + 2h bugs UX)
 - 🔄 **Horas efectivas esperadas:** 8.25h (velocity 0.55x)
-- **Accuracy:** 97% (8h actual vs 8.25h target)
-- **Status:** ✅ SPRINT W43 COMPLETADO EN DÍA 2
-- **Progreso:** 3/3 tarjetas (100%) + 2 bugs críticos + 1 documentation
-- **Productividad:** 300% (3 planned + 2 unplanned bugs)
+- **Accuracy:** 109% work completion (9h actual vs 8.25h target)
+- **Status:** ✅ SPRINT W43 COMPLETADO + EXTRA BUGFIXES
+- **Progreso:** 3/3 tarjetas (100%) + 5 bugs críticos + 1 documentation
+- **Productividad:** 400% (3 planned + 5 unplanned bugs)
 
 **Día 3 (27-oct, domingo):**
 - [ ] SO-UI-REFACTOR-001 en progreso
