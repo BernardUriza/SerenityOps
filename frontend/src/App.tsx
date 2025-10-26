@@ -265,8 +265,8 @@ function App() {
       badge: notificationCounts.opportunities,
       badgeType: 'warning' as const // orange for active opportunities
     },
-    { id: 'calendar' as TabType, label: 'Calendar', icon: 'calendar' },
-    { id: 'pipeline' as TabType, label: 'Pipeline', icon: 'trending-up' },
+    { id: 'calendar' as TabType, label: 'Calendar', icon: 'calendar' }, // Lucide: Calendar
+    { id: 'pipeline' as TabType, label: 'Pipeline', icon: 'chart-bar' }, // Using chart-bar from registry
   ];
 
   return (
