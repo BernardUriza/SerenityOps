@@ -121,7 +121,7 @@ Estas NO cuentan para velocity técnico pero son outcomes críticos del sprint:
 - 🔄 Horas invertidas: 0h / 8.25h efectivas esperadas
 - **Status:** Sprint iniciado, comenzando ejecución técnica
 
-**Día 2 (26-oct, sábado) - ADVANCED EXECUTION:**
+**Día 2 (26-oct, sábado) - ADVANCED EXECUTION + BUGFIX:**
 - ✅ SO-CVE-FEAT-002 INICIADO Y COMPLETADO (estructura base)
 - ✅ Tarjeta movida a In Progress en Trello
 - ✅ Rama feature/SO-CVE-FEAT-002-cv-templates creada
@@ -129,9 +129,16 @@ Estas NO cuentan para velocity técnico pero son outcomes críticos del sprint:
 - ✅ Template configuration system implementado (templates.yaml)
 - ✅ Template engine core creado (template_engine.py)
 - ✅ 3 templates configurados (classic, compact, modern)
-- 🔄 Horas invertidas: ~3h / 3.3h efectivas esperadas (91% target)
-- **Status:** Template architecture COMPLETADA, classic template funcional
-- **Progreso:** 1/3 tarjetas (33% completion)
+- ✅ Icon system README documentation created
+- ✅ **BUGS CRITICAL RESUELTOS:**
+  - ✅ SO-BUG-CHT-001: API 404 on Conversation Load (0.5h)
+  - ✅ SO-BUG-CHT-002: Message Send Fails (0.5h)
+  - Root cause: Frontend missing /api prefix in chat endpoints
+  - Fix: ChatView.tsx updated (2 lines changed)
+  - Result: Zero 404 errors, chat functional
+- 🔄 Horas invertidas: ~4h total (3h CVE + 1h bugs) / 3.3h CVE target
+- **Status:** CV Template COMPLETADO + Chat bugs RESUELTOS
+- **Progreso:** 1/3 tarjetas planificadas + 2 bugs críticos (167% productivity)
 
 **Día 3 (27-oct, domingo):**
 - [ ] SO-UI-REFACTOR-001 en progreso
