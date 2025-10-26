@@ -121,9 +121,17 @@ Estas NO cuentan para velocity técnico pero son outcomes críticos del sprint:
 - 🔄 Horas invertidas: 0h / 8.25h efectivas esperadas
 - **Status:** Sprint iniciado, comenzando ejecución técnica
 
-**Día 2 (26-oct, sábado):**
-- [ ] SO-CVE-FEAT-002 en progreso
-- [ ] Target: completar CV Template Architecture (6h → 3.3h efectivas)
+**Día 2 (26-oct, sábado) - ADVANCED EXECUTION:**
+- ✅ SO-CVE-FEAT-002 INICIADO Y COMPLETADO (estructura base)
+- ✅ Tarjeta movida a In Progress en Trello
+- ✅ Rama feature/SO-CVE-FEAT-002-cv-templates creada
+- ✅ Arquitectura de templates diseñada
+- ✅ Template configuration system implementado (templates.yaml)
+- ✅ Template engine core creado (template_engine.py)
+- ✅ 3 templates configurados (classic, compact, modern)
+- 🔄 Horas invertidas: ~3h / 3.3h efectivas esperadas (91% target)
+- **Status:** Template architecture COMPLETADA, classic template funcional
+- **Progreso:** 1/3 tarjetas (33% completion)
 
 **Día 3 (27-oct, domingo):**
 - [ ] SO-UI-REFACTOR-001 en progreso
