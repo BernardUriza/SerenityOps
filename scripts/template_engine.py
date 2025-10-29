@@ -13,6 +13,7 @@ Architecture:
 """
 
 import yaml
+import html
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 from datetime import datetime
@@ -44,6 +45,86 @@ class TemplateEngine:
         self.templates = self.config.get("templates", {})
         self.metadata = self.config.get("metadata", {})
         self.global_settings = self.config.get("global", {})
+
+    @staticmethod
+    def _safe_html(text: Any) -> str:
+        """
+        Escape HTML special characters to prevent XSS attacks.
+
+        Args:
+            text: Text to escape (any type, will be converted to string)
+
+        Returns:
+            HTML-escaped string safe for rendering
+
+        Security:
+            - Prevents XSS injection via user-controlled CV data
+            - Escapes: <, >, &, ", '
+            - Returns empty string for None values
+        """
+        if text is None:
+            return ""
+        return html.escape(str(text))
+
+    @staticmethod
+    def _validate_custom_css(custom_css: str) -> str:
+        """
+        Validate and sanitize custom CSS to prevent CSS injection attacks.
+
+        Args:
+            custom_css: User-provided custom CSS string
+
+        Returns:
+            Sanitized CSS string (only safe properties allowed)
+
+        Security:
+            - Blocks @import, @keyframes, url() functions (data exfiltration risk)
+            - Whitelists only safe CSS properties (margins, padding, colors, fonts)
+            - Prevents CSS-based attacks (keyloggers, data exfiltration)
+
+        Raises:
+            ValueError: If CSS contains dangerous constructs
+        """
+        if not custom_css:
+            return ""
+
+        # Whitelist of allowed CSS properties (styling only, no behavior)
+        ALLOWED_PROPERTIES = {
+            'margin', 'margin-top', 'margin-bottom', 'margin-left', 'margin-right',
+            'padding', 'padding-top', 'padding-bottom', 'padding-left', 'padding-right',
+            'font-size', 'font-family', 'font-weight', 'font-style',
+            'color', 'background-color',
+            'line-height', 'letter-spacing', 'text-align',
+            'border-radius', 'box-shadow'
+        }
+
+        # Dangerous patterns to reject outright
+        DANGEROUS_PATTERNS = ['@import', '@keyframes', 'url(', 'expression(', 'behavior:', '<', '>']
+
+        # Check for dangerous patterns
+        css_lower = custom_css.lower()
+        for pattern in DANGEROUS_PATTERNS:
+            if pattern in css_lower:
+                raise ValueError(
+                    f"Custom CSS contains dangerous pattern '{pattern}'. "
+                    f"Only styling properties are allowed (margins, fonts, colors)."
+                )
+
+        # Parse CSS line by line and validate properties
+        validated_lines = []
+        for line in custom_css.split('\n'):
+            line = line.strip()
+            if not line or line.startswith('/*'):
+                continue
+
+            # Extract property name (before colon)
+            if ':' in line:
+                prop_name = line.split(':')[0].strip()
+                if prop_name in ALLOWED_PROPERTIES:
+                    validated_lines.append(line)
+                # Silently skip non-whitelisted properties
+
+        return '\n'.join(validated_lines)
 
     def _load_templates_config(self) -> Dict[str, Any]:
         """
@@ -121,19 +202,25 @@ class TemplateEngine:
         # Generate CSS based on template config
         css = self._generate_css(template_config)
         if custom_css:
-            css += f"\n\n/* Custom CSS */\n{custom_css}"
+            # Validate and sanitize custom CSS before injecting
+            safe_custom_css = self._validate_custom_css(custom_css)
+            if safe_custom_css:
+                css += f"\n\n/* Custom CSS (validated) */\n{safe_custom_css}"
 
         # Generate HTML structure based on template sections
         html_content = self._generate_html_structure(cv_data, template_config)
 
         # Combine into complete HTML document
+        # Escape personal data for meta tags and title
+        full_name_safe = self._safe_html(cv_data.get('personal', {}).get('full_name', 'Unknown'))
+
         html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="{cv_data.get('personal', {}).get('full_name', 'Unknown')}">
-    <title>{cv_data.get('personal', {}).get('full_name', 'CV')} - Curriculum Vitae</title>
+    <meta name="author" content="{full_name_safe}">
+    <title>{full_name_safe} - Curriculum Vitae</title>
     <style>
 {css}
     </style>
@@ -417,42 +504,76 @@ a:hover {{
         return "\n".join(html_parts)
 
     def _render_personal(self, personal: Dict[str, Any]) -> str:
-        """Render personal info section"""
+        """
+        Render personal info section with XSS protection.
+
+        Args:
+            personal: Dict with keys: full_name, title, phone, email, location, website
+
+        Returns:
+            HTML string for personal info section (all data HTML-escaped)
+        """
         contact_items = []
 
         if personal.get("phone"):
-            contact_items.append(f'<span>{personal["phone"]}</span>')
+            phone = self._safe_html(personal["phone"])
+            contact_items.append(f'<span>{phone}</span>')
         if personal.get("email"):
-            contact_items.append(f'<a href="mailto:{personal["email"]}">{personal["email"]}</a>')
+            email = self._safe_html(personal["email"])
+            contact_items.append(f'<a href="mailto:{email}">{email}</a>')
         if personal.get("location"):
-            contact_items.append(f'<span>{personal["location"]}</span>')
+            location = self._safe_html(personal["location"])
+            contact_items.append(f'<span>{location}</span>')
         if personal.get("website"):
-            contact_items.append(f'<a href="{personal["website"]}" target="_blank">{personal["website"]}</a>')
+            website = self._safe_html(personal["website"])
+            contact_items.append(f'<a href="{website}" target="_blank" rel="noopener noreferrer">{website}</a>')
 
         contact_html = " | ".join(contact_items)
 
+        full_name = self._safe_html(personal.get('full_name', ''))
+        title = self._safe_html(personal.get('title', ''))
+
         return f"""
         <div class="cv-section personal-info">
-            <h1>{personal.get('full_name', '')}</h1>
-            <div class="title">{personal.get('title', '')}</div>
+            <h1>{full_name}</h1>
+            <div class="title">{title}</div>
             <div class="contact">{contact_html}</div>
         </div>
         """
 
     def _render_summary(self, summary: str) -> str:
-        """Render summary section"""
+        """
+        Render summary section with XSS protection.
+
+        Args:
+            summary: Professional summary text
+
+        Returns:
+            HTML string for summary section (HTML-escaped)
+        """
         if not summary:
             return ""
+
+        summary_safe = self._safe_html(summary)
 
         return f"""
         <div class="cv-section">
             <h2>Professional Summary</h2>
-            <p>{summary}</p>
+            <p>{summary_safe}</p>
         </div>
         """
 
     def _render_experience(self, experience: List[Dict[str, Any]]) -> str:
-        """Render experience section"""
+        """
+        Render experience section with XSS protection.
+
+        Args:
+            experience: List of dicts with keys: role, company, start_date, end_date,
+                        location, description, achievements, tech_stack
+
+        Returns:
+            HTML string for experience section (all data HTML-escaped)
+        """
         if not experience:
             return ""
 
@@ -461,25 +582,36 @@ a:hover {{
             achievements = exp.get("achievements", [])
             achievements_html = ""
             if achievements:
-                achievements_items = "\n".join(f'<li>{ach}</li>' for ach in achievements)
+                achievements_items = "\n".join(
+                    f'<li>{self._safe_html(ach)}</li>' for ach in achievements
+                )
                 achievements_html = f'<ul class="achievements-list">\n{achievements_items}\n</ul>'
 
             tech_stack = exp.get("tech_stack", [])
             tech_html = ""
             if tech_stack:
-                tech_tags = "\n".join(f'<span class="tech-tag">{tech}</span>' for tech in tech_stack)
+                tech_tags = "\n".join(
+                    f'<span class="tech-tag">{self._safe_html(tech)}</span>' for tech in tech_stack
+                )
                 tech_html = f'<div class="tech-stack">\n{tech_tags}\n</div>'
 
-            date_range = f"{exp.get('start_date', '')} - {exp.get('end_date', 'Present')}"
+            start_date = self._safe_html(exp.get('start_date', ''))
+            end_date = self._safe_html(exp.get('end_date', 'Present'))
+            date_range = f"{start_date} - {end_date}"
+
+            role = self._safe_html(exp.get('role', ''))
+            company = self._safe_html(exp.get('company', ''))
+            location = self._safe_html(exp.get('location', ''))
+            description = self._safe_html(exp.get('description', ''))
 
             items_html.append(f"""
             <div class="experience-item">
                 <div class="experience-header">
-                    <div class="experience-title">{exp.get('role', '')}</div>
-                    <div class="experience-company">{exp.get('company', '')}</div>
-                    <div class="experience-meta">{date_range} | {exp.get('location', '')}</div>
+                    <div class="experience-title">{role}</div>
+                    <div class="experience-company">{company}</div>
+                    <div class="experience-meta">{date_range} | {location}</div>
                 </div>
-                <div class="experience-description">{exp.get('description', '')}</div>
+                <div class="experience-description">{description}</div>
                 {achievements_html}
                 {tech_html}
             </div>
@@ -499,16 +631,27 @@ a:hover {{
         return ""
 
     def _render_skills(self, skills: Dict[str, List[str]]) -> str:
-        """Render skills section"""
+        """
+        Render skills section with XSS protection.
+
+        Args:
+            skills: Dict mapping category names to lists of skills
+
+        Returns:
+            HTML string for skills section (all data HTML-escaped)
+        """
         if not skills:
             return ""
 
         categories_html = []
         for category, skill_list in skills.items():
-            skills_items = "\n".join(f'<li>{skill}</li>' for skill in skill_list)
+            category_safe = self._safe_html(category)
+            skills_items = "\n".join(
+                f'<li>{self._safe_html(skill)}</li>' for skill in skill_list
+            )
             categories_html.append(f"""
             <div class="skill-category">
-                <div class="skill-category-name">{category}</div>
+                <div class="skill-category-name">{category_safe}</div>
                 <ul class="skill-list">
                     {skills_items}
                 </ul>
