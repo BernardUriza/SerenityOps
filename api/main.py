@@ -46,6 +46,14 @@ except ImportError:
     generate_html_with_claude = None
     load_cv_data = None
 
+# Import Template Engine
+try:
+    from scripts.template_engine import TemplateEngine
+    template_engine = TemplateEngine()
+except ImportError as e:
+    print(f"Warning: Could not import TemplateEngine: {e}")
+    template_engine = None
+
 # Import PDF service
 try:
     from services.pdf_service import generate_pdf_from_html_content, is_pdf_service_available
@@ -91,10 +99,46 @@ app.add_middleware(
 # Helper Functions
 # ========================
 
-def generate_cv_html(curriculum_path: Path) -> str:
-    """Generate HTML CV from curriculum data"""
+def generate_cv_html(curriculum_path: Path, template_id: str = "classic") -> str:
+    """
+    Generate HTML CV from curriculum data using specified template.
+
+    Args:
+        curriculum_path: Path to curriculum.yaml
+        template_id: Template identifier (classic, compact, modern)
+
+    Returns:
+        HTML content as string
+
+    Raises:
+        ValueError: If template_id is invalid
+        RuntimeError: If template_engine is unavailable
+    """
+    if not template_engine:
+        # Fallback to Claude-based generation
+        if generate_html_with_claude:
+            cv_data = load_cv_data(curriculum_path)
+            return generate_html_with_claude(cv_data)
+        else:
+            raise RuntimeError("Neither TemplateEngine nor Claude HTML generation available")
+
+    # Load CV data
     cv_data = load_cv_data(curriculum_path)
-    return generate_html_with_claude(cv_data)
+
+    # Use template engine to render HTML
+    try:
+        html_content = template_engine.render_html(cv_data, template_id=template_id)
+        return html_content
+    except ValueError as e:
+        # Invalid template_id
+        raise ValueError(f"Invalid template '{template_id}': {str(e)}")
+    except Exception as e:
+        # Fallback to Claude generation if available
+        if generate_html_with_claude:
+            print(f"Warning: Template rendering failed, falling back to Claude: {e}")
+            return generate_html_with_claude(cv_data)
+        else:
+            raise
 
 
 def log_action_execution(
@@ -118,13 +162,14 @@ def log_action_execution(
         )
 
 
-def run_cv_generation_with_tracking(job_id: str, opportunity: str):
+def run_cv_generation_with_tracking(job_id: str, opportunity: str, template_id: str = "classic"):
     """
     Background task: Generate CV with progress tracking
 
     Args:
         job_id: Job identifier
         opportunity: Opportunity identifier
+        template_id: Template to use (classic, compact, modern)
     """
     if not job_service:
         return
@@ -135,11 +180,11 @@ def run_cv_generation_with_tracking(job_id: str, opportunity: str):
             job_id,
             status=JobStatus.RUNNING.value,
             progress=10,
-            stage="Compiling HTML from curriculum data"
+            stage=f"Compiling HTML from curriculum data (template: {template_id})"
         )
 
-        # Generate HTML CV
-        html_content = generate_cv_html(CURRICULUM_PATH)
+        # Generate HTML CV with specified template
+        html_content = generate_cv_html(CURRICULUM_PATH, template_id=template_id)
 
         # Update: HTML generated
         job_service.update_job(
@@ -285,6 +330,7 @@ class Curriculum(BaseModel):
 class CVGenerateRequest(BaseModel):
     format: str = "pdf"
     opportunity: Optional[str] = "general"
+    template_id: Optional[str] = "classic"  # classic, compact, modern
 
 class ParseTextRequest(BaseModel):
     text: str
@@ -486,8 +532,19 @@ def generate_cv_endpoint(request: CVGenerateRequest, background_tasks: Backgroun
                 detail="Job service unavailable"
             )
 
-        # Extract opportunity from request or use "general"
+        # Extract opportunity and template_id from request
         opportunity = getattr(request, 'opportunity', None) or "general"
+        template_id = getattr(request, 'template_id', None) or "classic"
+
+        # Validate template_id if template_engine is available
+        if template_engine:
+            try:
+                template_engine.get_template_config(template_id)
+            except ValueError:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Invalid template_id '{template_id}'. Available: classic, compact, modern"
+                )
 
         # Create job
         job = job_service.create_job(
@@ -495,11 +552,12 @@ def generate_cv_endpoint(request: CVGenerateRequest, background_tasks: Backgroun
             user_id="default"
         )
 
-        # Start background task
+        # Start background task with template_id
         background_tasks.add_task(
             run_cv_generation_with_tracking,
             job_id=job["id"],
-            opportunity=opportunity
+            opportunity=opportunity,
+            template_id=template_id
         )
 
         return {
@@ -543,6 +601,97 @@ def get_cv_job_status(job_id: str):
             job["size"] = output_path.stat().st_size
 
     return job
+
+@app.get("/api/cv/templates")
+def list_cv_templates():
+    """
+    List all available CV templates with metadata.
+
+    Returns:
+        List of template objects with id, name, description, category, features
+
+    Example Response:
+        [
+            {
+                "id": "classic",
+                "name": "Classic Professional",
+                "description": "Traditional CV layout with clean typography",
+                "category": "professional",
+                "features": ["two-column", "serif-headings", "timeline-view"]
+            },
+            ...
+        ]
+
+    Raises:
+        503: If template engine is unavailable
+    """
+    if not template_engine:
+        raise HTTPException(
+            status_code=503,
+            detail="Template engine unavailable. Check TemplateEngine import."
+        )
+
+    try:
+        templates = template_engine.list_templates()
+        return {
+            "templates": templates,
+            "count": len(templates),
+            "default": "classic"
+        }
+    except Exception as e:
+        import traceback
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to list templates: {str(e)}\n{traceback.format_exc()}"
+        )
+
+@app.get("/api/cv/templates/{template_id}")
+def get_cv_template_details(template_id: str):
+    """
+    Get detailed configuration for a specific template.
+
+    Args:
+        template_id: Template identifier (classic, compact, modern)
+
+    Returns:
+        Template configuration with colors, typography, layout, sections
+
+    Example Response:
+        {
+            "id": "classic",
+            "name": "Classic Professional",
+            "description": "...",
+            "colors": {"primary": "#2563eb", ...},
+            "typography": {"heading_font": "Georgia", ...},
+            "layout": {"max_width": "800px", ...},
+            "sections": ["personal", "summary", "experience", ...]
+        }
+
+    Raises:
+        404: If template not found
+        503: If template engine unavailable
+    """
+    if not template_engine:
+        raise HTTPException(
+            status_code=503,
+            detail="Template engine unavailable"
+        )
+
+    try:
+        template_config = template_engine.get_template_config(template_id)
+        return {
+            "id": template_id,
+            **template_config
+        }
+    except ValueError as e:
+        # Template not found
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        import traceback
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to get template: {str(e)}\n{traceback.format_exc()}"
+        )
 
 @app.get("/api/cv/file/{filename}")
 def serve_cv_file(filename: str):
