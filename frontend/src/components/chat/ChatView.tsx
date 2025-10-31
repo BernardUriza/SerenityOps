@@ -1,6 +1,10 @@
 /**
  * ChatView - Main chat interface (refactored from CareerChat)
  * Displays messages and input for active conversation
+ *
+ * SO-BUG-CHT-004: Fixed scroll layout bug
+ * SO-REFACTOR-CHT-005: Isolated scroll to chat viewport
+ * SO-UX-CHT-006: Smooth scroll experience
  */
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -17,10 +21,21 @@ export const ChatView: React.FC<ChatViewProps> = ({ conversationId, apiBaseUrl }
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [sending, setSending] = useState(false);
+
+  // Isolated scroll viewport ref
+  const chatViewportRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Fixed scroll function - isolated to chat viewport only
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesEndRef.current && chatViewportRef.current) {
+      // Use scrollIntoView with explicit block: 'end' to prevent global layout shift
+      messagesEndRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end', // Critical: prevents centering and global scroll
+        inline: 'nearest'
+      });
+    }
   };
 
   useEffect(() => {
@@ -38,7 +53,7 @@ export const ChatView: React.FC<ChatViewProps> = ({ conversationId, apiBaseUrl }
 
   const loadConversation = async (convId: string) => {
     try {
-      const response = await fetch(`${apiBaseUrl}/chat/conversation/${convId}`);
+      const response = await fetch(`${apiBaseUrl}/api/chat/conversation/${convId}`);
       if (response.ok) {
         const data = await response.json();
         setMessages(data.messages || []);
@@ -67,7 +82,7 @@ export const ChatView: React.FC<ChatViewProps> = ({ conversationId, apiBaseUrl }
 
     try {
       setSending(true);
-      const response = await fetch(`${apiBaseUrl}/chat/message`, {
+      const response = await fetch(`${apiBaseUrl}/api/chat/message`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -107,11 +122,19 @@ export const ChatView: React.FC<ChatViewProps> = ({ conversationId, apiBaseUrl }
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-macBg h-full relative">
-      {/* Messages Container */}
-      <div className="flex-1 overflow-y-auto px-6 py-8 space-y-6">
+    <div className="flex flex-col bg-macBg h-full">
+      {/* Chat Viewport - Isolated Scroll Container */}
+      <div
+        ref={chatViewportRef}
+        className="flex-1 overflow-y-auto px-6 py-8 space-y-6"
+        style={{
+          scrollBehavior: 'smooth',
+          // Ensure this container handles ALL vertical scrolling
+          overscrollBehavior: 'contain'
+        }}
+      >
         {messages.length === 0 ? (
-          <div className="flex items-center justify-center h-full relative">
+          <div className="flex items-center justify-center min-h-full relative">
             {/* Decorative background */}
             <div className="gradient-orb absolute top-[15%] right-[25%] w-[400px] h-[400px] bg-purple-500/8"></div>
             <div className="particle absolute top-[30%] left-[20%]"></div>
@@ -218,13 +241,18 @@ export const ChatView: React.FC<ChatViewProps> = ({ conversationId, apiBaseUrl }
                 </div>
               </div>
             )}
-            <div ref={messagesEndRef} />
+            {/* Scroll anchor - bottom padding for smooth scroll */}
+            <div
+              ref={messagesEndRef}
+              className="h-4"
+              style={{ scrollMarginBottom: '1rem' }}
+            />
           </>
         )}
       </div>
 
-      {/* Input Area - Enhanced */}
-      <div className="px-6 py-4 border-t border-macBorder/40 liquid-glass backdrop-blur-xl">
+      {/* Input Area - Sticky at bottom, NO padding issues */}
+      <div className="sticky bottom-0 px-6 py-4 border-t border-macBorder/40 liquid-glass backdrop-blur-xl bg-macBg/80">
         <div className="flex gap-3 items-end max-w-5xl mx-auto">
           <textarea
             value={inputMessage}

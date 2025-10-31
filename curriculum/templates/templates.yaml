@@ -1,0 +1,140 @@
+# CV Templates Configuration
+# Defines available CV templates with metadata and styling parameters
+
+templates:
+  classic:
+    id: classic
+    name: Classic Professional
+    description: Traditional, ATS-friendly CV with clean typography and professional layout
+    category: traditional
+    features:
+      - ATS-optimized
+      - Clean typography
+      - Professional color scheme
+      - Print-friendly
+      - Single column layout
+    colors:
+      primary: "#2563eb"      # Blue 600
+      secondary: "#64748b"    # Slate 500
+      text: "#1e293b"         # Slate 900
+      background: "#ffffff"
+      accent: "#3b82f6"       # Blue 500
+    typography:
+      heading_font: "'Georgia', serif"
+      body_font: "'Arial', sans-serif"
+      heading_size: "24px"
+      body_size: "14px"
+      line_height: "1.6"
+    layout:
+      max_width: "800px"
+      spacing: "standard"     # standard | compact | spacious
+      columns: 1
+      margins: "2cm"
+    sections:
+      - personal
+      - summary
+      - experience
+      - projects
+      - skills
+      - education
+      - certifications
+    page_size: A4
+    orientation: portrait
+
+  compact:
+    id: compact
+    name: Compact Modern
+    description: Space-efficient design that fits more content while maintaining readability
+    category: modern
+    features:
+      - High information density
+      - Two-column layout
+      - Modern typography
+      - Optimized for 1-2 pages
+      - Visual hierarchy
+    colors:
+      primary: "#0f172a"      # Slate 900
+      secondary: "#475569"    # Slate 600
+      text: "#1e293b"         # Slate 900
+      background: "#ffffff"
+      accent: "#06b6d4"       # Cyan 500
+    typography:
+      heading_font: "'Helvetica Neue', sans-serif"
+      body_font: "'Helvetica', sans-serif"
+      heading_size: "20px"
+      body_size: "12px"
+      line_height: "1.4"
+    layout:
+      max_width: "800px"
+      spacing: "compact"
+      columns: 2               # Two-column for skills/education
+      margins: "1.5cm"
+    sections:
+      - personal
+      - summary
+      - experience
+      - skills               # Sidebar
+      - projects
+      - education            # Sidebar
+      - certifications       # Sidebar
+    page_size: A4
+    orientation: portrait
+
+  modern:
+    id: modern
+    name: Modern Creative
+    description: Contemporary design with bold typography and visual elements
+    category: creative
+    features:
+      - Bold visual design
+      - Custom iconography
+      - Gradient accents
+      - Modern color palette
+      - Standout header
+    colors:
+      primary: "#7c3aed"      # Violet 600
+      secondary: "#a78bfa"    # Violet 400
+      text: "#18181b"         # Zinc 900
+      background: "#ffffff"
+      accent: "#8b5cf6"       # Violet 500
+      gradient_start: "#7c3aed"
+      gradient_end: "#2563eb"
+    typography:
+      heading_font: "'Inter', sans-serif"
+      body_font: "'Inter', sans-serif"
+      heading_size: "28px"
+      body_size: "14px"
+      line_height: "1.7"
+    layout:
+      max_width: "850px"
+      spacing: "spacious"
+      columns: 1               # Single column with sidebar sections
+      margins: "2.5cm"
+    sections:
+      - personal              # Full-width header with gradient
+      - summary
+      - experience
+      - projects
+      - skills               # Grid layout
+      - education
+      - certifications
+    page_size: A4
+    orientation: portrait
+
+# Template metadata
+metadata:
+  version: "1.0.0"
+  last_updated: "2025-10-25"
+  author: "SerenityOps CV Engine"
+
+# Global settings
+global:
+  default_template: classic
+  supported_formats:
+    - html
+    - pdf
+  pdf_engine: weasyprint
+  optimization:
+    ats_friendly: true
+    print_optimized: true
+    responsive: true

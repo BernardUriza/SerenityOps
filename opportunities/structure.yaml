@@ -57,20 +57,24 @@ pipeline:
     timeline:
       discovered: "2025-10-23"
       applied: "2025-10-22"
-      first_interview: "2025-10-24"  # TOMORROW!
+      first_interview: "2025-10-30T14:00:00"  # 30-Oct-2025 2:00 PM CST (~70 hours from now)
+      interview_duration: "45-60 minutes"
       final_interview: null
       offer_received: null
       decision_deadline: null
       closed: null
 
     contacts:
-      - name: "Paylocity Recruiter"
-        role: "Recruiter"
+      - name: "Paylocity Recruiting Team"
+        role: "Technical Recruiter"
+        email: "TBD"  # To be confirmed in interview invite
+        phone: "TBD"
         source: "LinkedIn/Job Board"
+        notes: "Initial screening scheduled via automated system"
 
     notes:
       - date: "2025-10-23"
-        content: "FAVORITE OPPORTUNITY! Interview scheduled for tomorrow. Company rating 3.2/5. This is a QA/Testing role requiring automation expertise. I have Jest + Cypress experience with 90% coverage achieved at JLL on JLLGPT project."
+        content: "FAVORITE OPPORTUNITY! Interview scheduled for 30-Oct-2025 2:00 PM CST. Company rating 3.2/5. This is a QA/Testing role requiring automation expertise. I have Jest + Cypress experience with 90% coverage achieved at JLL on JLLGPT project."
       - date: "2025-10-23"
         content: "PREPARATION COMPLETED: Created comprehensive interview guide at opportunities/paylocity_interview_prep.md and quick brief at opportunities/paylocity_quick_brief.md. Updated CV to highlight testing experience."
       - date: "2025-10-23"
@@ -79,6 +83,14 @@ pipeline:
         content: "GAP TO ADDRESS: Limited Selenium/Playwright production experience (but Cypress is conceptually identical). Performance/Security testing limited (growth area)."
       - date: "2025-10-23"
         content: "STRATEGY: Lead with 90% coverage achievement. Emphasize end-to-end ownership of quality. Position Selenium/Playwright as natural extension of Cypress expertise."
+      - date: "2025-10-25"
+        content: "ENRICHED DATA: Updated timeline with exact interview datetime (30-Oct 2:00 PM CST, ~70 hours from now). Validated fit_analysis scores. Ready for final preparation push."
+      - date: "2025-10-25"
+        content: "INTERVIEW PREP CHECKLIST: ✅ CV tailored (cv_paylocity_2025-10-23.html), ✅ Interview guide ready, ✅ Quick brief created, ⏳ Final review 24h before, ⏳ Mock interview questions practice, ⏳ Company research refresh"
+      - date: "2025-10-25"
+        content: "TALKING POINTS: (1) JLLGPT project: 90% test coverage with Jest/Cypress, (2) CI/CD integration expertise (GitHub Actions, automated testing pipeline), (3) API testing experience (REST endpoints, auth flows, error handling), (4) Cross-browser compatibility (Chrome, Firefox, Safari, Edge), (5) Test data management strategies"
+      - date: "2025-10-25"
+        content: "QUESTIONS TO ASK: (1) Team structure and QA role distribution, (2) Current test automation coverage baseline, (3) CI/CD pipeline maturity level, (4) Performance/security testing roadmap, (5) Career growth path for QA engineers, (6) On-call/support expectations"
 
     fit_analysis:
       technical_match: 0.85  # Strong match - have Jest/Cypress, need to learn Selenium/Playwright
@@ -103,6 +115,39 @@ pipeline:
       - "opportunities/paylocity_interview_prep.md"  # Full preparation guide
       - "opportunities/paylocity_quick_brief.md"     # 5-minute pre-interview brief
       - "curriculum/versions/cv_paylocity_2025-10-23.html"  # Tailored CV
+
+    interview_prep:
+      company_research:
+        - "Paylocity is a G2 Top 100 Software Company (Award-winning)"
+        - "HR & Payroll SaaS platform serving 35,000+ clients"
+        - "Founded 1997, publicly traded (NASDAQ: PCTY)"
+        - "Company rating: 3.2/5 stars (check recent reviews before interview)"
+        - "Focus on modern cloud-based HR solutions"
+      role_understanding:
+        - "Senior QA Engineer focused on test automation"
+        - "Primary tools: Jest, Cypress, Playwright, Selenium"
+        - "Responsibilities: Automated testing, CI/CD integration, test plans, coverage expansion"
+        - "Cross-functional collaboration with dev teams"
+        - "Performance and security testing growth area"
+      key_examples:
+        - story: "JLLGPT Testing Achievement"
+          situation: "Enterprise AI chatbot with 0% test coverage"
+          task: "Implement comprehensive automated testing strategy"
+          action: "Set up Jest + Cypress framework, created 200+ test cases, integrated with CI/CD"
+          result: "90% test coverage, zero production bugs in 6 months"
+          technologies: ["Jest", "Cypress", "GitHub Actions", "TypeScript"]
+        - story: "API Testing Excellence"
+          situation: "Complex REST API with auth flows and error handling"
+          task: "Ensure API reliability across all endpoints"
+          action: "Implemented automated API tests with Cypress, tested auth flows, edge cases, error scenarios"
+          result: "100% critical path coverage, caught 12 bugs before production"
+          technologies: ["Cypress", "REST API", "JWT Authentication"]
+        - story: "Cross-Browser Compatibility"
+          situation: "Web app needed to work across all major browsers"
+          task: "Ensure consistent behavior on Chrome, Firefox, Safari, Edge"
+          action: "Created Cypress test suite with browser-specific configurations"
+          result: "Zero browser-specific bugs reported post-launch"
+          technologies: ["Cypress", "Cross-browser testing"]
 
   - id: "toka-001"
     company: "Grupo Toka Internacional"
@@ -191,14 +236,210 @@ pipeline:
         - "Stack técnico moderno (Python, Django, Redis, AWS, Kubernetes)"
         - "Validación de que perfil está siendo visto en mercado GDL"
 
+  - id: "anthropic-001"
+    company: "Anthropic"
+    role: "Senior AI Integration Engineer"
+    stage: "discovered"
+    priority: "high"
+    outcome: null
+
+    details:
+      description: "Build and scale AI integrations using Claude API. Design developer tools and SDKs. Work with cutting-edge LLM technology."
+      location: "Remote - Mexico/LatAm"
+      salary_range: "$120k-160k USD/year"
+      work_schedule: "Full-time, flexible hours"
+      sector: "AI/ML Research"
+      tech_stack:
+        - "Python"
+        - "TypeScript"
+        - "React"
+        - "Claude API"
+        - "FastAPI"
+        - "PostgreSQL"
+        - "Docker"
+        - "AWS"
+      benefits:
+        - "100% Remote"
+        - "Top-tier AI research company"
+        - "Competitive compensation"
+        - "Health insurance"
+        - "Learning budget"
+      requirements:
+        - "5+ years full stack development"
+        - "Experience with LLM APIs"
+        - "Strong TypeScript/Python skills"
+        - "API design expertise"
+
+    timeline:
+      discovered: "2025-10-25"
+      applied: null
+      first_interview: null
+      final_interview: null
+      offer_received: null
+      decision_deadline: null
+      closed: null
+
+    contacts:
+      - name: "TBD"
+        role: "Recruiter"
+        source: "LinkedIn"
+
+    notes:
+      - date: "2025-10-25"
+        content: "DREAM OPPORTUNITY! Anthropic is the company behind Claude. Perfect alignment with my SerenityOps project which uses Claude API extensively."
+      - date: "2025-10-25"
+        content: "STRENGTHS: Already using Claude API in production, built entire AI-powered CV builder with Claude integration, familiar with prompt engineering and LLM limitations."
+
+    fit_analysis:
+      technical_match: 0.95
+      cultural_match: 0.98
+      growth_potential: 1.0
+      decline_reason: null
+      red_flags: []
+      green_flags:
+        - "Dream company - creators of Claude"
+        - "100% remote from Mexico"
+        - "Perfect tech stack alignment (Python, TypeScript, React, Claude API)"
+        - "Already have production Claude integration experience"
+        - "Competitive USD compensation"
+
+  - id: "wizeline-001"
+    company: "Wizeline"
+    role: "Full Stack Engineer - AI Products"
+    stage: "applied"
+    priority: "medium"
+    outcome: null
+
+    details:
+      description: "Develop AI-powered products for Fortune 500 clients. React + Node.js + AI integrations. Agile team environment."
+      location: "Hybrid - Guadalajara office 2x/week"
+      salary_range: "$45k-60k MXN/month"
+      work_schedule: "Full-time, Mon-Fri 9-6"
+      sector: "Software Consulting"
+      tech_stack:
+        - "React"
+        - "Node.js"
+        - "TypeScript"
+        - "OpenAI API"
+        - "PostgreSQL"
+        - "AWS"
+        - "Docker"
+      benefits:
+        - "Hybrid work (2 days office)"
+        - "International clients"
+        - "Modern tech stack"
+        - "Career development program"
+      requirements:
+        - "4+ years full stack experience"
+        - "React + Node.js expertise"
+        - "Experience with AI/ML APIs"
+        - "Based in Guadalajara"
+
+    timeline:
+      discovered: "2025-10-20"
+      applied: "2025-10-21"
+      first_interview: null
+      final_interview: null
+      offer_received: null
+      decision_deadline: null
+      closed: null
+
+    contacts:
+      - name: "María González"
+        role: "Technical Recruiter"
+        source: "LinkedIn"
+        email: "maria.gonzalez@wizeline.com"
+
+    notes:
+      - date: "2025-10-21"
+        content: "Applied via LinkedIn. Strong company in GDL with good reputation. Hybrid model is acceptable (2 days/week office)."
+      - date: "2025-10-21"
+        content: "Wizeline rating: 4.1/5 stars. Known for good work culture and international exposure."
+
+    fit_analysis:
+      technical_match: 0.90
+      cultural_match: 0.75
+      growth_potential: 0.85
+      decline_reason: null
+      red_flags:
+        - "Hybrid model (prefer 100% remote)"
+        - "Consulting can mean less product ownership"
+      green_flags:
+        - "Established company in GDL (4.1/5 rating)"
+        - "Modern tech stack (React, Node, TypeScript)"
+        - "AI/ML focus aligns with interests"
+        - "International client exposure"
+
+  - id: "nearshore-001"
+    company: "Gorilla Logic"
+    role: "Senior React Developer"
+    stage: "closed"
+    priority: "low"
+    outcome: "declined"
+
+    details:
+      description: "Senior React developer for US clients. Nearshore consulting model. Focus on frontend excellence."
+      location: "Remote - must overlap 4+ hours with PST"
+      salary_range: "$50k-65k MXN/month"
+      work_schedule: "Full-time, PST hours required"
+      sector: "Nearshore Consulting"
+      tech_stack:
+        - "React"
+        - "TypeScript"
+        - "Next.js"
+        - "Tailwind CSS"
+        - "Jest"
+        - "Cypress"
+      benefits:
+        - "100% Remote"
+        - "US clients"
+        - "Competitive salary"
+      requirements:
+        - "5+ years React experience"
+        - "Must work PST hours"
+        - "Fluent English"
+        - "US client experience preferred"
+
+    timeline:
+      discovered: "2025-10-18"
+      applied: null
+      first_interview: null
+      final_interview: null
+      offer_received: null
+      decision_deadline: null
+      closed: "2025-10-18"
+
+    contacts:
+      - name: "Recruiting Team"
+        role: "Recruiter"
+        source: "Job Board"
+
+    notes:
+      - date: "2025-10-18"
+        content: "Declined to apply. PST hours (9am-5pm PST = 11am-7pm CST) are incompatible with preferred schedule. Prefer companies allowing flexible hours within 4 hours of EST, not PST."
+
+    fit_analysis:
+      technical_match: 0.95
+      cultural_match: 0.30
+      growth_potential: 0.60
+      decline_reason: "PST working hours required (11am-7pm CST) incompatible with lifestyle preferences"
+      red_flags:
+        - "Required PST overlap (late hours for Mexico)"
+        - "Consulting model with less product ownership"
+        - "Frontend-only role (prefer full stack)"
+      green_flags:
+        - "100% remote"
+        - "Perfect tech stack match (React, TypeScript, Next.js, Tailwind)"
+        - "Testing focus (Jest, Cypress)"
+
 active_count:
   # Auto-calculated metrics
-  discovered: 0
-  applied: 0
-  interviewing: 1  # Paylocity - Interview tomorrow!
+  discovered: 1  # Anthropic
+  applied: 1     # Wizeline
+  interviewing: 1  # Paylocity - Interview 30-Oct!
   offer: 0
-  closed: 1
-  total: 1
+  closed: 2      # Toka (declined), Gorilla Logic (declined)
+  total: 5
 
 goals:
   weekly:

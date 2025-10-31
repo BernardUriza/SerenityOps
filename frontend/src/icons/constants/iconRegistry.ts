@@ -32,6 +32,8 @@ import { SparklesIcon } from '../components/SparklesIcon';
 import { SearchIcon } from '../components/SearchIcon';
 import { BrainIcon } from '../components/BrainIcon';
 import { TieIcon } from '../components/TieIcon';
+import { CalendarIcon } from '../components/CalendarIcon';
+import { TrendingUpIcon } from '../components/TrendingUpIcon';
 import * as LucideIcons from 'lucide-react';
 import React from 'react';
 
@@ -220,6 +222,20 @@ export const ICON_REGISTRY: Record<string, IconMetadata> = {
     component: TieIcon,
     keywords: ['professional', 'formal', 'business', 'linkedin', 'work'],
     defaultColor: 'text-indigo-600',
+  },
+  calendar: {
+    name: 'calendar',
+    category: IconCategory.GENERAL,
+    component: CalendarIcon,
+    keywords: ['calendar', 'schedule', 'date', 'time', 'event', 'interview'],
+    defaultColor: 'text-blue-500',
+  },
+  'trending-up': {
+    name: 'trending-up',
+    category: IconCategory.BUSINESS,
+    component: TrendingUpIcon,
+    keywords: ['growth', 'trend', 'analytics', 'pipeline', 'metrics', 'increase'],
+    defaultColor: 'text-green-500',
   },
 };
 

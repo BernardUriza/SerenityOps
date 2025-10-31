@@ -1,15 +1,17 @@
 // Opportunities Viewer - Main Entry Point
 // macOS Aesthetic + 3-Column Layout + Claude Actions Integration
+// Updated: SO-FIX-OPP-004 - Hide inactive Claude panel by default
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '../../icons';
 import { useOpportunities } from './hooks/useOpportunities';
 import { useClaudeActions } from './hooks/useClaudeActions';
 
-// Import components (we'll create these next)
+// Import components
 import OpportunitiesList from './components/OpportunitiesList';
 import OpportunityCard from './components/OpportunityCard';
+import OpportunitiesDashboard from './components/OpportunitiesDashboard';
 import AnalyzerPanel from './components/AnalyzerPanel';
 import ComparisonPanel from './components/ComparisonPanel';
 import PitchReader from './components/PitchReader';
@@ -17,7 +19,7 @@ import FeedbackHistory from './components/FeedbackHistory';
 import PreparationPanel from './components/PreparationPanel';
 import RiskAdviser from './components/RiskAdviser';
 
-type ActivePanel = 'analyzer' | 'comparison' | 'pitch' | 'feedback' | 'preparation' | 'adviser' | null;
+type ActivePanel = 'dashboard' | 'analyzer' | 'comparison' | 'pitch' | 'feedback' | 'preparation' | 'adviser' | null;
 
 interface OpportunitiesViewerProps {
   apiBaseUrl: string;
@@ -39,9 +41,19 @@ export const OpportunitiesViewer: React.FC<OpportunitiesViewerProps> = ({ apiBas
 
   const claudeActions = useClaudeActions();
 
-  const [activePanel, setActivePanel] = useState<ActivePanel>('analyzer');
-  const [showClaudePanel, setShowClaudePanel] = useState(true);
+  const [activePanel, setActivePanel] = useState<ActivePanel>('dashboard'); // Start with dashboard - SO-REFACTOR-OPP-002
+  const [showClaudePanel, setShowClaudePanel] = useState(false); // Hidden by default - SO-FIX-OPP-004
   const [compareOppIds, setCompareOppIds] = useState<[string?, string?]>([undefined, undefined]);
+
+  // Auto-show Claude panel when actions are available or loading
+  const hasClaudeActivity = claudeActions.loading || claudeActions.error || claudeActions.result;
+
+  // Auto-show panel when Claude has activity
+  useEffect(() => {
+    if (hasClaudeActivity) {
+      setShowClaudePanel(true);
+    }
+  }, [hasClaudeActivity]);
 
   // macOS Layout: 3 columns - Sidebar | Main Content | Claude Actions
   return (
@@ -90,36 +102,54 @@ export const OpportunitiesViewer: React.FC<OpportunitiesViewerProps> = ({ apiBas
         />
       </div>
 
-      {/* COLUMN 2: Main Content Area (Pitch + Analysis + Feedback) */}
+      {/* COLUMN 2: Main Content Area (Dashboard + Panels) */}
       <div className="flex-1 flex flex-col overflow-hidden relative">
-        {/* Panel Tabs */}
-        <div className="p-6 pb-0 flex gap-2 border-b border-macBorder/30 bg-macPanel/20 backdrop-blur-md">
-          {[
-            { id: 'analyzer', label: 'Analyzer', icon: 'bar-chart' },
-            { id: 'comparison', label: 'Compare', icon: 'activity' },
-            { id: 'pitch', label: 'Pitch', icon: 'message-circle' },
-            { id: 'feedback', label: 'Feedback', icon: 'clipboard' },
-            { id: 'preparation', label: 'Prep', icon: 'book' },
-            { id: 'adviser', label: 'Adviser', icon: 'shield' },
-          ].map((panel) => (
-            <button
-              key={panel.id}
-              onClick={() => setActivePanel(panel.id as ActivePanel)}
-              className={`px-4 py-2.5 rounded-t-lg text-xs font-semibold transition-all duration-300 flex items-center gap-2 ${
-                activePanel === panel.id
-                  ? 'bg-macPanel/80 border border-b-0 border-macBorder/40 text-macAccent shadow-lg'
-                  : 'text-macSubtext hover:text-macText hover:bg-macPanel/40'
-              }`}
-            >
-              <Icon name={panel.icon} size={14} />
-              {panel.label}
-            </button>
-          ))}
+        {/* Simplified Header */}
+        <div className="p-6 pb-4 border-b border-macBorder/30 bg-macPanel/20 backdrop-blur-md">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-gradient">
+                {selectedOpportunity ? selectedOpportunity.company : 'Opportunities'}
+              </h1>
+              <p className="text-xs text-macSubtext mt-1">
+                {activePanel === 'dashboard' ? 'Overview & Quick Actions' : activePanel}
+              </p>
+            </div>
+            {activePanel !== 'dashboard' && (
+              <button
+                onClick={() => setActivePanel('dashboard')}
+                className="px-4 py-2 rounded-lg text-xs font-semibold bg-macPanel/60 hover:bg-macPanel text-macText border border-macBorder/30 transition-all duration-300 flex items-center gap-2"
+              >
+                <Icon name="grid" size={14} />
+                Back to Dashboard
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Panel Content */}
-        <div className="flex-1 overflow-y-auto p-6 bg-macPanel/10 backdrop-blur-sm">
+        <div className="flex-1 overflow-hidden bg-macPanel/10 backdrop-blur-sm">
           <AnimatePresence mode="wait">
+            {activePanel === 'dashboard' && (
+              <motion.div
+                key="dashboard"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+                className="h-full"
+              >
+                <OpportunitiesDashboard
+                  selectedOpportunity={selectedOpportunity}
+                  opportunities={opportunities}
+                  onAnalyzeClick={() => setActivePanel('analyzer')}
+                  onCompareClick={() => setActivePanel('comparison')}
+                  onPitchClick={() => setActivePanel('pitch')}
+                  onPrepClick={() => setActivePanel('preparation')}
+                />
+              </motion.div>
+            )}
+
             {activePanel === 'analyzer' && (
               <motion.div
                 key="analyzer"

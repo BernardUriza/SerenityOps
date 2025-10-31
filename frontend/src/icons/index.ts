@@ -44,6 +44,8 @@ export { SparklesIcon } from './components/SparklesIcon';
 export { SearchIcon } from './components/SearchIcon';
 export { BrainIcon } from './components/BrainIcon';
 export { TieIcon } from './components/TieIcon';
+export { CalendarIcon } from './components/CalendarIcon';
+export { TrendingUpIcon } from './components/TrendingUpIcon';
 
 // ===== Registry & Utilities =====
 export {
@@ -107,4 +109,6 @@ export const EMOJI_TO_ICON_MAP = {
   '🔍': 'search',
   '🧠': 'brain',
   '👔': 'tie',
+  '📅': 'calendar',
+  '📈': 'trending-up',
 } as const;

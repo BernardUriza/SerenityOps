@@ -27,11 +27,19 @@ const MARGIN_PRESETS = {
 async function generatePDF(htmlPath, outputPath, options = {}) {
   const browser = await puppeteer.launch({
     headless: 'new',
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--font-render-hinting=none', // Better font rendering
+      '--disable-font-subpixel-positioning' // Consistent font positioning
+    ]
   });
 
   try {
     const page = await browser.newPage();
+
+    // Enable emulate media for print styles
+    await page.emulateMediaType('print');
 
     // Read HTML content
     const htmlContent = await fs.readFile(htmlPath, 'utf-8');
@@ -42,6 +50,24 @@ async function generatePDF(htmlPath, outputPath, options = {}) {
       waitUntil: 'networkidle0',
       baseURL: baseUrl
     });
+
+    // Wait for fonts to load
+    await page.evaluateHandle('document.fonts.ready');
+
+    // Additional wait to ensure Tailwind CSS is fully applied
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // Verify styles are loaded
+    const stylesLoaded = await page.evaluate(() => {
+      const styles = document.styleSheets;
+      return styles.length > 0;
+    });
+
+    if (!stylesLoaded) {
+      console.warn('[PDF Generator] Warning: No stylesheets detected');
+    }
+
+    console.log(`[PDF Generator] Fonts loaded, CSS applied, ready to generate PDF`);
 
     // Generate PDF with options
     const pdfOptions = {
