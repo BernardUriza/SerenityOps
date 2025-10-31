@@ -1,7 +1,7 @@
-// PitchReader - Elevator Pitch Viewer and Editor
-// Refactored according to SerenityOps Neurosemiotic Design Principles
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// PitchReader - Cinematic Interactive Elevator Pitch Experience
+// Vision Pro-inspired design with 60fps performance
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Icon } from '../../../icons';
@@ -18,8 +18,11 @@ interface PitchMetadata {
   lastEdited?: string;
   source?: 'human' | 'claude' | 'mixed';
   status?: 'draft' | 'final';
-  version?: string;
+  wordCount?: number;
+  estimatedTime?: number; // in seconds
 }
+
+type ViewMode = 'think' | 'show' | 'present';
 
 const PitchReader: React.FC<PitchReaderProps> = ({ opportunity: selectedOpportunity, claudeActions }) => {
   const [pitch, setPitch] = useState('');
