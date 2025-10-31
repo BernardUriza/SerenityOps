@@ -1,7 +1,7 @@
-// PitchReader - Interactive Elevator Pitch Experience
-// Optimized for performance and readability
+// PitchReader - Cinematic Elevator Pitch Experience
+// Vision Pro-inspired with buttery smooth scrolling
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Icon } from '../../../icons';
@@ -23,6 +23,88 @@ interface PitchMetadata {
 }
 
 type ViewMode = 'think' | 'show' | 'present';
+
+// Cinematic animated components
+const AnimatedParagraph: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+
+  return (
+    <motion.p
+      ref={ref}
+      className="mb-4 text-macText leading-relaxed"
+      style={{ lineHeight: 1.6 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+    >
+      {children}
+    </motion.p>
+  );
+};
+
+const AnimatedHeading: React.FC<{ level: 1 | 2 | 3; children: React.ReactNode }> = ({ level, children }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-30px" });
+
+  const Component = level === 1 ? motion.h1 : level === 2 ? motion.h2 : motion.h3;
+  const className = level === 1
+    ? "text-3xl font-bold text-gradient mb-6 mt-8"
+    : level === 2
+    ? "text-2xl font-bold text-macText mb-4 mt-6"
+    : "text-xl font-semibold text-macText mb-3 mt-4";
+
+  return (
+    <Component
+      ref={ref}
+      className={className}
+      initial={{ opacity: 0, x: -30 }}
+      animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+    >
+      {children}
+    </Component>
+  );
+};
+
+const AnimatedList: React.FC<{ ordered?: boolean; children: React.ReactNode }> = ({ ordered, children }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-40px" });
+
+  const Component = ordered ? motion.ol : motion.ul;
+  const className = ordered
+    ? "space-y-2 my-4 list-decimal list-inside text-macText"
+    : "space-y-2 my-4 list-disc list-inside text-macText";
+
+  return (
+    <Component
+      ref={ref}
+      className={className}
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
+      {children}
+    </Component>
+  );
+};
+
+const AnimatedBlockquote: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-40px" });
+
+  return (
+    <motion.blockquote
+      ref={ref}
+      className="border-l-4 border-macAccent/40 pl-4 py-2 my-4 italic text-macSubtext bg-macAccent/5 rounded-r"
+      initial={{ opacity: 0, x: -20 }}
+      animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+      transition={{ duration: 0.5 }}
+    >
+      {children}
+    </motion.blockquote>
+  );
+};
 
 const PitchReader: React.FC<PitchReaderProps> = ({ opportunity: selectedOpportunity, claudeActions }) => {
   const [pitch, setPitch] = useState('');
@@ -319,86 +401,74 @@ I specialize in **full-stack development** with expertise in:
             </div>
           </div>
         ) : (
-          /* Reading Mode with Markdown Rendering */
+          /* Reading Mode - Cinematic Scroll Experience */
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="flex-1 min-h-0 flex flex-col"
           >
             <div
               ref={contentRef}
-              className="flex-1 overflow-y-auto liquid-glass rounded-xl border-2 border-macBorder/30 p-10"
+              className="flex-1 overflow-y-auto liquid-glass rounded-xl border-2 border-macBorder/30 p-10 scroll-smooth"
               style={{
                 scrollbarWidth: 'thin',
                 scrollbarColor: 'rgba(var(--mac-accent-rgb), 0.3) transparent',
+                scrollBehavior: 'smooth',
+                WebkitOverflowScrolling: 'touch',
               }}
             >
               {pitch ? (
-                <article className="mx-auto prose prose-lg prose-invert max-w-none" style={{ maxWidth: '75ch' }}>
+                <motion.article
+                  className="mx-auto prose prose-lg prose-invert max-w-none"
+                  style={{ maxWidth: '75ch' }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.4 }}
+                >
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
                     components={{
-                      p: ({ children }) => (
-                        <p className="mb-4 text-macText leading-relaxed" style={{ lineHeight: 1.6 }}>
-                          {children}
-                        </p>
-                      ),
+                      p: ({ children }) => <AnimatedParagraph>{children}</AnimatedParagraph>,
                       strong: ({ children }) => (
                         <strong className="text-macAccent font-semibold bg-macAccent/10 px-1 rounded">
                           {children}
                         </strong>
                       ),
-                      ul: ({ children }) => (
-                        <ul className="space-y-2 my-4 list-disc list-inside text-macText">{children}</ul>
-                      ),
-                      ol: ({ children }) => (
-                        <ol className="space-y-2 my-4 list-decimal list-inside text-macText">{children}</ol>
-                      ),
+                      ul: ({ children }) => <AnimatedList>{children}</AnimatedList>,
+                      ol: ({ children }) => <AnimatedList ordered>{children}</AnimatedList>,
                       li: ({ children }) => (
-                        <li className="hover:text-macAccent transition-colors">
+                        <motion.li
+                          className="hover:text-macAccent transition-colors cursor-default"
+                          whileHover={{ x: 5, transition: { duration: 0.2 } }}
+                        >
                           {children}
-                        </li>
+                        </motion.li>
                       ),
-                      h1: ({ children }) => (
-                        <h1 className="text-3xl font-bold text-gradient mb-6 mt-8">
-                          {children}
-                        </h1>
-                      ),
-                      h2: ({ children }) => (
-                        <h2 className="text-2xl font-bold text-macText mb-4 mt-6">
-                          {children}
-                        </h2>
-                      ),
-                      h3: ({ children }) => (
-                        <h3 className="text-xl font-semibold text-macText mb-3 mt-4">
-                          {children}
-                        </h3>
-                      ),
+                      h1: ({ children }) => <AnimatedHeading level={1}>{children}</AnimatedHeading>,
+                      h2: ({ children }) => <AnimatedHeading level={2}>{children}</AnimatedHeading>,
+                      h3: ({ children }) => <AnimatedHeading level={3}>{children}</AnimatedHeading>,
                       code: ({ children, className }) => {
                         const isInline = !className?.includes('language-');
-                        return isInline ? (
-                          <code className="px-2 py-1 rounded bg-macPanel/50 text-purple-300 text-sm font-mono">
-                            {children}
-                          </code>
-                        ) : (
-                          <div className="block p-4 rounded-lg bg-macPanel/70 border border-macBorder/40 text-sm font-mono overflow-x-auto">
-                            <code className={className}>
+                        if (isInline) {
+                          return (
+                            <code className="px-2 py-1 rounded bg-macPanel/50 text-purple-300 text-sm font-mono">
                               {children}
                             </code>
+                          );
+                        }
+                        return (
+                          <div className="block p-4 rounded-lg bg-macPanel/70 border border-macBorder/40 text-sm font-mono overflow-x-auto my-4">
+                            <code className={className}>{children}</code>
                           </div>
                         );
                       },
-                      blockquote: ({ children }) => (
-                        <blockquote className="border-l-4 border-macAccent/40 pl-4 py-2 my-4 italic text-macSubtext bg-macAccent/5 rounded-r">
-                          {children}
-                        </blockquote>
-                      ),
+                      blockquote: ({ children }) => <AnimatedBlockquote>{children}</AnimatedBlockquote>,
                     }}
                   >
                     {pitch}
                   </ReactMarkdown>
-                </article>
+                </motion.article>
               ) : (
                 <div className="text-center py-16">
                   <Icon name="document" size={56} className="text-macSubtext opacity-20 mx-auto mb-6" />
