@@ -1,0 +1,665 @@
+{
+  "board_id": "68fbec1e012f378e62fd9f5a",
+  "board_name": "SerenityOps",
+  "backup_date": "null",
+  "labels": {
+    "68fd878178f19734076c0995": {
+      "name": "UI",
+      "color": "pink"
+    },
+    "68fd877dc3b2d7d4b07b1957": {
+      "name": "S",
+      "color": "lime"
+    },
+    "69014096915083cb817f429e": {
+      "name": "Sprint-W43",
+      "color": "blue"
+    },
+    "68fd87b06de09900a517a316": {
+      "name": "M",
+      "color": "yellow"
+    },
+    "68fd877fa4c81d3805d8647c": {
+      "name": "Backend",
+      "color": "black"
+    },
+    "68fd86c7be4a5dff590ddffa": {
+      "name": "XS",
+      "color": "sky"
+    },
+    "68fd86c9584adff48c302d2b": {
+      "name": "Data",
+      "color": "blue"
+    },
+    "68fd86cb457d9fa7816c3478": {
+      "name": "Enhancement",
+      "color": "blue"
+    },
+    "68fd8784a570b4a44ebc1f83": {
+      "name": "Bug",
+      "color": "red"
+    },
+    "68fd86c1b0763555d6b0d98d": {
+      "name": "Sprint-W45",
+      "color": "orange"
+    },
+    "69013fe11116f672026f2929": {
+      "name": "Sprint-W44",
+      "color": "green"
+    },
+    "68fd8caa4bc7212430c2aa46": {
+      "name": "Refactor",
+      "color": "yellow"
+    },
+    "69007105030e9b803b3548d6": {
+      "name": "READY-FOR-QA",
+      "color": "green"
+    },
+    "6901409696c783c53a3df368": {
+      "name": "L",
+      "color": "orange"
+    },
+    "68fbec1e012f378e62fd9f93": {
+      "name": "",
+      "color": "orange"
+    },
+    "68fbec1e012f378e62fd9f95": {
+      "name": "",
+      "color": "purple"
+    },
+    "690140968833bf8056c77b11": {
+      "name": "AI",
+      "color": "purple"
+    },
+    "68fbec1e012f378e62fd9f94": {
+      "name": "",
+      "color": "red"
+    },
+    "6901409595c3d263a15a7d01": {
+      "name": "P0",
+      "color": "red"
+    },
+    "69014095d21901aca7a04d7d": {
+      "name": "Feature",
+      "color": "green"
+    },
+    "68fbec1e012f378e62fd9f92": {
+      "name": "",
+      "color": "yellow"
+    },
+    "68fbec1e012f378e62fd9f91": {
+      "name": "",
+      "color": "green"
+    },
+    "69014095735eed1a1e7934ec": {
+      "name": "P1",
+      "color": "yellow"
+    },
+    "68fbec1e012f378e62fd9f96": {
+      "name": "",
+      "color": "blue"
+    }
+  },
+  "card_labels": {
+    "68fd8ca2b676b31dbfa2db6b": {
+      "name": "\ud83e\uddf1 SO-REFACTOR-OPP-002: Redesign Opportunities Layout (Dashboard Mode)",
+      "labels": [
+        {
+          "id": "68fd878178f19734076c0995",
+          "name": "UI",
+          "color": "pink"
+        },
+        {
+          "id": "68fd8caa4bc7212430c2aa46",
+          "name": "Refactor",
+          "color": "yellow"
+        }
+      ]
+    },
+    "68fd8c956a1ab83aad632b7e": {
+      "name": "\ud83d\udc1b SO-BUG-OPP-001: Empty Job Data in Opportunities",
+      "labels": [
+        {
+          "id": "68fd877dc3b2d7d4b07b1957",
+          "name": "S",
+          "color": "lime"
+        },
+        {
+          "id": "68fd877fa4c81d3805d8647c",
+          "name": "Backend",
+          "color": "black"
+        },
+        {
+          "id": "68fd8784a570b4a44ebc1f83",
+          "name": "Bug",
+          "color": "red"
+        }
+      ]
+    },
+    "68fd8cadec51901e772ff992": {
+      "name": "\ud83c\udfa8 SO-UX-OPP-003: Modern UX Flow for Job Analyzer",
+      "labels": [
+        {
+          "id": "68fd87b06de09900a517a316",
+          "name": "M",
+          "color": "yellow"
+        },
+        {
+          "id": "68fd878178f19734076c0995",
+          "name": "UI",
+          "color": "pink"
+        },
+        {
+          "id": "68fd86cb457d9fa7816c3478",
+          "name": "Enhancement",
+          "color": "blue"
+        }
+      ]
+    },
+    "68fd8cb708c02dda99ccc0e9": {
+      "name": "\ud83e\udde9 SO-FIX-OPP-004: Hide Inactive Claude Actions Panel",
+      "labels": [
+        {
+          "id": "68fd86c7be4a5dff590ddffa",
+          "name": "XS",
+          "color": "sky"
+        },
+        {
+          "id": "68fd878178f19734076c0995",
+          "name": "UI",
+          "color": "pink"
+        },
+        {
+          "id": "68fd8784a570b4a44ebc1f83",
+          "name": "Bug",
+          "color": "red"
+        }
+      ]
+    },
+    "68fbfcf3d13fae38567d7d50": {
+      "name": "\ud83e\udeab SO-CVE-BUG-001: PDF Generator Tailwind Fidelity",
+      "labels": [
+        {
+          "id": "68fd877dc3b2d7d4b07b1957",
+          "name": "S",
+          "color": "lime"
+        },
+        {
+          "id": "68fd877fa4c81d3805d8647c",
+          "name": "Backend",
+          "color": "black"
+        },
+        {
+          "id": "68fd8784a570b4a44ebc1f83",
+          "name": "Bug",
+          "color": "red"
+        }
+      ]
+    },
+    "68fd6d474005bb9fd2b0334f": {
+      "name": "\ud83e\uddea SO-QA-CHT-003: End-to-End Chat Validation",
+      "labels": [
+        {
+          "id": "68fd877dc3b2d7d4b07b1957",
+          "name": "S",
+          "color": "lime"
+        },
+        {
+          "id": "68fd877fa4c81d3805d8647c",
+          "name": "Backend",
+          "color": "black"
+        },
+        {
+          "id": "68fd86cb457d9fa7816c3478",
+          "name": "Enhancement",
+          "color": "blue"
+        },
+        {
+          "id": "69007105030e9b803b3548d6",
+          "name": "READY-FOR-QA",
+          "color": "green"
+        },
+        {
+          "id": "69014096915083cb817f429e",
+          "name": "Sprint-W43",
+          "color": "blue"
+        }
+      ]
+    },
+    "68fbfcf0650e8370b7301b93": {
+      "name": "\ud83d\udcca SO-OPP-FEAT-001: Opportunities Analyzer Panel",
+      "labels": [
+        {
+          "id": "68fd86c1b0763555d6b0d98d",
+          "name": "Sprint-W45",
+          "color": "orange"
+        },
+        {
+          "id": "68fd87b06de09900a517a316",
+          "name": "M",
+          "color": "yellow"
+        },
+        {
+          "id": "68fd86c9584adff48c302d2b",
+          "name": "Data",
+          "color": "blue"
+        },
+        {
+          "id": "69014096915083cb817f429e",
+          "name": "Sprint-W43",
+          "color": "blue"
+        }
+      ]
+    },
+    "68fbfcf22f23d2cd20f8905a": {
+      "name": "\u26a1 SO-INFRA-FEAT-001: FastAPI + Frontend Build Version Sync",
+      "labels": [
+        {
+          "id": "68fd877dc3b2d7d4b07b1957",
+          "name": "S",
+          "color": "lime"
+        },
+        {
+          "id": "69013fe11116f672026f2929",
+          "name": "Sprint-W44",
+          "color": "green"
+        }
+      ]
+    },
+    "68fbfd6e9ba0d684b3c87fea": {
+      "name": "\ud83e\udde9 SO-CVE-FEAT-003: CV Field Mapper (Dynamic Section Control)",
+      "labels": [
+        {
+          "id": "68fd87b06de09900a517a316",
+          "name": "M",
+          "color": "yellow"
+        },
+        {
+          "id": "68fd878178f19734076c0995",
+          "name": "UI",
+          "color": "pink"
+        },
+        {
+          "id": "69013fe11116f672026f2929",
+          "name": "Sprint-W44",
+          "color": "green"
+        }
+      ]
+    },
+    "68fd86b81d314743e4aae299": {
+      "name": "\ud83d\uddc4\ufe0f SO-OPP-DATA-001: Enrich Paylocity YAML Data",
+      "labels": [
+        {
+          "id": "68fd86c1b0763555d6b0d98d",
+          "name": "Sprint-W45",
+          "color": "orange"
+        },
+        {
+          "id": "68fd86c7be4a5dff590ddffa",
+          "name": "XS",
+          "color": "sky"
+        },
+        {
+          "id": "68fd86c9584adff48c302d2b",
+          "name": "Data",
+          "color": "blue"
+        },
+        {
+          "id": "68fd86cb457d9fa7816c3478",
+          "name": "Enhancement",
+          "color": "blue"
+        },
+        {
+          "id": "69014096915083cb817f429e",
+          "name": "Sprint-W43",
+          "color": "blue"
+        }
+      ]
+    },
+    "68fd87776cdf828c533daba6": {
+      "name": "\ud83e\uddea SO-OPP-FIX-001: Opportunities Module E2E Testing & Fixes",
+      "labels": [
+        {
+          "id": "68fd86c1b0763555d6b0d98d",
+          "name": "Sprint-W45",
+          "color": "orange"
+        },
+        {
+          "id": "68fd877dc3b2d7d4b07b1957",
+          "name": "S",
+          "color": "lime"
+        },
+        {
+          "id": "68fd877fa4c81d3805d8647c",
+          "name": "Backend",
+          "color": "black"
+        },
+        {
+          "id": "68fd878178f19734076c0995",
+          "name": "UI",
+          "color": "pink"
+        },
+        {
+          "id": "68fd8784a570b4a44ebc1f83",
+          "name": "Bug",
+          "color": "red"
+        },
+        {
+          "id": "69014096915083cb817f429e",
+          "name": "Sprint-W43",
+          "color": "blue"
+        }
+      ]
+    },
+    "68fd8787b3a86c57e76cdc9f": {
+      "name": "\ud83d\uddc2\ufe0f SO-OPP-DATA-002: Create 5-7 Coherent Example Opportunities",
+      "labels": [
+        {
+          "id": "68fd86c1b0763555d6b0d98d",
+          "name": "Sprint-W45",
+          "color": "orange"
+        },
+        {
+          "id": "68fd86c7be4a5dff590ddffa",
+          "name": "XS",
+          "color": "sky"
+        },
+        {
+          "id": "68fd86c9584adff48c302d2b",
+          "name": "Data",
+          "color": "blue"
+        },
+        {
+          "id": "68fd86cb457d9fa7816c3478",
+          "name": "Enhancement",
+          "color": "blue"
+        },
+        {
+          "id": "69014096915083cb817f429e",
+          "name": "Sprint-W43",
+          "color": "blue"
+        }
+      ]
+    },
+    "68fbfcf420a8bd37a9caa7b8": {
+      "name": "\ud83e\ude84 SO-INFRA-FEAT-002: Deployment Badge & Logs",
+      "labels": [
+        {
+          "id": "69014096915083cb817f429e",
+          "name": "Sprint-W43",
+          "color": "blue"
+        }
+      ]
+    },
+    "68fbfcf5dcf4160b11eb24a4": {
+      "name": "\ud83d\udcc1 SO-OPP-FEAT-002: Opportunities Viewer CMS",
+      "labels": [
+        {
+          "id": "69014096915083cb817f429e",
+          "name": "Sprint-W43",
+          "color": "blue"
+        }
+      ]
+    },
+    "68fbfcf599bee83a83de604b": {
+      "name": "\ud83e\uddf1 SO-UI-FEAT-002: Serenity UI Mac Framework",
+      "labels": [
+        {
+          "id": "69014096915083cb817f429e",
+          "name": "Sprint-W43",
+          "color": "blue"
+        }
+      ]
+    },
+    "68fbfd6e908cfa2f32ba7e66": {
+      "name": "\ud83c\udfa8 SO-CVE-FEAT-002: CV Template Architecture (Base Framework)",
+      "labels": [
+        {
+          "id": "69014096915083cb817f429e",
+          "name": "Sprint-W43",
+          "color": "blue"
+        }
+      ]
+    },
+    "68fbfcf0c495106027e8f8d9": {
+      "name": "\ud83d\udd27 SO-CVE-FEAT-001: Integrar ATS Markdown Export",
+      "labels": [
+        {
+          "id": "68fd877dc3b2d7d4b07b1957",
+          "name": "S",
+          "color": "lime"
+        },
+        {
+          "id": "68fd877fa4c81d3805d8647c",
+          "name": "Backend",
+          "color": "black"
+        }
+      ]
+    },
+    "68fbfcf1ae76f76fa8990114": {
+      "name": "\ud83e\udde0 SO-AI-ENH-001: Claude Coaching Modes",
+      "labels": [
+        {
+          "id": "68fd87b06de09900a517a316",
+          "name": "M",
+          "color": "yellow"
+        },
+        {
+          "id": "68fd86cb457d9fa7816c3478",
+          "name": "Enhancement",
+          "color": "blue"
+        }
+      ]
+    },
+    "68fbfcf1d7eff0eecf4d3596": {
+      "name": "\ud83d\udcac SO-CHAT-FIX-001: Chat Autosave/Resume",
+      "labels": [
+        {
+          "id": "68fd86c7be4a5dff590ddffa",
+          "name": "XS",
+          "color": "sky"
+        },
+        {
+          "id": "68fd877fa4c81d3805d8647c",
+          "name": "Backend",
+          "color": "black"
+        },
+        {
+          "id": "68fd8784a570b4a44ebc1f83",
+          "name": "Bug",
+          "color": "red"
+        }
+      ]
+    },
+    "68fbfcf2c495106027e90045": {
+      "name": "\ud83d\udd0d SO-MCP-FEAT-001: MCP Diagnostic Visualization",
+      "labels": [
+        {
+          "id": "68fd877dc3b2d7d4b07b1957",
+          "name": "S",
+          "color": "lime"
+        },
+        {
+          "id": "68fd878178f19734076c0995",
+          "name": "UI",
+          "color": "pink"
+        }
+      ]
+    },
+    "68fbfcf2a34b75bafb728020": {
+      "name": "\ud83e\udeb6 SO-UI-POLISH-001: macOS Modal Polish + Focus Trap",
+      "labels": [
+        {
+          "id": "68fd86c7be4a5dff590ddffa",
+          "name": "XS",
+          "color": "sky"
+        },
+        {
+          "id": "68fd878178f19734076c0995",
+          "name": "UI",
+          "color": "pink"
+        },
+        {
+          "id": "68fd86cb457d9fa7816c3478",
+          "name": "Enhancement",
+          "color": "blue"
+        }
+      ]
+    },
+    "68fbfcf3fb1cb92beb223da8": {
+      "name": "\ud83e\udde9 SO-UI-FEAT-001: Dynamic Icon Inspector",
+      "labels": [
+        {
+          "id": "68fd86c7be4a5dff590ddffa",
+          "name": "XS",
+          "color": "sky"
+        },
+        {
+          "id": "68fd878178f19734076c0995",
+          "name": "UI",
+          "color": "pink"
+        }
+      ]
+    },
+    "68fbfd6e3fe4b48dee1bd72a": {
+      "name": "\ud83e\udeb6 SO-CVE-FEAT-004: Compact Layout Engine (Density Optimizer)",
+      "labels": [
+        {
+          "id": "68fd87b06de09900a517a316",
+          "name": "M",
+          "color": "yellow"
+        },
+        {
+          "id": "68fd878178f19734076c0995",
+          "name": "UI",
+          "color": "pink"
+        }
+      ]
+    },
+    "68fbfd6f9478c5d09555f314": {
+      "name": "\ud83d\udcf8 SO-CVE-FEAT-005: Upload Inspirations (User References)",
+      "labels": [
+        {
+          "id": "68fd877dc3b2d7d4b07b1957",
+          "name": "S",
+          "color": "lime"
+        },
+        {
+          "id": "68fd878178f19734076c0995",
+          "name": "UI",
+          "color": "pink"
+        }
+      ]
+    },
+    "68fbfd703e9ec830ba70bab6": {
+      "name": "\ud83e\uddfe SO-CVE-FEAT-006: Page Composer (Adaptive Content Engine)",
+      "labels": [
+        {
+          "id": "68fd878178f19734076c0995",
+          "name": "UI",
+          "color": "pink"
+        }
+      ]
+    },
+    "68fbfd70ee3e832735fbda34": {
+      "name": "\ud83d\udd0d SO-CVE-FEAT-007: CV Diff Tracker (Version Comparison)",
+      "labels": [
+        {
+          "id": "68fd877dc3b2d7d4b07b1957",
+          "name": "S",
+          "color": "lime"
+        },
+        {
+          "id": "68fd86c9584adff48c302d2b",
+          "name": "Data",
+          "color": "blue"
+        }
+      ]
+    },
+    "68fbfd7078c6ecbd37b97a42": {
+      "name": "\ud83e\udde0 SO-CVE-FEAT-008: ATS Compatibility Analyzer",
+      "labels": [
+        {
+          "id": "68fd87b06de09900a517a316",
+          "name": "M",
+          "color": "yellow"
+        }
+      ]
+    },
+    "68fbfd711272a63a4ec8ea2b": {
+      "name": "\ud83e\uddf0 SO-CVE-FEAT-009: Resolution & Print Optimizer",
+      "labels": [
+        {
+          "id": "68fd86c7be4a5dff590ddffa",
+          "name": "XS",
+          "color": "sky"
+        },
+        {
+          "id": "68fd877fa4c81d3805d8647c",
+          "name": "Backend",
+          "color": "black"
+        }
+      ]
+    },
+    "68fbfd714e5caef078af9a86": {
+      "name": "\ud83d\udcbe SO-CVE-FEAT-010: Saved Presets & Export Settings",
+      "labels": [
+        {
+          "id": "68fd877dc3b2d7d4b07b1957",
+          "name": "S",
+          "color": "lime"
+        },
+        {
+          "id": "68fd86c9584adff48c302d2b",
+          "name": "Data",
+          "color": "blue"
+        }
+      ]
+    },
+    "68fbfd72d094763fe79484e5": {
+      "name": "\ud83e\uddee SO-CVE-FEAT-011: Metrics Dashboard (CV Analytics)",
+      "labels": [
+        {
+          "id": "68fd87b06de09900a517a316",
+          "name": "M",
+          "color": "yellow"
+        },
+        {
+          "id": "68fd86c9584adff48c302d2b",
+          "name": "Data",
+          "color": "blue"
+        }
+      ]
+    },
+    "68fbfd728e668f90310b7c15": {
+      "name": "\ud83e\uddf7 SO-CVE-FEAT-012: Template Marketplace (Local / Shared Templates)",
+      "labels": [
+        {
+          "id": "68fd878178f19734076c0995",
+          "name": "UI",
+          "color": "pink"
+        }
+      ]
+    },
+    "68fbfd737f7ee2ec72f86093": {
+      "name": "\ud83e\udde9 SO-CVE-FEAT-013: Inline HTML Editor (Claude-assisted)",
+      "labels": [
+        {
+          "id": "68fd87b06de09900a517a316",
+          "name": "M",
+          "color": "yellow"
+        }
+      ]
+    },
+    "68fbfd73710921d94726b52b": {
+      "name": "\ud83e\uddf1 SO-CVE-INFRA-001: CV Engine Logs & Version Control",
+      "labels": [
+        {
+          "id": "68fd877dc3b2d7d4b07b1957",
+          "name": "S",
+          "color": "lime"
+        }
+      ]
+    }
+  }
+}
