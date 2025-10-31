@@ -29,12 +29,23 @@ const PitchReader: React.FC<PitchReaderProps> = ({ opportunity: selectedOpportun
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [viewMode, setViewMode] = useState<ViewMode>('show');
   const [metadata, setMetadata] = useState<PitchMetadata>({
     status: 'draft',
     source: 'human',
   });
 
   const contentRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Scroll-based parallax animations
+  const { scrollYProgress } = useScroll({
+    container: contentRef,
+    offset: ["start start", "end end"]
+  });
+
+  const headerOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0.3]);
+  const headerY = useTransform(scrollYProgress, [0, 0.2], [0, -20]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -93,15 +104,28 @@ const PitchReader: React.FC<PitchReaderProps> = ({ opportunity: selectedOpportun
     }
   };
 
+  // Auto-calculate metadata (word count, estimated time)
+  useEffect(() => {
+    if (!pitch) return;
+
+    const words = pitch.trim().split(/\s+/).length;
+    const wordsPerMinute = 150; // Average speaking speed
+    const estimatedSeconds = Math.ceil((words / wordsPerMinute) * 60);
+
+    setMetadata(prev => ({
+      ...prev,
+      wordCount: words,
+      estimatedTime: estimatedSeconds,
+      lastEdited: new Date().toISOString(),
+    }));
+  }, [pitch]);
+
   // Auto-save handler with debounce
   useEffect(() => {
     if (!pitch || !selectedOpportunity) return;
 
     const timer = setTimeout(() => {
-      setMetadata(prev => ({
-        ...prev,
-        lastEdited: new Date().toISOString(),
-      }));
+      // Auto-save logic here
     }, 3000);
 
     return () => clearTimeout(timer);
@@ -157,6 +181,24 @@ const PitchReader: React.FC<PitchReaderProps> = ({ opportunity: selectedOpportun
                   }`}>
                     {metadata.status === 'final' ? 'Final' : 'Draft'}
                   </span>
+                  {metadata.wordCount && (
+                    <>
+                      <span className="text-macSubtext">•</span>
+                      <span className="flex items-center gap-1.5">
+                        <Icon name="file-text" size={12} />
+                        {metadata.wordCount} words
+                      </span>
+                    </>
+                  )}
+                  {metadata.estimatedTime && (
+                    <>
+                      <span className="text-macSubtext">•</span>
+                      <span className="flex items-center gap-1.5">
+                        <Icon name="clock" size={12} />
+                        ~{metadata.estimatedTime}s read
+                      </span>
+                    </>
+                  )}
                   <span className="text-macSubtext">•</span>
                   <span>
                     Last edited {new Date(metadata.lastEdited).toLocaleTimeString()}
@@ -286,11 +328,13 @@ I specialize in **full-stack development** with expertise in:
             </div>
           </div>
         ) : (
-          /* Reading Mode with Markdown Rendering */
+          /* Reading Mode with Markdown Rendering + Cinematic Animations */
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="flex-1 min-h-0 flex flex-col"
+            ref={containerRef}
           >
             <div
               ref={contentRef}
@@ -301,41 +345,135 @@ I specialize in **full-stack development** with expertise in:
               }}
             >
               {pitch ? (
-                <article className="mx-auto prose prose-lg prose-invert max-w-none" style={{ maxWidth: '75ch' }}>
+                <motion.article
+                  className="mx-auto prose prose-lg prose-invert max-w-none"
+                  style={{ maxWidth: '75ch' }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                >
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
                     components={{
                       p: ({ children }) => (
-                        <p className="mb-4 text-macText leading-relaxed" style={{ lineHeight: 1.6 }}>
+                        <motion.p
+                          className="mb-4 text-macText leading-relaxed"
+                          style={{ lineHeight: 1.6 }}
+                          initial={{ opacity: 0, y: 10 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true, margin: "-50px" }}
+                          transition={{ duration: 0.5, ease: "easeOut" }}
+                        >
                           {children}
-                        </p>
+                        </motion.p>
                       ),
                       strong: ({ children }) => (
-                        <strong className="text-macAccent font-semibold">{children}</strong>
+                        <strong className="text-macAccent font-semibold bg-macAccent/10 px-1 rounded">
+                          {children}
+                        </strong>
                       ),
                       ul: ({ children }) => (
-                        <ul className="space-y-2 my-4 list-disc list-inside text-macText">{children}</ul>
+                        <motion.ul
+                          className="space-y-2 my-4 list-disc list-inside text-macText"
+                          initial={{ opacity: 0, x: -10 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.5 }}
+                        >
+                          {children}
+                        </motion.ul>
                       ),
                       ol: ({ children }) => (
-                        <ol className="space-y-2 my-4 list-decimal list-inside text-macText">{children}</ol>
+                        <motion.ol
+                          className="space-y-2 my-4 list-decimal list-inside text-macText"
+                          initial={{ opacity: 0, x: -10 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.5 }}
+                        >
+                          {children}
+                        </motion.ol>
                       ),
-                      code: ({ children, ...props }) => {
-                        const isInline = !props.className?.includes('language-');
+                      li: ({ children }) => (
+                        <motion.li
+                          initial={{ opacity: 0, x: -5 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.4 }}
+                          className="hover:text-macAccent transition-colors"
+                        >
+                          {children}
+                        </motion.li>
+                      ),
+                      h1: ({ children }) => (
+                        <motion.h1
+                          className="text-3xl font-bold text-gradient mb-6 mt-8"
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                        >
+                          {children}
+                        </motion.h1>
+                      ),
+                      h2: ({ children }) => (
+                        <motion.h2
+                          className="text-2xl font-bold text-macText mb-4 mt-6"
+                          initial={{ opacity: 0, y: 15 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.5 }}
+                        >
+                          {children}
+                        </motion.h2>
+                      ),
+                      h3: ({ children }) => (
+                        <motion.h3
+                          className="text-xl font-semibold text-macText mb-3 mt-4"
+                          initial={{ opacity: 0, y: 10 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.4 }}
+                        >
+                          {children}
+                        </motion.h3>
+                      ),
+                      code: ({ children, className }) => {
+                        const isInline = !className?.includes('language-');
                         return isInline ? (
                           <code className="px-2 py-1 rounded bg-macPanel/50 text-purple-300 text-sm font-mono">
                             {children}
                           </code>
                         ) : (
-                          <code className="block p-4 rounded-lg bg-macPanel/70 border border-macBorder/40 text-sm font-mono overflow-x-auto" {...props}>
-                            {children}
-                          </code>
+                          <motion.div
+                            className="block p-4 rounded-lg bg-macPanel/70 border border-macBorder/40 text-sm font-mono overflow-x-auto"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5 }}
+                          >
+                            <code className={className}>
+                              {children}
+                            </code>
+                          </motion.div>
                         );
                       },
+                      blockquote: ({ children }) => (
+                        <motion.blockquote
+                          className="border-l-4 border-macAccent/40 pl-4 py-2 my-4 italic text-macSubtext bg-macAccent/5 rounded-r"
+                          initial={{ opacity: 0, x: -20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.5 }}
+                        >
+                          {children}
+                        </motion.blockquote>
+                      ),
                     }}
                   >
                     {pitch}
                   </ReactMarkdown>
-                </article>
+                </motion.article>
               ) : (
                 <div className="text-center py-16">
                   <Icon name="document" size={56} className="text-macSubtext opacity-20 mx-auto mb-6" />
