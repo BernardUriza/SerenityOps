@@ -1,7 +1,7 @@
-// PitchReader - Cinematic Interactive Elevator Pitch Experience
-// Vision Pro-inspired design with 60fps performance
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+// PitchReader - Interactive Elevator Pitch Experience
+// Optimized for performance and readability
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Icon } from '../../../icons';
@@ -37,15 +37,6 @@ const PitchReader: React.FC<PitchReaderProps> = ({ opportunity: selectedOpportun
 
   const contentRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // Scroll-based parallax animations
-  const { scrollYProgress } = useScroll({
-    container: contentRef,
-    offset: ["start start", "end end"]
-  });
-
-  const headerOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0.3]);
-  const headerY = useTransform(scrollYProgress, [0, 0.2], [0, -20]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -328,13 +319,12 @@ I specialize in **full-stack development** with expertise in:
             </div>
           </div>
         ) : (
-          /* Reading Mode with Markdown Rendering + Cinematic Animations */
+          /* Reading Mode with Markdown Rendering */
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
             className="flex-1 min-h-0 flex flex-col"
-            ref={containerRef}
           >
             <div
               ref={contentRef}
@@ -345,27 +335,14 @@ I specialize in **full-stack development** with expertise in:
               }}
             >
               {pitch ? (
-                <motion.article
-                  className="mx-auto prose prose-lg prose-invert max-w-none"
-                  style={{ maxWidth: '75ch' }}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                >
+                <article className="mx-auto prose prose-lg prose-invert max-w-none" style={{ maxWidth: '75ch' }}>
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
                     components={{
                       p: ({ children }) => (
-                        <motion.p
-                          className="mb-4 text-macText leading-relaxed"
-                          style={{ lineHeight: 1.6 }}
-                          initial={{ opacity: 0, y: 10 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true, margin: "-50px" }}
-                          transition={{ duration: 0.5, ease: "easeOut" }}
-                        >
+                        <p className="mb-4 text-macText leading-relaxed" style={{ lineHeight: 1.6 }}>
                           {children}
-                        </motion.p>
+                        </p>
                       ),
                       strong: ({ children }) => (
                         <strong className="text-macAccent font-semibold bg-macAccent/10 px-1 rounded">
@@ -373,70 +350,30 @@ I specialize in **full-stack development** with expertise in:
                         </strong>
                       ),
                       ul: ({ children }) => (
-                        <motion.ul
-                          className="space-y-2 my-4 list-disc list-inside text-macText"
-                          initial={{ opacity: 0, x: -10 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.5 }}
-                        >
-                          {children}
-                        </motion.ul>
+                        <ul className="space-y-2 my-4 list-disc list-inside text-macText">{children}</ul>
                       ),
                       ol: ({ children }) => (
-                        <motion.ol
-                          className="space-y-2 my-4 list-decimal list-inside text-macText"
-                          initial={{ opacity: 0, x: -10 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.5 }}
-                        >
-                          {children}
-                        </motion.ol>
+                        <ol className="space-y-2 my-4 list-decimal list-inside text-macText">{children}</ol>
                       ),
                       li: ({ children }) => (
-                        <motion.li
-                          initial={{ opacity: 0, x: -5 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.4 }}
-                          className="hover:text-macAccent transition-colors"
-                        >
+                        <li className="hover:text-macAccent transition-colors">
                           {children}
-                        </motion.li>
+                        </li>
                       ),
                       h1: ({ children }) => (
-                        <motion.h1
-                          className="text-3xl font-bold text-gradient mb-6 mt-8"
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                        >
+                        <h1 className="text-3xl font-bold text-gradient mb-6 mt-8">
                           {children}
-                        </motion.h1>
+                        </h1>
                       ),
                       h2: ({ children }) => (
-                        <motion.h2
-                          className="text-2xl font-bold text-macText mb-4 mt-6"
-                          initial={{ opacity: 0, y: 15 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.5 }}
-                        >
+                        <h2 className="text-2xl font-bold text-macText mb-4 mt-6">
                           {children}
-                        </motion.h2>
+                        </h2>
                       ),
                       h3: ({ children }) => (
-                        <motion.h3
-                          className="text-xl font-semibold text-macText mb-3 mt-4"
-                          initial={{ opacity: 0, y: 10 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.4 }}
-                        >
+                        <h3 className="text-xl font-semibold text-macText mb-3 mt-4">
                           {children}
-                        </motion.h3>
+                        </h3>
                       ),
                       code: ({ children, className }) => {
                         const isInline = !className?.includes('language-');
@@ -445,35 +382,23 @@ I specialize in **full-stack development** with expertise in:
                             {children}
                           </code>
                         ) : (
-                          <motion.div
-                            className="block p-4 rounded-lg bg-macPanel/70 border border-macBorder/40 text-sm font-mono overflow-x-auto"
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5 }}
-                          >
+                          <div className="block p-4 rounded-lg bg-macPanel/70 border border-macBorder/40 text-sm font-mono overflow-x-auto">
                             <code className={className}>
                               {children}
                             </code>
-                          </motion.div>
+                          </div>
                         );
                       },
                       blockquote: ({ children }) => (
-                        <motion.blockquote
-                          className="border-l-4 border-macAccent/40 pl-4 py-2 my-4 italic text-macSubtext bg-macAccent/5 rounded-r"
-                          initial={{ opacity: 0, x: -20 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.5 }}
-                        >
+                        <blockquote className="border-l-4 border-macAccent/40 pl-4 py-2 my-4 italic text-macSubtext bg-macAccent/5 rounded-r">
                           {children}
-                        </motion.blockquote>
+                        </blockquote>
                       ),
                     }}
                   >
                     {pitch}
                   </ReactMarkdown>
-                </motion.article>
+                </article>
               ) : (
                 <div className="text-center py-16">
                   <Icon name="document" size={56} className="text-macSubtext opacity-20 mx-auto mb-6" />
